@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Xamarin.Forms;
 using System.Diagnostics;
 using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class TweetImagePage : ContentPage
-    {
+	public partial class TweetImagePage : BasePage
+	{
+		public override AppPage PageType => AppPage.TweetImage;
+
         public TweetImagePage(string image)
         {
             InitializeComponent();
@@ -46,6 +46,6 @@ namespace XamarinEvolve.Clients.UI
                     ProgressBar.IsVisible = MainImage.IsLoading;
                 };
         }
-    }
+	}
 }
 

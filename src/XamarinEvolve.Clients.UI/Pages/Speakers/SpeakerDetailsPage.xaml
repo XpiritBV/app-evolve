@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI"
@@ -95,28 +95,19 @@
                                             <ViewCell StyleId="disclosure">
                                                 <Grid ColumnSpacing="{StaticResource StandardSpacing}">
                                                     <Grid.Padding>
-                                                        <OnPlatform x:TypeArguments="Thickness" iOS="0,12" Android="16,8"/>
+                                                        <OnPlatform x:TypeArguments="Thickness" iOS="16,12" Android="16,8"/>
                                                     </Grid.Padding>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Image VerticalOptions="Center" Source="{Binding Icon}">
                                                         <Image.IsVisible>
-                                                            <OnPlatform x:TypeArguments="x:Boolean" iOS="false" Android="true"/>
+                                                            <OnPlatform x:TypeArguments="x:Boolean" iOS="true" Android="true"/>
                                                         </Image.IsVisible>
                                                     </Image>
-                                                    <Label Grid.Column="1" VerticalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}" Text="{Binding Name}"/>
-                                                    <Label Grid.Column="2"
-                                                           VerticalOptions="Center"
-                                                           Style="{DynamicResource EvolveListItemTextStyle}"
-                                                           TextColor="{DynamicResource DetailTextColor}"
-                                                           Text="{Binding Subtitle}">
-                                                        <Label.IsVisible>
-                                                            <OnPlatform x:TypeArguments="x:Boolean" iOS="true" Android="false"/>
-                                                        </Label.IsVisible>
-                                                    </Label>
+                                                    <Label Grid.Column="1" VerticalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}" Text="{Binding Name}">
+													</Label>
                                                 </Grid>
                                             </ViewCell>
                                         </DataTemplate>
@@ -129,7 +120,7 @@
                         <local:CardView IsVisible="{Binding HasAdditionalSessions}">
                             <!--Sessions-->
                             <StackLayout Spacing="0">
-                                <local:LabelSection Text="More Sessions" StyleId="MoreSessionsSection"/>
+                                <local:LabelSection Text="Sessions" StyleId="MoreSessionsSection"/>
                                 <local:HeaderDivider/>
                                 <StackLayout IsVisible="{Binding IsBusy}"
                                              HorizontalOptions="FillAndExpand"
@@ -168,4 +159,4 @@
             </Grid>
         </local:ParallaxScrollView>
     </Grid>
-</ContentPage>
+</local:BasePage>

@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using XamarinEvolve.DataObjects;
 using System.Linq;
 using System.Threading.Tasks;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -83,7 +84,7 @@ namespace XamarinEvolve.Clients.Portable
 #if !DEBUG
 
                     //if it hasn't started yet
-                    if (DateTime.UtcNow < session.StartTime.Value)
+					if (DateTime.UtcNow < session.StartTime.Value.ToUniversalTime())
                         continue;
 #endif
                     if (feedback.Any (f => f.SessionId == session.Id))

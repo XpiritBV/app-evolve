@@ -7,8 +7,10 @@ using FormsToolkit;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class AboutPage : ContentPage
-    {
+	public partial class AboutPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Information;
+
         AboutViewModel vm;
         IPushNotifications push;
         public AboutPage()
@@ -22,14 +24,34 @@ namespace XamarinEvolve.Clients.UI
             ListViewInfo.HeightRequest = (vm.InfoItems.Count * ListViewInfo.RowHeight) - adjust;
 
             ListViewAccount.HeightRequest = (vm.AccountItems.Count * ListViewAccount.RowHeight) - adjust;
-            ListViewAccount.ItemTapped += (sender, e) => ListViewAccount.SelectedItem = null;;
+			ListViewAccount.ItemSelected += async (sender, e) =>
+			{
+				var item = ListViewAccount.SelectedItem as XamarinEvolve.Clients.Portable.MenuItem;
+				if (item == null)
+					return;
+				Page page = null;
+				switch (item.Parameter)
+				{
+					case "mobiletowebsync":
+						page = new SyncMobileToWebPage();
+						break;
+					case "webtomobilesync":
+						page = new SyncWebToMobilePage();
+						break;
+				}
+				ListViewAccount.SelectedItem = null;
+
+				if (page == null)
+					return;
+				
+				await NavigationService.PushAsync(Navigation, page);
+			};
 
             ListViewAbout.ItemSelected += async (sender, e) => 
                 {
                     if(ListViewAbout.SelectedItem == null)
                         return;
 
-                    App.Logger.TrackPage(AppPage.Settings.ToString());
                     await NavigationService.PushAsync(Navigation, new SettingsPage());
 
                     ListViewAbout.SelectedItem = null;
@@ -44,30 +66,25 @@ namespace XamarinEvolve.Clients.UI
                     switch(item.Parameter)
                     {
                         case "evaluations":
-                            App.Logger.TrackPage ("Evaluations");
                             page = new EvaluationsPage ();
                             break;
                         case "venue":
-                            App.Logger.TrackPage(AppPage.Venue.ToString());
                             page = new VenuePage();
                             break;
                         case "code-of-conduct":
-                            App.Logger.TrackPage(AppPage.CodeOfConduct.ToString());
                             page = new CodeOfConductPage();
                             break;
                         case "wi-fi":
-                            App.Logger.TrackPage(AppPage.WiFi.ToString());
                             page = new WiFiInformationPage();
                             break;
                         case "sponsors":
-                            App.Logger.TrackPage(AppPage.Sponsors.ToString());
                             page = new SponsorsPage();
                             break;
                         case "floor-maps":
                             App.Logger.TrackPage(AppPage.FloorMap.ToString());
                             page = new FloorMapsCarouselPage();
                             break;
-                    }
+					}
 
                     if(page == null)
                         return;

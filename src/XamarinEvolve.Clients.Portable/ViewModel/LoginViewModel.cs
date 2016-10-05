@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Plugin.Share;
 using FormsToolkit;
 using Plugin.Share.Abstractions;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -100,6 +101,7 @@ namespace XamarinEvolve.Clients.Portable
                     Settings.FirstName = result.User?.FirstName ?? string.Empty;
                     Settings.LastName = result.User?.LastName ?? string.Empty;
                     Settings.Email = email.ToLowerInvariant();
+					Settings.UserIdentifier = email.ToLowerInvariant();
                     MessagingService.Current.SendMessage(MessageKeys.LoggedIn);
                     Logger.Track(EvolveLoggerKeys.LoginSuccess);
                     try
@@ -152,16 +154,19 @@ namespace XamarinEvolve.Clients.Portable
         async Task ExecuteSignupAsync()
         {
             Logger.Track(EvolveLoggerKeys.Signup);
+
+			var primaryColor = (Color)(Application.Current.Resources["Primary"]);
+
             await CrossShare.Current.OpenBrowser("https://auth.xamarin.com/account/register", 
                 new BrowserOptions
                 {
                     ChromeShowTitle = true,
                     ChromeToolbarColor = new ShareColor
                         {
-                            A=255,
-                            R=118,
-                            G=53,
-                            B=235
+							A=(int)(primaryColor.A * 256),
+							R=(int)(primaryColor.R * 256),
+                            G=(int)(primaryColor.G * 256),
+                            B=(int)(primaryColor.B * 256)
                         },
                     UseSafairReaderMode = false,
                     UseSafariWebViewController = true
@@ -205,13 +210,13 @@ namespace XamarinEvolve.Clients.Portable
             if(Device.OS == TargetPlatform.iOS && Settings.FirstRun)
             {
 
-                #if ENABLE_TEST_CLOUD
+#if ENABLE_TEST_CLOUD
                 MessagingService.Current.SendMessage<MessagingServiceQuestion>(MessageKeys.Question, new MessagingServiceQuestion
                     {
                         Title = "Push Notifications",
                         Positive = "Let's do it!",
                         Negative = "Maybe Later",
-                        Question = "We can send you updates through Evolve via push notifications. Would you like to enable them now?",
+						Question = $"We can send you updates through {EventInfo.EventName} via push notifications. Would you like to enable them now?",
                         OnCompleted = async (success) =>
                             {
                                 if(success)

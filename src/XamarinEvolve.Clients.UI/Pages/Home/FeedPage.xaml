@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI"
@@ -8,7 +8,7 @@
     xmlns:imagecircle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
     x:Class="XamarinEvolve.Clients.UI.FeedPage"
     x:Name="FeedPage"
-    Title="Evolve Feed"
+    Title="{Binding Title}"
     Icon="tab_feed.png"
     BackgroundColor="{DynamicResource WindowBackgroundTable}">
     <ContentPage.Resources>
@@ -17,6 +17,9 @@
         <local:HumanizeDateConverter x:Key="HumanizeDateConverter" />
      </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="toolbar_share.png" Text="Share" Command="{Binding ShareCommand}"/>
+    </ContentPage.ToolbarItems>
     <pull:PullToRefreshLayout
           IsPullToRefreshEnabled="True"
           RefreshCommand="{Binding RefreshCommand}"
@@ -29,6 +32,36 @@
           VerticalOptions="FillAndExpand">
         <StackLayout Spacing="{DynamicResource CardSpacing}"
                     Padding="{DynamicResource CardPadding}">
+			<local:CardView IsVisible="{Binding ShowBuyTicketButton}">
+                 <!--Buy now!-->
+                 <StackLayout Spacing="0" Margin="10,5,10,5">
+					<local:LabelSection Text="Tickets" />
+                    <local:HeaderDivider/>
+					<Button HorizontalOptions="FillAndExpand" 
+							VerticalOptions="FillAndExpand" 
+							Text="Buy your ticket now!"
+							BackgroundColor="{DynamicResource Primary}"
+							TextColor="White"
+							Command="{Binding BuyTicketNowCommand}"/>
+                    <local:FooterDivider/>
+                </StackLayout>
+            </local:CardView>
+
+			<local:CardView IsVisible="{Binding ShowConferenceFeedbackButton}">
+                 <!--Conference feedback-->
+                 <StackLayout Spacing="0" Margin="10,5,10,5">
+					<local:LabelSection Text="Feedback" />
+                    <local:HeaderDivider/>
+					<Button HorizontalOptions="FillAndExpand" 
+							VerticalOptions="FillAndExpand" 
+							Text="We'd love to hear your feedback!"
+							BackgroundColor="{DynamicResource Primary}"
+							TextColor="White"
+							Command="{Binding ShowConferenceFeedbackCommand}"/>
+                    <local:FooterDivider/>
+                </StackLayout>
+            </local:CardView>
+
              <local:CardView>
                  <!--Notifications-->
                  <StackLayout Spacing="0">
@@ -75,7 +108,7 @@
                 </StackLayout>
             </local:CardView>
 
-            <local:CardView>
+            <local:CardView IsVisible="{Binding ShowUpcomingFavorites}">
                  <!--Upcoming Sessions-->
                  <StackLayout Spacing="0">
                     <Grid>
@@ -117,7 +150,7 @@
                             <OnPlatform x:TypeArguments="Color" iOS="{StaticResource ListSeparator}" WinPhone="{StaticResource ListSeparator}"/>
                         </local:NonScrollableListView.SeparatorColor>
                         <local:NonScrollableListView.RowHeight>
-                            <OnPlatform x:TypeArguments="x:Int32" Android="120" iOS="120" WinPhone="120"/>
+                            <OnPlatform x:TypeArguments="x:Int32" Android="120" iOS="120" WinPhone="110"/>
                         </local:NonScrollableListView.RowHeight>
                         <local:NonScrollableListView.ItemTemplate>
                              <DataTemplate>
@@ -139,7 +172,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="34"/>
                         </Grid.ColumnDefinitions>
-                        <local:LabelSection Text="Social - #XamarinEvolve"/>
+                        <local:LabelSection Text="{Binding SocialHeader}"/>
+						<Grid.GestureRecognizers>
+							<TapGestureRecognizer Command="{Binding ShareCommand}"/>
+						</Grid.GestureRecognizers>
                     </Grid>
                     <local:HeaderDivider/>
                     <StackLayout IsVisible="{Binding LoadingSocial}" 
@@ -190,4 +226,4 @@
         </StackLayout>
     </local:AlwaysScrollView>
     </pull:PullToRefreshLayout>
-</ContentPage>
+</local:BasePage>

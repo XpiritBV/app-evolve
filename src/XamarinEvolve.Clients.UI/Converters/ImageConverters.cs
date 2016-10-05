@@ -31,6 +31,7 @@ namespace XamarinEvolve.Clients.UI
             {
                 if (!string.IsNullOrWhiteSpace((string)value))
                 {
+					Debug.WriteLine($"Getting image {value}");
                     return new UriImageSource
                     {
                         Uri = new Uri((string)value),

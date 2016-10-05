@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
 using FormsToolkit;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class SettingsPage : ContentPage
-    {
+	public partial class SettingsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Settings;
+
         SettingsViewModel vm;
         public SettingsPage ()
         {
@@ -34,27 +35,33 @@ namespace XamarinEvolve.Clients.UI
 
             dialogShown = true;
 
+			App.Logger.Track("AppCreditsFound-8MoreThan92");
+
             await DisplayAlert ("Credits",
-                               "The Xamarin Evolve mobile apps were handcrafted by Xamarins spread out all over the world.\n\n" +
-                                "Development:\n" +
-                                "James Montemagno\n" +
-                                "Pierce Boggan\n" +
-                               "\n" +
-                                "Design:\n" +
-                                "Antonio García Aprea\n" +
-                               "\n" +
-                                "Testing:\n" +
-                                "Ethan Dennis\n" +
-                               "\n" +
-                                "Many thanks to:\n" +
-                                "Fabio Cavalcante\n" +
-                                "Matisse Hack\n" +
-                                "Sweetkriti Satpathy\n" +
-                                "Andrew Branch\n" +
-                               "\n" +
-                               "...and of course you! <3", "OK");
-            
+			                    AboutThisApp.Credits, "OK");            
         }
+
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+
+			MessagingService.Current.Subscribe(MessageKeys.NavigateToSyncMobileToWebViewModel, async (m) =>
+			{
+				await Navigation.PushAsync(new SyncMobileToWebPage(), true);
+			});
+
+			MessagingService.Current.Subscribe(MessageKeys.NavigateToSyncWebToMobileViewModel, async (m) =>
+			{
+				await Navigation.PushAsync(new SyncWebToMobilePage(), true);
+			});
+		}
+
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			MessagingService.Current.Unsubscribe(MessageKeys.NavigateToSyncMobileToWebViewModel);
+			MessagingService.Current.Unsubscribe(MessageKeys.NavigateToSyncWebToMobileViewModel);
+		}
     }
 }
 

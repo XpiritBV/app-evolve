@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI"
     xmlns:imagecircle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
@@ -40,7 +40,7 @@
                        LineBreakMode="WordWrap"
                        FontSize="Large"
                        TextColor="{DynamicResource DetailTextColor}"
-                       Text="Sign in with your Xamarin account to save and sync favorites and session feedback.">
+                       Text="Sign in first to save and sync favorites and session feedback.">
 
                     <Label.FontSize>
                         <OnPlatform x:TypeArguments="x:Double" Android="15" iOS="15" WinPhone="15"/>
@@ -156,4 +156,4 @@
         </StackLayout>
     </Grid>
     </ScrollView>
-</ContentPage>
+</local:BasePage>

@@ -5,6 +5,7 @@ using System.Globalization;
 using XamarinEvolve.DataObjects;
 using Humanizer;
 using System.Diagnostics;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
@@ -132,7 +133,7 @@ namespace XamarinEvolve.Clients.UI
                 if(!(value is DateTime))
                     return string.Empty;
 
-                return ((DateTime)value).ToEasternTimeZone().Day;
+                return ((DateTime)value).ToEventTimeZone().Day;
             }
             catch (Exception ex)
             {
@@ -159,7 +160,7 @@ namespace XamarinEvolve.Clients.UI
                 if(!(value is DateTime))
                     return string.Empty;
 
-                return ((DateTime)value).ToEasternTimeZone().DayOfWeek.ToString().Substring(0,3).ToUpperInvariant();
+                return ((DateTime)value).ToEventTimeZone().DayOfWeek.ToString().Substring(0,3).ToUpperInvariant();
             }
             catch (Exception ex)
             {
@@ -185,16 +186,16 @@ namespace XamarinEvolve.Clients.UI
             {
 
                 if(!(value is DateTime))
-                    return Color.FromHex("753BE4");
+					return (Color) Application.Current.Resources["Primary"];
 
-                return DateTime.UtcNow > ((DateTime)value).ToUniversalTime() ? Color.FromHex("D3D2D2") : Color.FromHex("753BE4");
+                return DateTime.UtcNow > ((DateTime)value).ToUniversalTime() ? Color.FromHex("D3D2D2") : (Color)Application.Current.Resources["Primary"];
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Unable to convert: " + ex);
             }
 
-            return Color.FromHex("753BE4");
+            return (Color)Application.Current.Resources["Primary"];
         }
 
 

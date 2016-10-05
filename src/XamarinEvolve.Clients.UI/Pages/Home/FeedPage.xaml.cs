@@ -5,19 +5,23 @@ using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
 using FormsToolkit;
 using XamarinEvolve.DataObjects;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class FeedPage : ContentPage
-    {
+	public partial class FeedPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Feed;
+
         FeedViewModel ViewModel => vm ?? (vm = BindingContext as FeedViewModel);
-        FeedViewModel vm;
+
+		FeedViewModel vm;
         DateTime favoritesTime;
         string loggedIn;
         public FeedPage()
         {
             InitializeComponent();
-            loggedIn = Settings.Current.Email;
+            loggedIn = Settings.Current.UserIdentifier;
             BindingContext = new FeedViewModel();
 
             if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
@@ -51,7 +55,6 @@ namespace XamarinEvolve.Clients.UI
                         return;
                     var sessionDetails = new SessionDetailsPage(session);
 
-                    App.Logger.TrackPage(AppPage.Session.ToString(), session.Title);
                     await NavigationService.PushAsync(Navigation, sessionDetails);
                     ListViewSessions.SelectedItem = null;
                 }; 
@@ -60,7 +63,6 @@ namespace XamarinEvolve.Clients.UI
                 {
                     Command = new Command(async () => 
                         {
-                            App.Logger.TrackPage(AppPage.Notification.ToString());
                             await NavigationService.PushAsync(Navigation, new NotificationsPage());
                         })
                 });
@@ -74,10 +76,13 @@ namespace XamarinEvolve.Clients.UI
 
             MessagingService.Current.Subscribe<string>(MessageKeys.NavigateToImage, async (m, image) =>
                 {
-                    App.Logger.TrackPage(AppPage.TweetImage.ToString(), image);
                     await NavigationService.PushModalAsync(Navigation, new EvolveNavigationPage(new TweetImagePage(image)));
                 });
 
+			MessagingService.Current.Subscribe(MessageKeys.NavigateToConferenceFeedback, async (m) =>
+				{
+					await NavigationService.PushModalAsync(Navigation, new EvolveNavigationPage(new ConferenceFeedbackPage()));
+				});
         }
 
         protected override void OnDisappearing()
@@ -90,9 +95,12 @@ namespace XamarinEvolve.Clients.UI
         private void UpdatePage()
         {
             bool forceRefresh = (DateTime.UtcNow > (ViewModel?.NextForceRefresh ?? DateTime.UtcNow)) ||
-                    loggedIn != Settings.Current.Email;
+                    loggedIn != Settings.Current.UserIdentifier;
 
-            loggedIn = Settings.Current.Email;
+            loggedIn = Settings.Current.UserIdentifier;
+
+			vm.EvaluateVisualState();
+
             if (forceRefresh)
             {
                 ViewModel.RefreshCommand.Execute(null);

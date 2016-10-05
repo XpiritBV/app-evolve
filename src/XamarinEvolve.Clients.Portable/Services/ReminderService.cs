@@ -7,6 +7,7 @@ using Plugin.Permissions.Abstractions;
 using FormsToolkit;
 using System.Diagnostics;
 using Xamarin.Forms;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -128,7 +129,7 @@ namespace XamarinEvolve.Clients.Portable
                             MessagingService.Current.SendMessage<MessagingServiceQuestion>(MessageKeys.Question, new MessagingServiceQuestion
                                 {
                                     Title = "Calendar Permission",
-                                    Question = "Unable to set reminders as the Calendar permission was not granted. Please go into Settings and turn on Calendars for Evolve16.",
+									Question = $"Unable to set reminders as the Calendar permission was not granted. Please go into Settings and turn on Calendars for {EventInfo.EventName}.",
                                     Positive = "Settings",
                                     Negative = "Maybe Later",
                                     OnCompleted = (result) =>
@@ -164,7 +165,7 @@ namespace XamarinEvolve.Clients.Portable
                     MessagingService.Current.SendMessage<MessagingServiceAlert>(MessageKeys.Message, new MessagingServiceAlert
                         {
                             Title = "No Calendar",
-                            Message = "We were unable to get or create the Evolve calendar, please check your calendar app and try again.",
+							Message = $"We were unable to get or create the {EventInfo.EventName} calendar, please check your calendar app and try again.",
                             Cancel = "OK"
                         });
                 }
@@ -178,7 +179,7 @@ namespace XamarinEvolve.Clients.Portable
         static async Task<Calendar> GetOrCreateEvolveCalendarAsync()
         {
             
-            var id = Settings.Current.EvolveCalendarId;
+            var id = Settings.Current.EventCalendarId;
             if (!string.IsNullOrWhiteSpace(id))
             {
                 try
@@ -189,7 +190,7 @@ namespace XamarinEvolve.Clients.Portable
                 }
                 catch(Exception ex)
                 {
-                    Debug.WriteLine("Unable to get calendar.. odd as we created it already: " + ex);
+                    Debug.WriteLine("Unable to get calendar... odd as we created it already: " + ex);
 
                 }
 
@@ -208,50 +209,50 @@ namespace XamarinEvolve.Clients.Portable
                         if (!calendar.CanEditEvents)
                             continue;
 
-                        Settings.Current.EvolveCalendarId = calendar.ExternalID;
+                        Settings.Current.EventCalendarId = calendar.ExternalID;
                         return calendar;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Unable to get calendars.. " + ex);
+                    Debug.WriteLine("Unable to get calendars..." + ex);
                 }
             }
             else
             {
-                //try to find evolve app if already uninstalled for some reason
+                //try to find app if already uninstalled for some reason
                 try
                 {
                     var calendars = await CrossCalendars.Current.GetCalendarsAsync();
                     foreach(var calendar in calendars)
                     {
                         //find first calendar we can add stuff to
-                        if(calendar.CanEditEvents && calendar.Name == "Xamarin Evolve")
+                        if(calendar.CanEditEvents && calendar.Name == EventInfo.EventName)
                         {
-                            Settings.Current.EvolveCalendarId = calendar.ExternalID;
+                            Settings.Current.EventCalendarId = calendar.ExternalID;
                             return calendar;
                         }
                     }
                 }
                 catch(Exception ex)
                 {
-                    Debug.WriteLine("Unable to get calendars.. " + ex);
+                    Debug.WriteLine("Unable to get calendars..." + ex);
                 }
             }
 
-            var evolveCalendar = new Calendar();
-            evolveCalendar.Color = "#7635EB";
-            evolveCalendar.Name = "Xamarin Evolve";
+			var conferenceCalendar = new Calendar();
+			conferenceCalendar.Color = ((Color)Application.Current.Resources["Primary"]).ToHex();
+            conferenceCalendar.Name = EventInfo.EventName;
 
             try
             {
-                await CrossCalendars.Current.AddOrUpdateCalendarAsync(evolveCalendar);
-                Settings.Current.EvolveCalendarId = evolveCalendar.ExternalID;
-                return evolveCalendar;
+                await CrossCalendars.Current.AddOrUpdateCalendarAsync(conferenceCalendar);
+                Settings.Current.EventCalendarId = conferenceCalendar.ExternalID;
+                return conferenceCalendar;
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("Unable to create calendar.. " + ex);
+                Debug.WriteLine("Unable to create calendar..." + ex);
             }
 
             return null;

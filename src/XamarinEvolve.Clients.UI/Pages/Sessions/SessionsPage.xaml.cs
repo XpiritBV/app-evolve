@@ -6,8 +6,10 @@ using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class SessionsPage : ContentPage
-    {
+    public partial class SessionsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Sessions;
+
         SessionsViewModel ViewModel => vm ?? (vm = BindingContext as SessionsViewModel);
         SessionsViewModel vm;
         bool showFavs, showPast, showAllCategories;
@@ -18,7 +20,7 @@ namespace XamarinEvolve.Clients.UI
         {
            
             InitializeComponent();
-            loggedIn = Settings.Current.Email;
+            loggedIn = Settings.Current.UserIdentifier;
             showFavs = Settings.Current.FavoritesOnly;
             showPast = Settings.Current.ShowPastSessions;
             showAllCategories = Settings.Current.ShowAllCategories;
@@ -49,7 +51,6 @@ namespace XamarinEvolve.Clients.UI
                 {
                     if (vm.IsBusy)
                         return;
-                    App.Logger.TrackPage(AppPage.Filter.ToString());
                     await NavigationService.PushModalAsync(Navigation, new EvolveNavigationPage(new FilterSessionsPage()));
                 });
 
@@ -63,7 +64,6 @@ namespace XamarinEvolve.Clients.UI
                     
                     var sessionDetails = new SessionDetailsPage(session);
 
-                    App.Logger.TrackPage(AppPage.Session.ToString(), session.Title);
                     await NavigationService.PushAsync(Navigation, sessionDetails);
                     ListViewSessions.SelectedItem = null;
                 };
@@ -95,9 +95,9 @@ namespace XamarinEvolve.Clients.UI
             Title = Settings.Current.FavoritesOnly ? "Favorite Sessions" : "Sessions";
 
             bool forceRefresh = (DateTime.UtcNow > (ViewModel?.NextForceRefresh ?? DateTime.UtcNow)) ||
-                loggedIn != Settings.Current.Email;
+                loggedIn != Settings.Current.UserIdentifier;
 
-            loggedIn = Settings.Current.Email;
+            loggedIn = Settings.Current.UserIdentifier;
             //Load if none, or if 45 minutes has gone by
             if ((ViewModel?.Sessions?.Count ?? 0) == 0 || forceRefresh)
             {

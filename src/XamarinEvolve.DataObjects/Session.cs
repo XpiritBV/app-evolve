@@ -12,6 +12,7 @@ namespace XamarinEvolve.DataObjects
     {
         public Session() {
             this.Speakers = new List<Speaker>();
+            this.Categories = new List<Category>();
         }
         /// <summary>
         /// Gets or sets the title.
@@ -45,10 +46,10 @@ namespace XamarinEvolve.DataObjects
         public virtual Room Room { get; set; }
 
         /// <summary>
-        /// Gets or sets the main category.
+        /// Gets or sets the categories.
         /// </summary>
-        /// <value>The main category.</value>
-        public virtual Category MainCategory { get; set; }
+        /// <value>The main categories.</value>
+        public virtual ICollection<Category> Categories { get; set; }
 
         /// <summary>
         /// Gets or sets the start time.
@@ -61,6 +62,22 @@ namespace XamarinEvolve.DataObjects
         /// </summary>
         /// <value>The end time.</value>
         public DateTime? EndTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the level of the session [100 - 400]
+        /// </summary>
+        /// <value>The session level.</value>
+        public string Level { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url to the presentation material
+        /// </summary>
+        public string PresentationUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url to the recorded session video
+        /// </summary>
+        public string VideoUrl { get; set; }
 
 #if MOBILE
         private string speakerNames;
@@ -91,7 +108,40 @@ namespace XamarinEvolve.DataObjects
             }
         }
 
-        [Newtonsoft.Json.JsonIgnore]
+		private string speakerHandles;
+		[Newtonsoft.Json.JsonIgnore]
+		public string SpeakerHandles
+		{
+			get
+			{
+				if (speakerHandles != null)
+					return speakerHandles;
+
+				speakerHandles = string.Empty;
+
+				if (Speakers == null || Speakers.Count == 0)
+					return speakerHandles;
+
+				var allSpeakers = Speakers.ToArray();
+				speakerHandles = string.Empty;
+				for (int i = 0; i < allSpeakers.Length; i++)
+				{
+					var handle = allSpeakers[i].TwitterUrl;
+					if (!string.IsNullOrEmpty(handle))
+					{
+						if (i != 0)
+						{
+							speakerHandles += ", ";
+						}
+						speakerHandles += $"@{handle}";
+					}
+				}
+
+				return speakerHandles;
+			}
+		}
+
+		[Newtonsoft.Json.JsonIgnore]
         public DateTime StartTimeOrderBy { get { return StartTime.HasValue ? StartTime.Value : DateTime.MinValue; } }
         const string delimiter = "|";
         string haystack;
@@ -107,15 +157,16 @@ namespace XamarinEvolve.DataObjects
                 builder.Append(delimiter);
                 builder.Append(Title);
                 builder.Append(delimiter);
-                if (!string.IsNullOrWhiteSpace(MainCategory?.Name))
-                    builder.Append(MainCategory.Name);
-                builder.Append(delimiter);
+                if (Categories != null)
+                {
+                    foreach (var c in Categories)
+						builder.Append($"{c.Name}{delimiter}{c.ShortName}{delimiter}");
+                }
                 if (Speakers != null)
                 {
                     foreach (var p in Speakers)
-                        builder.Append($"{p.FirstName} {p.LastName}{delimiter}{p.FirstName}{delimiter}{p.LastName}");
+						builder.Append($"{p.FirstName} {p.LastName}{delimiter}{p.FirstName}{delimiter}{p.LastName}{delimiter}");
                 }
-
                 haystack = builder.ToString();
                 return haystack;
             }
@@ -142,6 +193,9 @@ namespace XamarinEvolve.DataObjects
             }
         }
 
-        #endif
+		[Newtonsoft.Json.JsonIgnore]
+		public string LevelString => $"Level: {Level}";
+
+#endif
     }
 }

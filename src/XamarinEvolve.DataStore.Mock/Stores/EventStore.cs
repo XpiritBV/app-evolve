@@ -29,7 +29,7 @@ namespace XamarinEvolve.DataStore.Mock
             Events.Add(new FeaturedEvent
                 {
                     Title = "Registration for Training & System Config",
-                    Description = "Get ready for Xamarin Evolve training with open registration and full system configuration prep throughout the day!",
+                    Description = "Get ready for TechDays training with open registration and full system configuration prep throughout the day!",
                     StartTime = new DateTime(2016, 4, 24, 16, 0, 0, DateTimeKind.Utc),
                     EndTime = new DateTime(2016, 4, 25, 0, 0, 0, DateTimeKind.Utc),
                     LocationName = "Registration",
@@ -139,7 +139,7 @@ namespace XamarinEvolve.DataStore.Mock
 
             Events.Add(new FeaturedEvent
                 {
-                    Title = "Xamarin Evolve Keynote",
+                    Title = "TechDays Keynote",
                     Description = "",
                     StartTime = new DateTime(2016, 4, 27, 13, 0, 0, DateTimeKind.Utc),
                     EndTime = new DateTime(2016, 4, 27, 14, 30, 0, DateTimeKind.Utc),
@@ -169,11 +169,11 @@ namespace XamarinEvolve.DataStore.Mock
             });
 
             Events.Add (new FeaturedEvent {
-                Title = "Evolve Party",
-                Description = "No lines, just fun! Xamarin Evolve 2016 is throwing an unforgettable celebration at Universal's Island of Adventure® theme park on Wednesday, April 27th. The Wizarding just for you! All night long, you'll enjoy unlimited access to incredible rides and attractions including Harry Potter and the Forbidden Journey™ and the Jurassic Park River Adventure®. It's an entire evening of thrills and excitement – and it's all yours!\n\nThere will be plenty of food, music and entertainment for those that prefer to keep their feet on dry land. You won't want to miss this exclusive event at one of Orlando's most famous theme parks!\n\nHARRY POTTER characters, names and related indicia are © & ™ Warner Bros. Entertainment Inc. Harry Potter Publishing Rights © JKR. (s16) Jurassic Park, Jurassic Park River Adventure® Universal Studios/Amblin. Universal elements and all related indicia TM & © 2016 Universal Studios. All rights reserved.",
+                Title = "TechDays Party",
+                Description = "No lines, just fun! TechDays 2016 is throwing an unforgettable celebration at Xpirit HQ on Tuesday, October 4th.",
                 StartTime = new DateTime (2016, 4, 28, 0, 0, 0, DateTimeKind.Utc),
                 EndTime = new DateTime (2016, 4, 28, 4, 0, 0, DateTimeKind.Utc),
-                LocationName = "Universal's Island of Adventure®",
+                LocationName = "Xpirit, Wibautstraat 210, Amsterdam",
                 IsAllDay = false,
             });
 

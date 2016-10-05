@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="XamarinEvolve.Clients.UI.SettingsPage"
@@ -19,7 +19,7 @@
 
     <local:AlwaysScrollView Grid.RowSpan="2">
         <StackLayout Spacing="0">
-
+        	<Button IsVisible="{Binding IsDebug}" TextColor="Red" Text="Force reset" Command="{Binding ForceResetCommand}" />
             <StackLayout 
                 BackgroundColor="{DynamicResource WindowBackgroundTable}"
                 Spacing="{DynamicResource CardSpacing}"
@@ -33,16 +33,15 @@
                         <local:LabelSection Text="Data Sync"/>
                         <local:HeaderDivider/>   
                         <StackLayout BackgroundColor="White" 
-                                     Padding="{StaticResource StandardPadding}">
-                            <Label Text="Sign in with your Xamarin account to save and sync favorites and session feedback across devices." 
-                                   HorizontalOptions="Center" 
-                                   Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
-                            
+                                     Padding="{StaticResource StandardPadding}" IsVisible="{Binding LoginEnabled}">
+                            <Label Text="Sign in with to save and sync favorites and session feedback across devices." 
+                                   HorizontalOptions="Center" 								   
+                                   Style="{DynamicResource EvolveListItemDetailTextStyle}"/>                            
                         </StackLayout>  
-                        <local:SectionDivider/>
+                        <local:SectionDivider IsVisible="{Binding LoginEnabled}" />
                         <Grid Padding="{StaticResource StandardPadding}" 
                                ColumnSpacing="{StaticResource StandardSpacing}" 
-                               BackgroundColor="White">
+                               BackgroundColor="White" IsVisible="{Binding LoginEnabled}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -57,6 +56,13 @@
                                     IsEnabled="{Binding IsNotBusy}"
                                     TextColor="White"/>
                          </Grid>
+                         <Button
+                            Text="Sync Now" Margin="10,5,10,5" Command="{Binding SyncCommand}"
+                            BackgroundColor="{StaticResource PrimaryDark}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            TextColor="White"
+							HorizontalOptions="FillAndExpand"
+							IsVisible="{Binding LoginEnabled, Converter={StaticResource InvertedBooleanConverter}}"/>
 
                         <local:SectionDivider/>
                         <Grid Padding="{StaticResource StandardPadding}" BackgroundColor="White">
@@ -76,17 +82,42 @@
                             </ActivityIndicator>
 
                         </Grid>
+                        <local:SectionDivider IsVisible="{Binding AppToWebLinkingEnabled}" />
+                        <StackLayout BackgroundColor="White" Spacing="10"
+                                     Padding="{StaticResource StandardPadding}" IsVisible="{Binding AppToWebLinkingEnabled}">
+							<Label Text="Link app data to website" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="LinkAppDataToWebsite">
+								<Label.GestureRecognizers>
+		                            <TapGestureRecognizer Command="{Binding LinkAppDataToWebsiteCommand}"/>
+								</Label.GestureRecognizers>
+							</Label>
+	                        <local:SectionDivider/>
+							<Label Text="Link website data to app" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="LinkWebsiteDataToApp">
+								<Label.GestureRecognizers>
+		                            <TapGestureRecognizer Command="{Binding LinkWebsiteDataToAppCommand}"/>
+								</Label.GestureRecognizers>
+							</Label>
+						</StackLayout>
+
                         <local:FooterDivider/>
                     </StackLayout>
                 </local:CardView>
 
                 <local:CardView>
                      <StackLayout Spacing="0">
-                        <local:LabelSection>
-                            <local:LabelSection.Text>
-                                <OnPlatform x:TypeArguments="x:String" Android="About the App" iOS=" " WinPhone="About the App"/>
-                            </local:LabelSection.Text>
+                        <local:LabelSection Text="About the App">
+							<local:LabelSection.IsVisible>
+                                <OnPlatform x:TypeArguments="x:Boolean" Android="True" iOS="False" WinPhone="True"/>
+							</local:LabelSection.IsVisible>
                         </local:LabelSection>
+                        <StackLayout Spacing="10">
+                            <StackLayout.Padding>
+                                <OnPlatform x:TypeArguments="Thickness" iOS="16,8,16,8" Android="16,8" WinPhone="16,8"/>
+                            </StackLayout.Padding>
+	                        <Label Text="{Binding AppVersion}" 
+                                   Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
+                            <Label Text="{Binding Copyright}" 
+                                   Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
+                        </StackLayout>
                         <local:HeaderDivider/>
                         <local:NonScrollableListView 
                             x:Name="ListViewAbout"
@@ -106,13 +137,6 @@
                             </local:NonScrollableListView.ItemTemplate>
                         </local:NonScrollableListView>
                         <local:FooterDivider/>
-                        <StackLayout>
-                            <StackLayout.Padding>
-                                <OnPlatform x:TypeArguments="Thickness" iOS="16,8,16,0" Android="16,8" WinPhone="16,8"/>
-                            </StackLayout.Padding>
-                            <Label Text="Copyright 2016 - Xamarin Inc." 
-                                   Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
-                        </StackLayout>
                     </StackLayout>
                 </local:CardView>
 
@@ -157,4 +181,4 @@
         </StackLayout>
     </local:AlwaysScrollView>
 
-</ContentPage>
+</local:BasePage>

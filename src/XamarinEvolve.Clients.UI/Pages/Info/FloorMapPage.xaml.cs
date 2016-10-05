@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class FloorMapPage : ContentPage
-    {
+    public partial class FloorMapPage : BasePage
+	{
+		public override AppPage PageType => AppPage.FloorMap;
+
         public FloorMapPage (int floor)
         {
             InitializeComponent ();
@@ -18,28 +21,34 @@ namespace XamarinEvolve.Clients.UI
             {
                 case 0:
                 local = "floor_1.png";
-                url = "https://s3.amazonaws.com/xamarin-releases/evolve-2016/floor_1.png";
-                Title = "Floor Maps (1/2)";
+				url = $"{AboutThisApp.CdnUrl}floor_1.png";
+                Title = "Floor Maps (1/3)";
                     break;
                 case 1:
                 local = "floor_2.png";
-                url = "https://s3.amazonaws.com/xamarin-releases/evolve-2016/floor_2.png";
-                Title = "Floor Maps (2/2)";
+				url = $"{AboutThisApp.CdnUrl}floor_2.png";
+                Title = "Floor Maps (2/3)";
+                    break;
+                case 2:
+                    local = "floor_3.png";
+                    url = $"{AboutThisApp.CdnUrl}floor_3.png";
+                    Title = "Floor Maps (2/3)";
                     break;
             }
 
             try 
             {
-                /*MainImage.Source = new FileImageSource 
+               MainImage.Source = new FileImageSource 
                {
                    File = local
-               };*/
-               MainImage.Source = new UriImageSource 
-               {
-                   Uri = new Uri (url),
-                   CachingEnabled = true,
-                   CacheValidity = TimeSpan.FromDays (3)
                };
+
+               //MainImage.Source = new UriImageSource 
+               //{
+               //    Uri = new Uri (url),
+               //    CachingEnabled = true,
+               //    CacheValidity = TimeSpan.FromDays (3)
+               //};
             } 
             catch (Exception ex) 
             {

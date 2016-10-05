@@ -7,6 +7,7 @@ using Plugin.Share;
 using System.Net.Http;
 using Plugin.Connectivity;
 using Newtonsoft.Json;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -18,9 +19,9 @@ namespace XamarinEvolve.Clients.Portable
 
     public class ConferenceInfoViewModel : ViewModelBase
     {
+		public string CodeOfConductPageTitle => AboutThisApp.CodeOfConductPageTitle;
 
         IWiFiConfig wiFiConfig;
-        const string WifiUrl =  "https://s3.amazonaws.com/xamarin-releases/evolve-2016/wifi.json";
         public ConferenceInfoViewModel()
         {
             wiFiConfig = DependencyService.Get<IWiFiConfig>();
@@ -28,7 +29,7 @@ namespace XamarinEvolve.Clients.Portable
 
         public async Task<bool> UpdateConfigs()
         {
-            if (IsBusy)
+			if (IsBusy || !FeatureFlags.WifiEnabled)
                 return false;
 
 
@@ -42,7 +43,7 @@ namespace XamarinEvolve.Clients.Portable
                         using (var client = new HttpClient ()) 
                         {
                             client.Timeout = TimeSpan.FromSeconds (5);
-                            var json = await client.GetStringAsync (WifiUrl);
+							var json = await client.GetStringAsync (EventInfo.WifiUrl);
                             var root = JsonConvert.DeserializeObject<WiFiRoot> (json);
                             Settings.WiFiSSID = root.SSID;
                             Settings.WiFiPass = root.Password;
@@ -75,6 +76,7 @@ namespace XamarinEvolve.Clients.Portable
             return true;
         }
 
+		public bool WiFiEnabled => FeatureFlags.WifiEnabled;
 
         bool wiFiConfigured;
         public bool WiFiConfigured

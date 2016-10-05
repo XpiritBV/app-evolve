@@ -1,29 +1,26 @@
-﻿using System;
-using FormsToolkit;
+﻿using FormsToolkit;
+using Xamarin.Forms;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
-    public static class MessagingUtils
-    {
-        public static void SendOfflineMessage()
-        {
-            MessagingService.Current.SendMessage(MessageKeys.Message, new MessagingServiceAlert
-                {
-                    Title="Offline",
-                    Message="You are currently offline, please connect to the internet and try again.",
-                    Cancel="OK"
-                });
-        }
+	public static class MessagingUtils
+	{
+		public static void SendOfflineMessage()
+		{
+			var toaster = DependencyService.Get<IToast>();
+			toaster.SendToast("You are currently offline, please connect to the internet and try again.");
+		}
 
-        public static void SendAlert(string title, string message)
-        {
-            MessagingService.Current.SendMessage(MessageKeys.Message, new MessagingServiceAlert
-                {
-                    Title=title,
-                    Message=message,
-                    Cancel="OK"
-                });
-        }
-    }
+		public static void SendAlert(string title, string message)
+		{
+			MessagingService.Current.SendMessage(MessageKeys.Message, new MessagingServiceAlert
+			{
+				Title = title,
+				Message = message,
+				Cancel = "OK"
+			});
+		}
+	}
 }
 

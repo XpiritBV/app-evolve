@@ -59,7 +59,7 @@ namespace XamarinEvolve.DataStore.Mock
             return results;
         }
 
-        public async Task<IEnumerable<Session>> GetNextSessions()
+        public async Task<IEnumerable<Session>> GetNextSessions(int maxNumber)
         {
             if (!initialized)
                 await InitializeStore();
@@ -69,7 +69,7 @@ namespace XamarinEvolve.DataStore.Mock
             var results = (from session in sessions
                 where (session.IsFavorite && session.StartTime.HasValue && session.StartTime.Value > date)
                                     orderby session.StartTime.Value
-                                    select session).Take(2);
+                                    select session).Take(maxNumber);
 
 
             var enumerable = results as Session[] ?? results.ToArray();
@@ -93,12 +93,16 @@ namespace XamarinEvolve.DataStore.Mock
             int speaker = 0;
             int speakerCount = 0;
             int room = 0;
+            int categoryCount = 0;
             int category = 0;
             var day = new DateTime(2016, 4, 27, 13, 0, 0, DateTimeKind.Utc);
             int dayCount = 0;
             for (int i = 0; i < titles.Length; i++)
             {
                 var sessionSpeakers = new List<Speaker>();
+                var sessionCategories = new List<Category>();
+
+                categoryCount++;
                 speakerCount++;
                 
                 for (int j = 0; j < speakerCount; j++)
@@ -112,10 +116,16 @@ namespace XamarinEvolve.DataStore.Mock
                 if (i == 1)
                     sessionSpeakers.Add(sessions[0].Speakers.ElementAt(0));
 
-                var cat = categories[category];
-                category++;
-                if (category >= categories.Length)
-                    category = 0;
+                for (int j = 0; j < categoryCount; j++)
+                {
+                    sessionCategories.Add(categories[category]);
+                    category++;
+                    if (category >= categories.Length)
+                        category = 0;
+                }
+
+                if (i == 1)
+                    sessionCategories.Add(sessions[0].Categories.ElementAt(0));
 
                 var ro = rooms[room];
                 room++;
@@ -126,7 +136,7 @@ namespace XamarinEvolve.DataStore.Mock
                     {
                         Id = i.ToString(),
                         Abstract = "This is an abstract that is going to tell us all about how awsome this session is and that you should go over there right now and get ready for awesome!.",
-                        MainCategory = cat,
+                        Categories = sessionCategories,
                         Room = ro,
                         Speakers = sessionSpeakers,
                         Title = titles[i],
@@ -163,7 +173,7 @@ namespace XamarinEvolve.DataStore.Mock
                 {
                     Id = sessions.Count.ToString(),
                     Abstract = "Coming soon",
-                    MainCategory = categories[0],
+                    Categories = categories.Take(1).ToList(),
                     Room = rooms[0],
                     //Speakers = new List<Speaker>{ speakers[0] },
                     Title = "Something awesome!",

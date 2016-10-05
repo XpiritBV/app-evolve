@@ -1,1 +1,2 @@
-﻿MONO_GC_PARAMS=bridge-implementation=new
+﻿XA_HTTP_CLIENT_HANDLER_TYPE=Xamarin.Android.Net.AndroidClientHandler
+MONO_GC_PARAMS=bridge-implementation=new

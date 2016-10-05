@@ -17,12 +17,8 @@ namespace XamarinEvolve.Backend.Controllers
 
         public async Task<HttpResponseMessage> Post(string password, [FromBody]string message)
         {
-
-            HttpStatusCode ret = HttpStatusCode.InternalServerError;
-
             if (string.IsNullOrWhiteSpace(message) || password != ConfigurationManager.AppSettings["NotificationsPassword"])
-                return Request.CreateResponse(ret);
-
+                return Request.CreateResponse(HttpStatusCode.Forbidden);
 
             try
             {
@@ -41,7 +37,7 @@ namespace XamarinEvolve.Backend.Controllers
             }
             catch
             {
-                return Request.CreateResponse(ret);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);

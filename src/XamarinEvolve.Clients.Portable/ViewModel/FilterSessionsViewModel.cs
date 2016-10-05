@@ -36,6 +36,8 @@ namespace XamarinEvolve.Clients.Portable
 
         private void SetShowAllCategories(bool showAll)
         {
+			// first save changes to individual filters
+			Save();
             Settings.ShowAllCategories = showAll;
             foreach(var category in Categories)
             {
@@ -71,7 +73,10 @@ namespace XamarinEvolve.Clients.Portable
        
         public void Save()
         {
-            Settings.FilteredCategories = string.Join("|", Categories?.Where(c => c.IsFiltered).Select(c => c.Name)); 
+			if (!Settings.ShowAllCategories)
+			{
+				Settings.FilteredCategories = string.Join("|", Categories?.Where(c => c.IsFiltered).Select(c => c.Name));
+			}
         }
     }
 }

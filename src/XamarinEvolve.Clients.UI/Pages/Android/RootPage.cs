@@ -1,15 +1,14 @@
-﻿using System;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using XamarinEvolve.Clients.Portable;
 using FormsToolkit;
 using XamarinEvolve.DataStore.Abstractions;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public class RootPageAndroid : MasterDetailPage
+	public class RootPageAndroid : MasterDetailPage
     {
         Dictionary<int, EvolveNavigationPage> pages;
         DeepLinkPage page;
@@ -47,7 +46,10 @@ namespace XamarinEvolve.Clients.UI
                     case (int)AppPage.Sessions://sessions
                         pages.Add(menuId, new EvolveNavigationPage(new SessionsPage()));
                         break;
-                    case (int)AppPage.Events://events
+					case (int)AppPage.Speakers://speakers
+						pages.Add(menuId, new EvolveNavigationPage(new SpeakersPage()));
+						break;
+					case (int)AppPage.Events://events
                         pages.Add(menuId, new EvolveNavigationPage(new EventsPage()));
                         break;
                     case (int)AppPage.MiniHacks://Mini-Hacks
@@ -94,10 +96,10 @@ namespace XamarinEvolve.Clients.UI
             base.OnAppearing();
 
 
-            if (Settings.Current.FirstRun)
-            {
-                MessagingService.Current.SendMessage(MessageKeys.NavigateLogin);
-            }
+			if (Settings.Current.FirstRun)
+			{
+				MessagingService.Current.SendMessage(MessageKeys.NavigateLogin);
+			}
 
             isRunning = true;
 
@@ -121,8 +123,31 @@ namespace XamarinEvolve.Clients.UI
                         break;
                     await Detail.Navigation.PushAsync(new SessionDetailsPage(session));
                     break;
-            }
+				case AppPage.MiniHack:
+					await NavigateAsync((int)AppPage.MiniHacks);
+					var hack = await DependencyService.Get<IMiniHacksStore>().GetAppIndexMiniHack(id);
+					if (hack == null)
+						break;
+					await Detail.Navigation.PushAsync(new MiniHacksDetailsPage(hack));
+					break;
+				case AppPage.Speaker:
+					await NavigateAsync((int) AppPage.Speakers);
+					var speaker = await DependencyService.Get<ISpeakerStore>().GetAppIndexSpeaker(id);
+					if (speaker == null)
+						break;
 
+					ContentPage destination;
+					if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
+					{
+						destination = new SpeakerDetailsPageUWP(speaker);
+					}
+					else
+					{
+						destination = new SpeakerDetailsPage(speaker);
+					}
+					await Detail.Navigation.PushAsync(destination);
+					break;
+			}
         }
 
     }

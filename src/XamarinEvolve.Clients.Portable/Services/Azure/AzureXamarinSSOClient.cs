@@ -14,6 +14,7 @@ namespace XamarinEvolve.Clients.Portable.Auth.Azure
     public sealed class XamarinSSOClient : ISSOClient
     {
         private readonly StoreManager storeManager;
+		private readonly ILogger logger;
      
         public XamarinSSOClient(StoreManager storeManager)
         {
@@ -22,14 +23,16 @@ namespace XamarinEvolve.Clients.Portable.Auth.Azure
                 throw new ArgumentNullException(nameof(storeManager));
             }
 
+			this.logger = DependencyService.Get<ILogger>();
             this.storeManager = storeManager;
         }
 
         public XamarinSSOClient()
         {
             storeManager = DependencyService.Get<IStoreManager>() as StoreManager;
+			logger = DependencyService.Get<ILogger>();
 
-            if (storeManager == null)
+			if (storeManager == null)
             {
                 throw new InvalidOperationException($"The {typeof(XamarinSSOClient).FullName} requires a {typeof(StoreManager).FullName}.");
             }
@@ -42,7 +45,21 @@ namespace XamarinEvolve.Clients.Portable.Auth.Azure
             return AccountFromMobileServiceUser(user);
         }
 
-        public async Task LogoutAsync()
+		public async Task<AccountResponse> LoginAnonymouslyAsync(string impersonateUserId)
+		{
+			try
+			{
+				MobileServiceUser user = await storeManager.LoginAnonymouslyAsync(impersonateUserId);
+				return AccountFromMobileServiceUser(user);
+			}
+			catch (Exception e)
+			{
+				logger.Report(e, "Method", "LoginAnonymouslyAsync", Severity.Error);
+				return null;
+			}
+		}
+
+		public async Task LogoutAsync()
         {
             await storeManager.LogoutAsync();
         }

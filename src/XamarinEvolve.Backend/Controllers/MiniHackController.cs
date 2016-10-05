@@ -7,6 +7,7 @@ using Microsoft.Azure.Mobile.Server;
 using XamarinEvolve.Backend.Models;
 using XamarinEvolve.DataObjects;
 using XamarinEvolve.Backend.Identity;
+using XamarinEvolve.Backend.Helpers;
 
 namespace XamarinEvolve.Backend.Controllers
 {

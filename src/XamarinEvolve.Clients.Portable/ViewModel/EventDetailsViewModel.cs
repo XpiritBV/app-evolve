@@ -7,6 +7,7 @@ using Plugin.ExternalMaps;
 using MvvmHelpers;
 using FormsToolkit;
 using System.Threading.Tasks;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {

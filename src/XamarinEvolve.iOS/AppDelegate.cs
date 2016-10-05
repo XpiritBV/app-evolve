@@ -16,47 +16,31 @@ using Refractored.XamForms.PullToRefresh.iOS;
 using Social;
 using CoreSpotlight;
 using XamarinEvolve.DataStore.Abstractions;
-using HockeyApp;
 using System.Threading.Tasks;
 using Google.AppIndexing;
+using HockeyApp.iOS;
+using NotificationCenter;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.iOS
 {
-
-
     [Register("AppDelegate")]
     public partial class AppDelegate : FormsApplicationDelegate
     {
-
         public static class ShortcutIdentifier
         {
-            public const string Tweet = "com.sample.evolve.tweet";
-            public const string Announcements = "com.sample.evolve.announcements";
-            public const string Events = "com.sample.evolve.events";
-            public const string MiniHacks = "com.sample.evolve.minihacks";
+			public const string Tweet = AboutThisApp.PackageName + ".tweet";
+            public const string Announcements = AboutThisApp.PackageName + ".announcements";
+            public const string Events = AboutThisApp.PackageName + ".events";
+            public const string MiniHacks = AboutThisApp.PackageName + ".minihacks";
         }
 
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-        {
-            
-            var tint = UIColor.FromRGB(118, 53, 235);
-            UINavigationBar.Appearance.BarTintColor = UIColor.FromRGB(250, 250, 250); //bar background
-            UINavigationBar.Appearance.TintColor = tint; //Tint color of button items
+		internal static UIColor PrimaryColor = null;
 
-            UIBarButtonItem.Appearance.TintColor = tint; //Tint color of button items
-
-            UITabBar.Appearance.TintColor = tint;
-
-            UISwitch.Appearance.OnTintColor = tint;
-
-            UIAlertView.Appearance.TintColor = tint;
-
-            UIView.AppearanceWhenContainedIn(typeof(UIAlertController)).TintColor = tint;
-            UIView.AppearanceWhenContainedIn(typeof(UIActivityViewController)).TintColor = tint;
-            UIView.AppearanceWhenContainedIn(typeof(SLComposeViewController)).TintColor = tint;
-
-            #if !ENABLE_TEST_CLOUD
-            if (!string.IsNullOrWhiteSpace(ApiKeys.HockeyAppiOS) && ApiKeys.HockeyAppiOS != nameof(ApiKeys.HockeyAppiOS)))
+        public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
+		{
+#if !ENABLE_TEST_CLOUD
+            if (!string.IsNullOrWhiteSpace(ApiKeys.HockeyAppiOS) && ApiKeys.HockeyAppiOS != nameof(ApiKeys.HockeyAppiOS))
             {
                
                 var manager = BITHockeyManager.SharedHockeyManager;
@@ -69,77 +53,102 @@ namespace XamarinEvolve.iOS
                 //manager.Authenticator.AuthenticateInstallation();
                    
             }
-            #endif
+#endif
+			// Code for starting up the Xamarin Test Cloud Agent
+#if ENABLE_TEST_CLOUD
+			Xamarin.Calabash.Start();
+			//Mapping StyleId to iOS Labels
+			Forms.ViewInitialized += (object sender, ViewInitializedEventArgs e) =>
+			{
+				if (null != e.View.StyleId)
+				{
+					e.NativeView.AccessibilityIdentifier = e.View.StyleId;
+				}
+			};
+#endif
 
-            Forms.Init();
-            FormsMaps.Init();
-            Toolkit.Init();
+			Forms.Init();
 
-            AppIndexing.SharedInstance.RegisterApp (618319027);
+			SetMinimumBackgroundFetchInterval();
 
-            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-            // Code for starting up the Xamarin Test Cloud Agent
-            #if ENABLE_TEST_CLOUD
-            Xamarin.Calabash.Start();
-            //Mapping StyleId to iOS Labels
-            Forms.ViewInitialized += (object sender, ViewInitializedEventArgs e) =>
-            {
-                if (null != e.View.StyleId)
-                {
-                    e.NativeView.AccessibilityIdentifier = e.View.StyleId;
-                }
-            };
-            #endif
+			InitializeDependencies();
 
-            SetMinimumBackgroundFetchInterval();
+			LoadApplication(new App());
 
-            //Random Inits for Linking out.
-            Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
-            SQLitePCL.CurrentPlatform.Init();
-            Plugin.Share.ShareImplementation.ExcludedUIActivityTypes = new List<NSString>
-            {
-                UIActivityType.PostToFacebook,
-                UIActivityType.AssignToContact,
-                UIActivityType.OpenInIBooks,
-                UIActivityType.PostToVimeo,
-                UIActivityType.PostToFlickr,
-                UIActivityType.SaveToCameraRoll
-            };
-            ImageCircle.Forms.Plugin.iOS.ImageCircleRenderer.Init();
-            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-            NonScrollableListViewRenderer.Initialize();
-            SelectedTabPageRenderer.Initialize();
-            TextViewValue1Renderer.Init();
-            PullToRefreshLayoutRenderer.Init();
-            LoadApplication(new App());
+			InitializeThemeColors();
 
+			// Process any potential notification data from launch
+			ProcessNotification(launchOptions);
 
-           
+			NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, DidBecomeActive);
 
-            // Process any potential notification data from launch
-            ProcessNotification(options);
+			var shouldPerformAdditionalDelegateHandling = true;
 
-            NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.DidBecomeActiveNotification, DidBecomeActive);
+			// Get possible shortcut item
+			if (launchOptions != null)
+			{
+				LaunchedShortcutItem = launchOptions[UIApplication.LaunchOptionsShortcutItemKey] as UIApplicationShortcutItem;
+				shouldPerformAdditionalDelegateHandling = (LaunchedShortcutItem == null);
+			}
 
+			return base.FinishedLaunching(uiApplication, launchOptions);// && shouldPerformAdditionalDelegateHandling;
+		}
 
-
-            return base.FinishedLaunching(app, options);
-        }
-
-
-        void DidBecomeActive(NSNotification notification)
+		void DidBecomeActive(NSNotification notification)
         {
             ((XamarinEvolve.Clients.UI.App)Xamarin.Forms.Application.Current).SecondOnResume();
-
         }
+
+		static void InitializeDependencies()
+		{
+			FormsMaps.Init();
+			Toolkit.Init();
+
+			AppIndexing.SharedInstance.RegisterApp(PublicationSettings.iTunesAppId);
+
+			ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+
+			//Random Inits for Linking out.
+			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+			SQLitePCL.CurrentPlatform.Init();
+			Plugin.Share.ShareImplementation.ExcludedUIActivityTypes = new List<NSString>
+			{
+				UIActivityType.PostToFacebook,
+				UIActivityType.AssignToContact,
+				UIActivityType.OpenInIBooks,
+				UIActivityType.PostToVimeo,
+				UIActivityType.PostToFlickr,
+				UIActivityType.SaveToCameraRoll
+			};
+			ImageCircle.Forms.Plugin.iOS.ImageCircleRenderer.Init();
+			ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+			NonScrollableListViewRenderer.Initialize();
+			SelectedTabPageRenderer.Initialize();
+			TextViewValue1Renderer.Init();
+			PullToRefreshLayoutRenderer.Init();
+		}
+
+		static void InitializeThemeColors()
+		{
+			// Set up appearance after loading theme resources in App.xaml
+			PrimaryColor = ((Color)Xamarin.Forms.Application.Current.Resources["Primary"]).ToUIColor();
+			UINavigationBar.Appearance.BarTintColor = ((Color)Xamarin.Forms.Application.Current.Resources["BarBackgroundColor"]).ToUIColor();
+			UINavigationBar.Appearance.TintColor = PrimaryColor; //Tint color of button items
+			UIBarButtonItem.Appearance.TintColor = PrimaryColor; //Tint color of button items
+			UITabBar.Appearance.TintColor = PrimaryColor;
+			UISwitch.Appearance.OnTintColor = PrimaryColor;
+			UIAlertView.Appearance.TintColor = PrimaryColor;
+
+			UIView.AppearanceWhenContainedIn(typeof(UIAlertController)).TintColor = PrimaryColor;
+			UIView.AppearanceWhenContainedIn(typeof(UIActivityViewController)).TintColor = PrimaryColor;
+			UIView.AppearanceWhenContainedIn(typeof(SLComposeViewController)).TintColor = PrimaryColor;
+		}
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
             base.WillEnterForeground(uiApplication);
             ((XamarinEvolve.Clients.UI.App)Xamarin.Forms.Application.Current).SecondOnResume();
         }
-
-
 
         public override void RegisteredForRemoteNotifications(UIApplication app, NSData deviceToken)
         {
@@ -163,13 +172,43 @@ namespace XamarinEvolve.iOS
                 else
                     Console.WriteLine("Success");
             });
-            #endif
+#endif
         }
 
         public override void ReceivedRemoteNotification(UIApplication app, NSDictionary userInfo)
         {
             // Process a notification received while the app was already open
             ProcessNotification(userInfo);
+        }
+
+		public override bool HandleOpenURL(UIApplication application, NSUrl url)
+		{
+            if (!string.IsNullOrEmpty(url.AbsoluteString))
+            {
+                ((XamarinEvolve.Clients.UI.App)App.Current).SendOnAppLinkRequestReceived(new Uri(url.AbsoluteString));
+                return true;
+            }
+            return false;
+		}
+
+		public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+		{
+            if (!string.IsNullOrEmpty(url.AbsoluteString))
+            {
+                ((XamarinEvolve.Clients.UI.App)App.Current).SendOnAppLinkRequestReceived(new Uri(url.AbsoluteString));
+                return true;
+            }
+            return false;
+		}
+
+		public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+            if (!string.IsNullOrEmpty(url.AbsoluteString))
+            {
+                ((XamarinEvolve.Clients.UI.App)App.Current).SendOnAppLinkRequestReceived(new Uri(url.AbsoluteString));
+                return true;
+            }
+            return false;
         }
 
         void ProcessNotification(NSDictionary userInfo)
@@ -183,7 +222,6 @@ namespace XamarinEvolve.iOS
 
             if (userInfo.ContainsKey(apsKey))
             {
-
                 var alertKey = new NSString("alert");
 
                 var aps = (NSDictionary)userInfo.ObjectForKey(apsKey);
@@ -195,7 +233,7 @@ namespace XamarinEvolve.iOS
                     try 
                     {
 
-                        var avAlert = new UIAlertView ("Evolve Update", alert, null, "OK", null);
+						var avAlert = new UIAlertView ($"{EventInfo.EventName} Update", alert, null, "OK", null);
                         avAlert.Show ();
                       
                     } 
@@ -213,20 +251,44 @@ namespace XamarinEvolve.iOS
 
         public UIApplicationShortcutItem LaunchedShortcutItem { get; set; }
 
-        public override void OnActivated(UIApplication application)
-        {
-            Console.WriteLine("OnActivated");
+		public override void OnActivated(UIApplication uiApplication)
+		{
+			Console.WriteLine("OnActivated");
 
-            // Handle any shortcut item being selected
-            HandleShortcutItem(LaunchedShortcutItem);
+			// Handle any shortcut item being selected
+			HandleShortcutItem(LaunchedShortcutItem);
 
 
 
-            // Clear shortcut after it's been handled
-            LaunchedShortcutItem = null;
-        }
-        // if app is already running
-        public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
+			// Clear shortcut after it's been handled
+			LaunchedShortcutItem = null;
+		}
+
+		void CheckForAppLink(NSUserActivity userActivity)
+		{
+			var link = string.Empty;
+
+			switch (userActivity.ActivityType)
+			{
+				case "NSUserActivityTypeBrowsingWeb":
+					link = userActivity.WebPageUrl.AbsoluteString;
+					break;
+				case "com.apple.corespotlightitem":
+					if (userActivity.UserInfo.ContainsKey(CSSearchableItem.ActivityIdentifier))
+						link = userActivity.UserInfo.ObjectForKey(CSSearchableItem.ActivityIdentifier).ToString();
+					break;
+				default:
+					if (userActivity.UserInfo.ContainsKey(new NSString("link")))
+						link = userActivity.UserInfo[new NSString("link")].ToString();
+					break;
+			}
+
+			if (!string.IsNullOrEmpty(link))
+				((XamarinEvolve.Clients.UI.App)App.Current).SendOnAppLinkRequestReceived(new Uri(link));
+		}
+
+		// if app is already running
+		public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
         {
             Console.WriteLine("PerformActionForShortcutItem");
             // Perform action
@@ -243,7 +305,6 @@ namespace XamarinEvolve.iOS
             if (shortcutItem == null)
                 return false;
 
-
             // Take action based on the shortcut type
             switch (shortcutItem.Type)
             {
@@ -256,10 +317,10 @@ namespace XamarinEvolve.iOS
                     }
                     else
                     {
-                        slComposer.SetInitialText("#XamarinEvolve");
+                        slComposer.SetInitialText(EventInfo.HashTag);
                         if (slComposer.EditButtonItem != null)
                         {
-                            slComposer.EditButtonItem.TintColor = UIColor.FromRGB(118, 53, 235);
+                            slComposer.EditButtonItem.TintColor = PrimaryColor;
                         }
                         slComposer.CompletionHandler += (result) =>
                         {
@@ -305,6 +366,17 @@ namespace XamarinEvolve.iOS
                 });
         }
 
+		public override void UserActivityUpdated(UIApplication application, NSUserActivity userActivity)
+		{
+			CheckForAppLink(userActivity);
+		}
+
+		public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+		{
+			CheckForAppLink(userActivity);
+			return true;
+		}
+
         #endregion
 
         #region Background Refresh
@@ -319,38 +391,36 @@ namespace XamarinEvolve.iOS
         private const double MINIMUM_BACKGROUND_FETCH_INTERVAL = 1200;
 
         // Called whenever your app performs a background fetch
-        public override async void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
+        public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
             // Do Background Fetch
             var downloadSuccessful = false;
-            try
+			var logger = DependencyService.Get<ILogger>();
+
+			try
             {
                 Xamarin.Forms.Forms.Init();//need for dependency services
                 // Download data
                 var manager = DependencyService.Get <IStoreManager>();
-
-                downloadSuccessful = await manager.SyncAllAsync(Settings.Current.IsLoggedIn);
+				downloadSuccessful = manager.SyncAllAsync(Settings.Current.IsLoggedIn).Result;
             }
             catch (Exception ex)
             {
-                var logger = DependencyService.Get <ILogger>();
                 ex.Data["Method"] = "PerformFetch";
                 logger.Report(ex);
             }
 
-            // If you don't call this, your application will be terminated by the OS.
-            // Allows OS to collect stats like data cost and power consumption
+			// If you don't call this, your application will be terminated by the OS.
+			// Allows OS to collect stats like data cost and power consumption
             if (downloadSuccessful)
-            {
-                completionHandler(UIBackgroundFetchResult.NewData);
+			{
                 Settings.Current.HasSyncedData = true;
                 Settings.Current.LastSync = DateTime.UtcNow;
-            }
-            else
-            {
-                completionHandler(UIBackgroundFetchResult.Failed);
-            }
-        }
+				logger.Track("PerformFetchOnBackground", "DateTime", Settings.Current.LastSync.ToLongTimeString());
+			}
+			var resultFlag = downloadSuccessful ? UIBackgroundFetchResult.NewData : UIBackgroundFetchResult.Failed;
+			completionHandler(resultFlag);
+		}
 
         #endregion
     }

@@ -20,6 +20,7 @@ namespace XamarinEvolve.Backend.Controllers
             DomainManager = new EntityDomainManager<Speaker>(context, Request, true);
         }
 
+        [EnableQuery(MaxTop = 500, PageSize =200)]
         public IQueryable<Speaker> GetAllSpeaker()
         {
             return Query();

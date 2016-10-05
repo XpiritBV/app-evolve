@@ -16,8 +16,9 @@ namespace XamarinEvolve.iOS
         {
             try
             {
-                if(UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"twitter://user?screen_name={username}")))
-                    return true;
+				var twitterUrl = NSUrl.FromString($"twitter://user?screen_name={username}");
+				if (UIApplication.SharedApplication.OpenUrl(twitterUrl))
+					return true;
             }
             catch(Exception ex)
             {
@@ -26,8 +27,9 @@ namespace XamarinEvolve.iOS
 
             try
             {
-                if(UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"tweetbot://{username}/timeline")))
-                    return true;
+				var tweetbotUrl = NSUrl.FromString($"tweetbot:///user_profile/{username}");
+				if (UIApplication.SharedApplication.OpenUrl(tweetbotUrl))
+					return true;
             }
             catch (Exception ex)
             {

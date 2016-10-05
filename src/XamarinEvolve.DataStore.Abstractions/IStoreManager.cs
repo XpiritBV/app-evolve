@@ -10,6 +10,7 @@ namespace XamarinEvolve.DataStore.Abstractions
         ICategoryStore CategoryStore { get; }
         IFavoriteStore FavoriteStore { get; }
         IFeedbackStore FeedbackStore { get; }
+		IConferenceFeedbackStore ConferenceFeedbackStore { get; }
         ISessionStore SessionStore { get; }
         ISpeakerStore SpeakerStore { get; }
         ISponsorStore SponsorStore { get; }

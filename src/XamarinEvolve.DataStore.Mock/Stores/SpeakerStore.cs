@@ -3,16 +3,12 @@ using XamarinEvolve.DataStore.Abstractions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using XamarinEvolve.DataObjects;
-
-
-using XamarinEvolve.DataStore.Mock;
 using System.Linq;
 
 namespace XamarinEvolve.DataStore.Mock
 {
-    public class SpeakerStore : BaseStore<Speaker>, ISpeakerStore
-    {
-        
+	public class SpeakerStore : BaseStore<Speaker>, ISpeakerStore
+    {        
         IEnumerable<Speaker> speakers;
 
         #region ISpeakerStore implementation
@@ -48,9 +44,14 @@ namespace XamarinEvolve.DataStore.Mock
             return Task.FromResult(true);
         }
 
-        #endregion
-    
-    }
+		public Task<Speaker> GetAppIndexSpeaker(string id)
+		{
+			return GetItemAsync(id);
+		}
+
+		#endregion
+
+	}
 
 
     static class SampleData
@@ -60,15 +61,13 @@ namespace XamarinEvolve.DataStore.Mock
         enum Gender { Man, Woman }
 
 
-        static string[] mensNames = new string[]
-            {
+        static string[] mensNames = {
                 "Joseph", "Charles", "Bryan", "Joshua", "Nate",
                 "Kai", "Ian", "Greg", "Sean", "Derek",
                 "Breck", "James", "Cormac", "Michael", "Andrew"
             };
 
-        static string[] womensNames = new string[]
-            {
+        static string[] womensNames = {
                 "Julia", "Kim", "Laura", "Tammy", "Anya",
                 "Claudia", "Jo Ann", "Brianne", "Sheena", "Ashley",
                 "Allison", "Nina", "Arwa", "Samantha", "Antonia"
@@ -155,7 +154,7 @@ namespace XamarinEvolve.DataStore.Mock
                var company = Companies[random.Next(0, Companies.Length - 1)];
                 var domain = $"{company.ToLower()}.com";
                
-                yield return new Speaker
+                var speaker = new Speaker
                 {
                     Id = i.ToString(),
                     FirstName = firstName,
@@ -170,6 +169,20 @@ namespace XamarinEvolve.DataStore.Mock
                     AvatarUrl =  photos.SmallPhotoUrl,
                     PhotoUrl = photos.PhotoUrl
                 };
+
+				if (i % 3 == 0)
+				{
+					speaker.TwitterUrl = "@" + speaker.TwitterUrl;
+					speaker.LinkedInUrl = "https://linkedin.com/in/" + speaker.LinkedInUrl;
+					speaker.FacebookProfileName = "https://facebook.com/roycornelissen";
+				}
+
+				if (i % 5 == 0 && i % 3 != 0)
+				{
+					speaker.TwitterUrl = "https://www.twitter.com" + speaker.TwitterUrl;
+				}
+
+				yield return speaker;
             }
         }
 

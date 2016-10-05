@@ -2,10 +2,9 @@
 using Xamarin.Forms;
 using XamarinEvolve.DataObjects;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 using System.Windows.Input;
 using FormsToolkit;
-using System.Collections.Generic;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -54,7 +53,7 @@ namespace XamarinEvolve.Clients.Portable
                 MessagingService.Current.SendMessage<MessagingServiceAlert>(MessageKeys.Message, new MessagingServiceAlert
                     {
                         Title = "Feedback Received",
-                        Message = "Thanks for the feedback, have a great Evolve.",
+						Message = $"Thanks for the feedback, have a great {EventInfo.EventName}.",
                         Cancel = "OK",
                         OnCompleted = async () => 
                         {

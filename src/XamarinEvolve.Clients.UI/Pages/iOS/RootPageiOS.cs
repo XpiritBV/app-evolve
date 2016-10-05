@@ -3,6 +3,8 @@ using XamarinEvolve.Clients.UI;
 using FormsToolkit;
 using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.DataStore.Abstractions;
+using XamarinEvolve.Utils;
+using System.Linq;
 
 namespace XamarinEvolve.Clients.UI
 {
@@ -25,8 +27,22 @@ namespace XamarinEvolve.Clients.UI
             NavigationPage.SetHasNavigationBar(this, false);
             Children.Add(new EvolveNavigationPage(new FeedPage()));
             Children.Add(new EvolveNavigationPage(new SessionsPage()));
-            Children.Add(new EvolveNavigationPage(new EventsPage()));
-            Children.Add(new EvolveNavigationPage(new MiniHacksPage()));
+			if (FeatureFlags.SpeakersEnabled)
+			{
+				Children.Add(new EvolveNavigationPage(new SpeakersPage()));
+			}
+			if (FeatureFlags.EventsEnabled)
+			{
+				Children.Add(new EvolveNavigationPage(new EventsPage()));
+			}
+			if (FeatureFlags.SponsorsOnTabPage)
+			{
+				Children.Add(new EvolveNavigationPage(new SponsorsPage()));
+			}
+			if (FeatureFlags.MiniHacksEnabled)
+			{
+				Children.Add(new EvolveNavigationPage(new MiniHacksPage()));
+			}
             Children.Add(new EvolveNavigationPage(new AboutPage()));
 
             MessagingService.Current.Subscribe<DeepLinkPage>("DeepLinkPage", async (m, p) =>
@@ -34,79 +50,80 @@ namespace XamarinEvolve.Clients.UI
                     switch(p.Page)
                     {
                         case AppPage.Notification:
-                            NavigateAsync(AppPage.Notification);
+							Navigate(AppPage.Feed);
+                            Navigate(AppPage.Notification);
                             await CurrentPage.Navigation.PopToRootAsync();
                             await CurrentPage.Navigation.PushAsync(new NotificationsPage());
                             break;
                         case AppPage.Events:
-                            NavigateAsync(AppPage.Events);
+                            Navigate(AppPage.Events);
                             await CurrentPage.Navigation.PopToRootAsync();
                             break;
                         case AppPage.MiniHacks:
-                            NavigateAsync(AppPage.MiniHacks);
+                            Navigate(AppPage.MiniHacks);
                             await CurrentPage.Navigation.PopToRootAsync();
                             break;
-                        case AppPage.Session:
-                            NavigateAsync(AppPage.Sessions);
+						case AppPage.MiniHack:
+							Navigate(AppPage.MiniHacks);
+							await CurrentPage.Navigation.PopToRootAsync();
+
+							var hack = await DependencyService.Get<IMiniHacksStore>().GetAppIndexMiniHack(p.Id);
+							if (hack == null)
+								break;
+
+							await CurrentPage.Navigation.PushAsync(new MiniHacksDetailsPage(hack));
+							break;
+						case AppPage.Session:
+                            Navigate(AppPage.Sessions);
+							await CurrentPage.Navigation.PopToRootAsync();
                             var session = await DependencyService.Get<ISessionStore>().GetAppIndexSession (p.Id);
                             if (session == null)
                                 break;
                             await CurrentPage.Navigation.PushAsync(new SessionDetailsPage(session));
                             break;
-                    }
-
+						case AppPage.Speaker:
+							Navigate(AppPage.Speakers);
+							await CurrentPage.Navigation.PopToRootAsync();
+							var speaker = await DependencyService.Get<ISpeakerStore>().GetAppIndexSpeaker(p.Id);
+							if (speaker == null)
+								break;
+							
+							ContentPage destination;
+							if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
+							{
+								destination = new SpeakerDetailsPageUWP(speaker);
+							}
+							else
+							{
+								destination = new SpeakerDetailsPage(speaker);
+							}
+							await CurrentPage.Navigation.PushAsync(destination);
+							break;
+					}
                 });
         }
 
-        protected override void OnCurrentPageChanged()
+		public void Navigate(AppPage menuId)
         {
-            base.OnCurrentPageChanged();
-            switch (Children.IndexOf(CurrentPage))
-            {
-                case 0:
-                    App.Logger.TrackPage(AppPage.Feed.ToString());
-                    break;
-                case 1:
-                    App.Logger.TrackPage(AppPage.Sessions.ToString());
-                    break;
-                case 2:
-                    App.Logger.TrackPage(AppPage.Events.ToString());
-                    break;
-                case 3:
-                    App.Logger.TrackPage(AppPage.MiniHacks.ToString());
-                    break;
-                case 4:
-                    App.Logger.TrackPage(AppPage.Information.ToString());
-                    break;
-            }
-        }
+			var page = Children.OfType<EvolveNavigationPage>()
+							   .Where(n => n.CurrentPage is IProvidePageInfo && ((IProvidePageInfo)n.CurrentPage).PageType == menuId)
+			                   .FirstOrDefault();
 
-        public void NavigateAsync(AppPage menuId)
-        {
-            switch ((int)menuId)
-            {
-                case (int)AppPage.Feed: CurrentPage = Children[0]; break;
-                case (int)AppPage.Sessions: CurrentPage = Children[1]; break;
-                case (int)AppPage.Events: CurrentPage = Children[2]; break;
-                case (int)AppPage.MiniHacks: CurrentPage = Children[3]; break;
-                case (int)AppPage.Information: CurrentPage = Children[4]; break;
-                case (int)AppPage.Notification: CurrentPage = Children[0]; break;
-            }
+			if (page != null)
+			{
+				CurrentPage = page;
+			}
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-
-
             if (Settings.Current.FirstRun)
             {
                 MessagingService.Current.SendMessage(MessageKeys.NavigateLogin);
             }
-        }
-
-       
+        }       
     }
 }
 

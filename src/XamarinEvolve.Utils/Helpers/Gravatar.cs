@@ -20,26 +20,8 @@ namespace XamarinEvolve.Clients.Portable
         /// <param name="rating">The Gravatar rating.</param>
         /// <returns>A gravatar URL.</returns>
         public static string GetURL(string email,int size = 150, 
-            string rating = "x") => $"{HttpsUrl}{GetMD5(email)}&s={size.ToString(CultureInfo.InvariantCulture)}&r={rating}";
-
-
-        /// <summary>
-        /// Gets the MD5 of the given string.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>The MD5 hash.</returns>
-        static string GetMD5(string input)
-        {
-
-            var bytes = Encoding.UTF8.GetBytes(input);
-            var data = MD5Core.GetHash(bytes);
-            var builder = new StringBuilder();
-
-            for (var i = 0; i < data.Length; i++) 
-                builder.Append(data[i].ToString("x2"));
-            
-            return builder.ToString();
-        }
+            string rating = "x") => $"{HttpsUrl}{MD5Core.GetMD5String(email)}&s={size.ToString(CultureInfo.InvariantCulture)}&r={rating}";
+		                             
     }
 }
 

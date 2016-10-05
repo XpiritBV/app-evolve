@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Favorite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Feedback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobileToWebSync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Room.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Session.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Speaker.cs" />
@@ -21,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)FeaturedEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Notification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MiniHack.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConferenceFeedback.cs" />
   </ItemGroup>
 </Project>

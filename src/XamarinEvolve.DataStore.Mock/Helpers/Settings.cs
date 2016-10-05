@@ -39,6 +39,12 @@ namespace XamarinEvolve.DataStore.Mock
         public static bool LeftFeedback(string id) =>
         AppSettings.GetValueOrDefault<bool>("feed_"+id, false);
 
+		public static bool LeftConferenceFeedback() =>
+			AppSettings.GetValueOrDefault<bool>("conference_feedback", false);
+
+		public static bool LeaveConferenceFeedback(bool leave) =>
+			AppSettings.AddOrUpdateValue("conference_feedback", leave);
+
         public static void LeaveFeedback(string id, bool leave) =>
         AppSettings.AddOrUpdateValue("feed_"+id, leave);
 

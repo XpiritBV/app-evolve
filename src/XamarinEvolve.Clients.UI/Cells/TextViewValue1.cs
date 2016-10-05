@@ -7,7 +7,7 @@ namespace XamarinEvolve.Clients.UI
     {
         public TextViewValue1()
         {
-            DetailColor = Color.FromHex("#979797");
+			DetailColor = (Color) Application.Current.Resources["DetailTextColor"];
         }
     }
 }

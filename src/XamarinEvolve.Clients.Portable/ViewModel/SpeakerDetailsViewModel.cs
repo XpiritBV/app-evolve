@@ -1,15 +1,16 @@
 ﻿using System;
 using Xamarin.Forms;
 using XamarinEvolve.DataObjects;
-using System.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using MvvmHelpers;
 using FormsToolkit;
+using XamarinEvolve.Utils;
+using System.Linq;
 
 namespace XamarinEvolve.Clients.Portable
 {
-    public class SpeakerDetailsViewModel : ViewModelBase
+	public class SpeakerDetailsViewModel : ViewModelBase
     {
         
         public Speaker Speaker { get; set;}
@@ -28,12 +29,14 @@ namespace XamarinEvolve.Clients.Portable
         {
             Speaker = speaker;
             this.sessionId = sessionId;
+
+			MessagingService.Current.Subscribe<Session>(MessageKeys.SessionFavoriteToggled, UpdateFavoritedSession);
+
             if (!string.IsNullOrWhiteSpace(speaker.CompanyWebsiteUrl))
             {
                 FollowItems.Add(new MenuItem
                     {
-                        Name = "Web",
-                        Subtitle = speaker.CompanyWebsiteUrl,
+                        Name = speaker.CompanyWebsiteUrl.StripUrlForDisplay(),
                         Parameter = speaker.CompanyWebsiteUrl,
                         Icon = "icon_website.png"
                     });
@@ -43,38 +46,60 @@ namespace XamarinEvolve.Clients.Portable
             {
                 FollowItems.Add(new MenuItem
                     {
-                        Name = "Blog",
-                        Subtitle = speaker.BlogUrl,
+						Name = speaker.BlogUrl.StripUrlForDisplay(),
                         Parameter = speaker.BlogUrl,
                         Icon = "icon_blog.png"
                     });
             }
 
-            if (!string.IsNullOrWhiteSpace(speaker.TwitterUrl))
-            {
-                FollowItems.Add(new MenuItem
-                    {
-                        Name = Device.OS == TargetPlatform.iOS ? "Twitter" : speaker.TwitterUrl,
-                        Subtitle = $"@{speaker.TwitterUrl}",
-                        Parameter = "http://twitter.com/" + speaker.TwitterUrl,
-                        Icon = "icon_twitter.png"
-                    });
-            }
+			if (!string.IsNullOrWhiteSpace(speaker.TwitterUrl))
+			{
+				var twitterValue = speaker.TwitterUrl.CleanUpTwitter();
 
-            if (!string.IsNullOrWhiteSpace(speaker.LinkedInUrl))
-            {
-                FollowItems.Add(new MenuItem
-                    {
-                        Name = "LinkedIn",
-                        Subtitle = speaker.LinkedInUrl,
-                        Parameter = "http://linkedin.com/in/" + speaker.LinkedInUrl,
-                        Icon = "icon_linkedin.png"
-                    });
-            }
+				FollowItems.Add(new MenuItem
+				{
+					Name = $"@{twitterValue}",
+					Parameter = "https://twitter.com/" + twitterValue,
+					Icon = "icon_twitter.png"
+				});
+			}
+			if (!string.IsNullOrWhiteSpace(speaker.FacebookProfileName))
+			{
+				var profileName = speaker.FacebookProfileName.GetLastPartOfUrl();
+				var profileDisplayName = profileName;
+				Int64 testProfileId;
+				if (Int64.TryParse(profileName, out testProfileId))
+				{
+					profileDisplayName = "Facebook";
+				}
+				FollowItems.Add(new MenuItem
+				{
+					Name = profileDisplayName,
+					Parameter = "https://facebook.com/" + profileName,
+					Icon = "icon_facebook.png"
+				});
+			}
+			if (!string.IsNullOrWhiteSpace(speaker.LinkedInUrl))
+			{
+				FollowItems.Add(new MenuItem
+				{
+					Name = "LinkedIn",
+					Parameter = speaker.LinkedInUrl.StripUrlForDisplay(),
+					Icon = "icon_linkedin.png"
+				});
+			}
+		}
 
-        }
+		void UpdateFavoritedSession(IMessagingService service, Session updatedSession)
+		{
+			var sessionInList = Sessions.FirstOrDefault(s => s.Id == updatedSession.Id);
+			if (sessionInList != null && sessionInList.IsFavorite != updatedSession.IsFavorite)
+			{
+				sessionInList.IsFavorite = updatedSession.IsFavorite;
+			}
+		}
 
-        ICommand  loadSessionsCommand;
+		ICommand  loadSessionsCommand;
         public ICommand LoadSessionsCommand =>
             loadSessionsCommand ?? (loadSessionsCommand = new Command(async () => await ExecuteLoadSessionsCommandAsync())); 
 
@@ -89,10 +114,10 @@ namespace XamarinEvolve.Clients.Portable
 
                 #if DEBUG
                 await Task.Delay(1000);
-                #endif
+#endif
 
 
-                var items = (await StoreManager.SessionStore.GetSpeakerSessionsAsync(Speaker.Id)).Where(x => x.Id != sessionId);
+				var items = (await StoreManager.SessionStore.GetSpeakerSessionsAsync(Speaker.Id));
 
                 Sessions.ReplaceRange(items);
 
@@ -145,29 +170,36 @@ namespace XamarinEvolve.Clients.Portable
 
         ICommand  favoriteCommand;
         public ICommand FavoriteCommand =>
-        favoriteCommand ?? (favoriteCommand = new Command<Session>((s) =>  ExecuteFavoriteCommand(s))); 
+		favoriteCommand ?? (favoriteCommand = new Command<Session>(async (s) => await ExecuteFavoriteCommandAsync(s))); 
 
-        void ExecuteFavoriteCommand(Session session)
+		async Task ExecuteFavoriteCommandAsync(Session session)
         {
-            MessagingService.Current.SendMessage<MessagingServiceQuestion>(MessageKeys.Question, new MessagingServiceQuestion
-                {
-                    Negative = "Cancel",
-                    Positive = "Unfavorite",
-                    Question = "Are you sure you want to remove this session from your favorites?",
-                    Title = "Unfavorite Session",
-                    OnCompleted = (async (result) =>
-                        {
-                            if(!result)
-                                return;
-
-                            var toggled = await FavoriteService.ToggleFavorite(session);
-                            if(toggled)
-                                await ExecuteLoadSessionsCommandAsync();
-                        })
-                });
-
+			if (session.IsFavorite)
+			{
+				MessagingService.Current.SendMessage<MessagingServiceQuestion>(MessageKeys.Question, new MessagingServiceQuestion
+				{
+					Negative = "Cancel",
+					Positive = "Unfavorite",
+					Question = "Are you sure you want to remove this session from your favorites?",
+					Title = "Unfavorite Session",
+					OnCompleted = (async (result) =>
+						{
+							if (!result)
+								return;
+							await ToggleFavorite(session);
+					})
+				});
+			}
+			else
+			{
+				await ToggleFavorite(session);
+			}
         }
 
-    }
+		async Task ToggleFavorite(Session session)
+		{
+			var toggled = await FavoriteService.ToggleFavorite(session);
+		}
+	}
 }
 

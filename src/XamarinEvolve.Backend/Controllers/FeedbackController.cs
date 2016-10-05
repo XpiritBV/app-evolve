@@ -21,14 +21,15 @@ namespace XamarinEvolve.Backend.Controllers
             XamarinEvolveContext context = new XamarinEvolveContext();
             DomainManager = new EntityDomainManager<Feedback>(context, Request, true);
         }
-        
+
+        [Authorize]
         public IQueryable<Feedback> GetAllFeedback()
         {
             var items = Query();
 
-            var email = EmailHelper.GetAuthenticatedUserEmail(RequestContext);
+            var userId = AuthenticationHelper.GetAuthenticatedUserId(RequestContext);
 
-            var final = items.Where(feedback => feedback.UserId == email);
+            var final = items.Where(feedback => feedback.UserId == userId);
 
             return final;
 
@@ -51,8 +52,8 @@ namespace XamarinEvolve.Backend.Controllers
         public async Task<IHttpActionResult> PostFeedback(Feedback item)
         {
             var feedback = item;
-            feedback.UserId = EmailHelper.GetAuthenticatedUserEmail(RequestContext);
 
+            feedback.UserId = AuthenticationHelper.GetAuthenticatedUserId(RequestContext);
             var current = await InsertAsync(feedback);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }

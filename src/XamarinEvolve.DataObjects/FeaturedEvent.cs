@@ -5,7 +5,7 @@ namespace XamarinEvolve.DataObjects
     public class FeaturedEvent : BaseDataObject
     {
         /// <summary>
-        /// Gets or sets the title of the event such as: Evolve Keynote
+        /// Gets or sets the title of the event such as: Keynote
         /// </summary>
         /// <value>The title.</value>
         public string Title { get; set; }

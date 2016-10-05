@@ -13,7 +13,12 @@ namespace XamarinEvolve.DataStore.Mock
         {
         }
 
-        public override async Task<IEnumerable<MiniHack>> GetItemsAsync(bool forceRefresh = false)
+		public Task<MiniHack> GetAppIndexMiniHack(string id)
+		{
+			return GetItemAsync(id);
+		}
+
+		public override async Task<IEnumerable<MiniHack>> GetItemsAsync(bool forceRefresh = false)
         {
             await InitializeStore();
             return hacks as IEnumerable<MiniHack>;

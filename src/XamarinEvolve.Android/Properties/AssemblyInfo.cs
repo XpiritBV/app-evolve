@@ -6,12 +6,12 @@ using Android.App;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("XamarinEvolve.Droid")]
-[assembly: AssemblyDescription("Xamarin Evolve Android")]
+[assembly: AssemblyDescription("TechDays 2016 Android")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Xamarin")]
-[assembly: AssemblyProduct("Xamarin Evolve")]
-[assembly: AssemblyCopyright("Copyright © 2016 Xamarin Inc All Rights Reserved")]
-[assembly: AssemblyTrademark("Xamarin Inc")]
+[assembly: AssemblyCompany("Xpirit")]
+[assembly: AssemblyProduct("TechDays 2016")]
+[assembly: AssemblyCopyright("Copyright © 2016 Xpirit Inc All Rights Reserved")]
+[assembly: AssemblyTrademark("Xpirit Nederland B.V.")]
 [assembly: AssemblyCulture("")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".

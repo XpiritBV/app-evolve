@@ -48,16 +48,19 @@ namespace XamarinEvolve.DataStore.Azure
         public virtual async Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false)
         {
             await InitializeStore().ConfigureAwait (false);
-            if(forceRefresh)
-                await PullLatestAsync().ConfigureAwait (false);
-            
-            return await Table.ToEnumerableAsync().ConfigureAwait(false);
+			if (forceRefresh)
+			{
+				await SyncAsync().ConfigureAwait(false);
+				await PullLatestAsync().ConfigureAwait(false);
+			}
+			return await Table.ToEnumerableAsync().ConfigureAwait(false);
         }
 
         public virtual async Task<T> GetItemAsync(string id)
         {
             await InitializeStore().ConfigureAwait(false);
             await PullLatestAsync().ConfigureAwait(false);
+
             var items = await Table.Where(s => s.Id == id).ToListAsync().ConfigureAwait(false);
 
             if (items == null || items.Count == 0)
@@ -103,9 +106,19 @@ namespace XamarinEvolve.DataStore.Azure
             {
                 await Table.PullAsync($"all{Identifier}", Table.CreateQuery()).ConfigureAwait(false);
             }
-            catch (Exception ex)
+			catch (MobileServicePushFailedException pex)
+			{
+				Debug.WriteLine($"Unable to pull items for {Identifier}, that is alright as we have offline capabilities: {pex}");
+				Debug.WriteLine($"Push status: {pex.PushResult.Status}");
+				foreach (var error in pex.PushResult.Errors)
+				{
+					Debug.WriteLine($"--{error.TableName} : {error.RawResult}");
+				}
+				return false;
+			}
+			catch (Exception ex)
             {
-                Debug.WriteLine("Unable to pull items, that is alright as we have offline capabilities: " + ex);
+				Debug.WriteLine($"Unable to pull items for {Identifier}, that is alright as we have offline capabilities: {ex}");
                 return false;
             }
             return true;
@@ -119,15 +132,25 @@ namespace XamarinEvolve.DataStore.Azure
                 Debug.WriteLine("Unable to sync items, we are offline");
                 return false;
             }
-            try
-            {
-                await StoreManager.MobileService.SyncContext.PushAsync().ConfigureAwait(false);
-                if(!(await PullLatestAsync().ConfigureAwait(false)))
-                    return false;
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine("Unable to sync items, that is alright as we have offline capabilities: " + ex);
+			try
+			{
+				await StoreManager.MobileService.SyncContext.PushAsync().ConfigureAwait(false);
+				if (!(await PullLatestAsync().ConfigureAwait(false)))
+					return false;
+			}
+			catch (MobileServicePushFailedException pex)
+			{
+				Debug.WriteLine($"Unable to sync items for {Identifier}, that is alright as we have offline capabilities: {pex}");
+				Debug.WriteLine($"Push status: {pex.PushResult.Status}");
+				foreach (var error in pex.PushResult.Errors)
+				{
+					Debug.WriteLine($"--{error.TableName} : {error.RawResult}");
+				}
+				return false;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Unable to sync items for {Identifier}, that is alright as we have offline capabilities: {ex}");
                 return false;
             }
             finally

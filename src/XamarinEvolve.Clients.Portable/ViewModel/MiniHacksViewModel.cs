@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FormsToolkit;
 using Xamarin.Forms;
 using System.Linq;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -23,6 +24,8 @@ namespace XamarinEvolve.Clients.Portable
             get { return noHacksFound; }
             set { SetProperty(ref noHacksFound, value); }
         }
+
+		public string NoHacksText => $"Mini-Hacks will be revealed at {EventInfo.EventName}. Check back soon.";
 
         #region Commands
 
@@ -58,9 +61,23 @@ namespace XamarinEvolve.Clients.Portable
 
                 var hacks = await StoreManager.MiniHacksStore.GetItemsAsync(force);
                 var finalHacks = hacks.ToList ();
-                foreach(var hack in finalHacks)
-                    hack.IsCompleted = Settings.Current.IsHackFinished(hack.Id);
-                
+				foreach (var hack in finalHacks)
+				{
+					try
+					{
+						if (Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows && FeatureFlags.AppLinksEnabled)
+						{
+							Application.Current.AppLinks.RegisterLink(hack.GetAppLink());
+						}
+					}
+					catch (Exception applinkException)
+					{
+						// don't crash the app
+						Logger.Report(applinkException, "AppLinks.RegisterLink", hack.Id);
+					}
+
+					hack.IsCompleted = Settings.Current.IsHackFinished(hack.Id);
+				}
 
                 MiniHacks.ReplaceRange(finalHacks);
 
