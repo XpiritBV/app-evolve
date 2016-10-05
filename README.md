@@ -110,7 +110,7 @@ Make sure to provide authentication details for:
 ## Tools
 Of course a conference database needs data to work properly. We added some tools to the repo to facilitate this:
 
-*DataManager*
+### DataManager
 The DataManager is an ASP.NET MVC web application that provides CRUD screens for entering data, sending push notifications, etc. You can deploy the application to an Azure website and point it to the same SQL Azure database as the mobile backend API.
 
 You'll find the source in *src/DataManager/DataManager.sln*
@@ -122,12 +122,12 @@ Make sure to provide authentication details for:
 
 We used Auth0 for authenticating data manager user. You can quickly setup an account there and provide the `auth0:ClientId`, `auth0:ClientSecret` and `auth0:Domain` app settings. Or you can plug in your own identity provider if you like.
 
-*MiniHacks*
+### MiniHacks
 If you want to run a Mini-Hack contest at your conference, this mobile app can be used by your staff to provide QR unlock codes. Just change the API url in the source code and deploy the app with HockeyApp to your staff using Ad-Hoc deployment.
 
 You'll find the source in *tools/MiniHacks/MiniHacks.sln*
 
-*PhotoSizeChecker*
+### PhotoSizeChecker
 We learned the hard way that size matters when it comes to speaker photos. In order for the app to work smoothly, the size of the avatars and full photos must be small. The PhotoSizeChecker is a console application that queries the speaker list and reports the size of both photos. We used it to regularly check the data that was entered into the database and correct pictures that were too big.
 
 You'll find the source in *tools/PhotoSizeChecker/PhotoSizeChecker.sln*
