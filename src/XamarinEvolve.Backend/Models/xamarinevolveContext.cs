@@ -52,6 +52,10 @@ namespace XamarinEvolve.Backend.Models
         public DbSet<MiniHack> MiniHacks { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<MobileToWebSync> MobileToWebSyncs { get; set; }
+
+        public DbSet<ConferenceFeedback> ConferenceFeedbacks { get; set; }
     }
 
 }

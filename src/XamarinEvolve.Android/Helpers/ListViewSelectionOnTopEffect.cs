@@ -4,7 +4,7 @@ using Xamarin.Forms.Platform.Android;
 using Android.Widget;
 using XamarinEvolve.Droid;
 
-[assembly: ResolutionGroupName ("Xamarin")]
+[assembly: ResolutionGroupName ("Xpirit")]
 [assembly: ExportEffect (typeof (ListViewSelectionOnTopEffect), "ListViewSelectionOnTopEffect")]
 namespace XamarinEvolve.Droid
 {

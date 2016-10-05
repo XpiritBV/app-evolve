@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI"
@@ -9,7 +9,6 @@
     Title="Rate Session">
     <ContentPage.Resources>
      <ResourceDictionary>
-        <local:RatingVisibleConverter x:Key="RatingVisibleConverter" />
         <local:RatingConverter x:Key="RatingConverter" />
      </ResourceDictionary>
     </ContentPage.Resources>
@@ -22,7 +21,6 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
 
         <StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
             <Image Source="icon_sessions_big_purple.png" HorizontalOptions="Center" />
@@ -38,79 +36,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <StackLayout Orientation="Horizontal" Spacing="{StaticResource StandardSpacing}" HorizontalOptions="Center" Grid.Column="1">
-              <Grid HeightRequest="24" WidthRequest="24" x:Name="StarGrid">
-                <Grid.Behaviors>
-                   <!--Do not remove name as it is used in binding-->
-                  <local:StarBehavior x:Name="starOne" GroupName="myStar"/>
-                </Grid.Behaviors>
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_outline.png}" />
-
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_selected.png}"
-                        IsVisible="{Binding Source={x:Reference starOne},
-                                            Path=IsStarred}"/>
-              </Grid>
-              <Grid HeightRequest="24" WidthRequest="24" HorizontalOptions="Center">
-                <Grid.Behaviors>
-                   <!--Do not remove name as it is used in binding-->
-                  <local:StarBehavior x:Name="starTwo" GroupName="myStar"/>
-                </Grid.Behaviors>
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_outline.png}" />
-
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_selected.png}"
-                        IsVisible="{Binding Source={x:Reference starTwo},
-                                            Path=IsStarred}"/>
-              </Grid>
-              <Grid HeightRequest="24" WidthRequest="24" HorizontalOptions="Center">
-                <Grid.Behaviors>
-                   <!--Do not remove name as it is used in binding-->
-                  <local:StarBehavior x:Name="starThree" GroupName="myStar"/>
-                </Grid.Behaviors>
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_outline.png}" />
-
-                <Image
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_selected.png}"
-                        IsVisible="{Binding Source={x:Reference starThree},
-                                            Path=IsStarred}"/>
-              </Grid>
-              <Grid HeightRequest="24" WidthRequest="24" HorizontalOptions="Center">
-                <Grid.Behaviors>
-                <!--Do not remove name as it is used in binding-->
-                  <local:StarBehavior x:Name="starFour" GroupName="myStar"/>
-                </Grid.Behaviors>
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_outline.png}" />
-
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_selected.png}"
-                        IsVisible="{Binding Source={x:Reference starFour},
-                                            Path=IsStarred}"/>
-              </Grid>
-              <Grid HeightRequest="24" WidthRequest="24" HorizontalOptions="Center">
-                <Grid.Behaviors>
-                  <!--D not remove name as it is used in binding-->
-                  <local:StarBehavior x:Name="starFive" GroupName="myStar"/>
-                </Grid.Behaviors>
-                <Image
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_outline.png}" />
-
-                <Image 
-                        Source="{local:ImageResource XamarinEvolve.Clients.UI.Images.star_selected.png}"
-                        IsVisible="{Binding Source={x:Reference starFive},
-                                            Path=IsStarred}"/>
-              </Grid>
-          </StackLayout>
+            <local:RatingControl x:Name="RatingControl" Grid.Column="1" />
           </Grid>
 
-            <Label Text="{Binding Source={x:Reference starFive},
+            <Label Text="{Binding Source={x:Reference RatingControl},
                    Path=Rating, Converter={StaticResource RatingConverter}}" 
                    Style="{DynamicResource EvolveListItemDetailTextStyle}"
                    StyleId="Status"
@@ -121,7 +53,7 @@
                 Text="Submit"  
                 StyleId="ButtonSubmit"
                 Command="{Binding SubmitRatingCommand}"
-                CommandParameter="{Binding Source={x:Reference starFive},Path=Rating}"
+                CommandParameter="{Binding Source={x:Reference RatingControl},Path=Rating}"
                 IsEnabled="{Binding IsNotBusy}">
 
                 <Button.FontAttributes>
@@ -142,4 +74,4 @@
             </Button>
             </StackLayout>
     </Grid>
-</ContentPage>
+</local:BasePage>

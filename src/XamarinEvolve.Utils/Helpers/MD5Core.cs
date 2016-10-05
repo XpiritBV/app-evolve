@@ -1,5 +1,6 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 using System;
+using System.Linq;
 using System.Text;
 
 // **************************************************************
@@ -23,6 +24,24 @@ public sealed class MD5Core
 {
     //Prevent CSC from adding a default public constructor
     private MD5Core() { }
+
+	/// <summary>
+	/// Gets the MD5 of the given string.
+	/// </summary>
+	/// <param name="input">The input.</param>
+	/// <returns>The MD5 hash.</returns>
+	public static string GetMD5String(string input)
+	{
+
+		var bytes = Encoding.UTF8.GetBytes(input);
+		var data = GetHash(bytes);
+		var builder = new StringBuilder();
+
+		for (var i = 0; i < data.Length; i++)
+			builder.Append(data[i].ToString("x2"));
+
+		return builder.ToString();
+	}
 
     public static byte[] GetHash(string input, Encoding encoding)
     {

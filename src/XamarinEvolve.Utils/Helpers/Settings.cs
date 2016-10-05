@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -36,12 +37,17 @@ namespace XamarinEvolve.Clients.Portable
             get { return settings ?? (settings = new Settings()); }
         }
 
+		private IPlatformSpecificSettings _platformSettings;
+
+		public Settings()
+		{
+			_platformSettings = DependencyService.Get<IPlatformSpecificSettings>();
+		}
 
         const string WiFiSSIDKey = "ssid_key";
-        readonly string WiFiSSIDDefault = "Xamarin_Evolve";
         public string WiFiSSID 
         {
-            get { return AppSettings.GetValueOrDefault<string> (WiFiSSIDKey, WiFiSSIDDefault); }
+            get { return AppSettings.GetValueOrDefault<string> (WiFiSSIDKey, EventInfo.WiFiSSIDDefault); }
             set 
             {
                 if (AppSettings.AddOrUpdateValue (WiFiSSIDKey, value)) 
@@ -52,10 +58,9 @@ namespace XamarinEvolve.Clients.Portable
         }
 
         const string WiFiPassKey = "wifi_pass_key";
-        readonly string WiFiPassDefault = "";
         public string WiFiPass 
         {
-            get { return AppSettings.GetValueOrDefault<string> (WiFiPassKey, WiFiPassDefault); }
+            get { return AppSettings.GetValueOrDefault<string> (WiFiPassKey, EventInfo.WiFiPassDefault); }
             set 
             {
                 if (AppSettings.AddOrUpdateValue (WiFiPassKey, value)) 
@@ -85,7 +90,17 @@ namespace XamarinEvolve.Clients.Portable
             AppSettings.Remove(GetReminderId(id));
         }
 
-        public bool IsHackFinished(string id)
+		public void LeaveConferenceFeedback()
+		{
+			AppSettings.AddOrUpdateValue("conferencefeedback_finished", true);
+		}
+
+		public bool IsConferenceFeedbackFinished()
+		{
+			return AppSettings.GetValueOrDefault("conferencefeedback_finished", false);
+		}
+
+		public bool IsHackFinished(string id)
         {
             return AppSettings.GetValueOrDefault("minihack_" + id, false);
         }
@@ -106,7 +121,6 @@ namespace XamarinEvolve.Clients.Portable
             }
         }
 
-
         const string HasSetReminderKey = "set_a_reminder";
         static readonly bool HasSetReminderDefault = false;
 
@@ -119,12 +133,12 @@ namespace XamarinEvolve.Clients.Portable
             }
         }
 
-        const string EvolveCalendarIdKey = "evolve_calendar";
-        static readonly string EvolveCalendarIdDefault = string.Empty;
-        public string EvolveCalendarId
+		const string EventCalendarKey = "event_calendar";
+		static readonly string EventCalendarIdDefault = string.Empty;
+        public string EventCalendarId
         {
-            get { return AppSettings.GetValueOrDefault<string>(EvolveCalendarIdKey, EvolveCalendarIdDefault); }
-            set { AppSettings.AddOrUpdateValue<string>(EvolveCalendarIdKey, value); }
+            get { return AppSettings.GetValueOrDefault<string>(EventCalendarKey, EventCalendarIdDefault); }
+            set { AppSettings.AddOrUpdateValue<string>(EventCalendarKey, value); }
         }
           
 
@@ -231,7 +245,6 @@ namespace XamarinEvolve.Clients.Portable
 
         const string ShowPastSessionsKey = "show_past_sessions";
         static readonly bool ShowPastSessionsDefault = false;
-        public static readonly DateTime EndOfEvolve = new DateTime(2016, 4, 29, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// Gets or sets a value indicating whether the user wants show past sessions.
@@ -241,8 +254,8 @@ namespace XamarinEvolve.Clients.Portable
         {
             get 
             {
-                //if end of evolve
-                if (DateTime.UtcNow > EndOfEvolve)
+                //if end of conference
+				if (DateTime.UtcNow > EventInfo.EndOfConference)
                     return true;
                 
                 return AppSettings.GetValueOrDefault<bool>(ShowPastSessionsKey, ShowPastSessionsDefault); 
@@ -268,18 +281,44 @@ namespace XamarinEvolve.Clients.Portable
             }
         }
 
+		const string EmailKey = "email_key";
+		readonly string EmailDefault = string.Empty;
+		public string Email
+		{
+			get { return AppSettings.GetValueOrDefault<string>(EmailKey, EmailDefault); }
+			set
+			{
+				if (AppSettings.AddOrUpdateValue(EmailKey, value))
+				{
+					OnPropertyChanged();
+					OnPropertyChanged(nameof(UserAvatar));
+				}
+			}
+		}
 
-        const string EmailKey = "email_key";
-        readonly string EmailDefault = string.Empty;
-        public string Email 
+		const string UserIdentifierKey = "useridentifier_key";
+        readonly string UserIdentifierDefault = string.Empty;
+        public string UserIdentifier 
         {
-            get { return AppSettings.GetValueOrDefault<string>(EmailKey, EmailDefault); }
+            get 
+			{
+				var id = AppSettings.GetValueOrDefault<string>(UserIdentifierKey, UserIdentifierDefault);
+
+				if (_platformSettings != null && _platformSettings.UserIdentifier != id)
+				{
+					_platformSettings.UserIdentifier = id;
+				}
+				return id;
+			}
             set
             {
-                if (AppSettings.AddOrUpdateValue(EmailKey, value))
+                if (AppSettings.AddOrUpdateValue(UserIdentifierKey, value))
                 {
+					if (_platformSettings != null)
+					{
+						_platformSettings.UserIdentifier = value;
+					}
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(UserAvatar));
                 }
             }
         }
@@ -399,7 +438,7 @@ namespace XamarinEvolve.Clients.Portable
 
         public string UserAvatar => IsLoggedIn ? Gravatar.GetURL(Email) : "profile_generic.png";
 
-        public bool IsLoggedIn => !string.IsNullOrWhiteSpace(Email);
+		public bool IsLoggedIn => !string.IsNullOrWhiteSpace(UserIdentifier);
 
         public bool HasFilters => (ShowPastSessions || FavoritesOnly || (!string.IsNullOrWhiteSpace(FilteredCategories) && !ShowAllCategories));
 

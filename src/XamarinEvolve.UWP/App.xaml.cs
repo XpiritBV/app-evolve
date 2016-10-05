@@ -21,6 +21,9 @@ using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.DataStore.Abstractions;
 using Microsoft.WindowsAzure.MobileServices;
 using System.Reflection;
+using Microsoft.HockeyApp;
+using FFImageLoading.Forms.WinUWP;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.UWP
 {
@@ -66,15 +69,7 @@ namespace XamarinEvolve.UWP
             }
 #endif
 
-            // If we are on mobile (Hence having the status bar API), set the status bar color to purple.
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                
-                // Set this to any Windows Color or ARGB value.
-                statusBar.BackgroundColor = Color.FromArgb(255, 118, 53, 235);
-                statusBar.BackgroundOpacity = 1;
-            }
+          
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -126,13 +121,48 @@ namespace XamarinEvolve.UWP
                 assembliesToInclude.Add(typeof(XamarinEvolve.DataStore.Mock.CategoryStore).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(XamarinEvolve.Clients.Portable.FavoriteService).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(ZXing.BarcodeReader).GetTypeInfo().Assembly);
+                assembliesToInclude.Add(typeof(ZXing.Net.Mobile.Forms.WindowsUniversal.ZXingScannerViewRenderer).GetTypeInfo().Assembly);
                 assembliesToInclude.Add(typeof(Xamarin.FormsMaps).GetTypeInfo().Assembly);
+                assembliesToInclude.Add(typeof(Xamarin.Forms.MasterDetailPage).GetTypeInfo().Assembly);
+                assembliesToInclude.Add(typeof(Xamarin.Forms.Platform.UWP.MasterDetailControl).GetTypeInfo().Assembly);
+                assembliesToInclude.Add(typeof(Windows.UI.Xaml.Automation.Peers.AccessibilityView).GetTypeInfo().Assembly);
+
+                //assembliesToInclude.Add(typeof(FFImageLoading.Forms.CachedImage).GetTypeInfo().Assembly);
+                //assembliesToInclude.Add(typeof(FFImageLoading.FFImage).GetTypeInfo().Assembly);
+                //assembliesToInclude.Add(typeof(FFImageLoading.Transformations.CropTransformation).GetTypeInfo().Assembly);
+
+                if (FeatureFlags.GoogleAnalyticsEnabled)
+                {
+                    assembliesToInclude.Add(typeof(Plugin.GoogleAnalytics.Tracker).GetTypeInfo().Assembly);
+                    assembliesToInclude.Add(typeof(Plugin.GoogleAnalytics.Abstractions.IDeviceInfo).GetTypeInfo().Assembly);
+                }
 
                 //Also do this for all your other 3rd party libraries
 
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
-                Xamarin.FormsMaps.Init(string.Empty);
+                Xamarin.FormsMaps.Init(ApiKeys.BingMapsUWPKey);
                 ViewModelBase.Init();
+
+                CachedImageRenderer.Init();
+
+                // If we are on mobile (Hence having the status bar API), set the status bar color to purple.
+                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                {
+                    var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+
+                    // Set this to any Windows Color or ARGB value.
+                    // TODO: replace with theme color (in visual studio)
+
+                    //var formsColor = (Xamarin.Forms.Color)Application.Current.Resources["Primary"];
+                    var windowsColor = Color.FromArgb(
+                        (byte)(255),
+                        (byte)(0),
+                        (byte)(120),
+                        (byte)(215));
+
+                    statusBar.BackgroundColor = windowsColor;
+                    statusBar.BackgroundOpacity = 1;
+                }
 
                 try
                 {
@@ -144,7 +174,7 @@ namespace XamarinEvolve.UWP
 
                 if (ApiKeys.HockeyAppUWP != nameof(ApiKeys.HockeyAppUWP))
                 {
-                    Microsoft.HockeyApp.HockeyClient.Current.Configure(ApiKeys.HockeyAppUWP);
+                    HockeyClient.Current.Configure(ApiKeys.HockeyAppUWP);
                 }
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

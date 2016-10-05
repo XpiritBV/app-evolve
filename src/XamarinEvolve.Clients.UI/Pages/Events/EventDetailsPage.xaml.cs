@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.DataObjects;
-using FormsToolkit;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class EventDetailsPage : ContentPage
-    {
+	public partial class EventDetailsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Event;
+
         EventDetailsViewModel ViewModel => vm ?? (vm = BindingContext as EventDetailsViewModel);
         EventDetailsViewModel vm;
 
@@ -28,7 +26,6 @@ namespace XamarinEvolve.Clients.UI
                             Sponsor = sponsor
                         };
 
-                    App.Logger.TrackPage(AppPage.Sponsor.ToString(), sponsor.Name);
                     await NavigationService.PushAsync(Navigation, sponsorDetails);
 
                     ListViewSponsors.SelectedItem = null;
@@ -41,7 +38,7 @@ namespace XamarinEvolve.Clients.UI
             set { BindingContext = new EventDetailsViewModel(Navigation, value); }
         }
 
-        protected override void OnBindingContextChanged()
+		protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
             vm = null;

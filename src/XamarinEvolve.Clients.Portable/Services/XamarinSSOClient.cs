@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,8 +6,6 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Xamarin.Forms;
-using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.Portable.Auth
 {
@@ -58,7 +54,12 @@ namespace XamarinEvolve.Clients.Portable.Auth
         public async Task<AccountResponse> LoginAsync(string username, string password) =>
             await CreateToken(username, password);
 
-        public Task LogoutAsync()
+		public Task<AccountResponse> LoginAnonymouslyAsync(string impersonateUserId)
+		{
+			throw new InvalidOperationException("Xamarin SSO Client does not support anonymous login. Set FeatureFlags.LoginEnabled to false");
+		}
+
+		public Task LogoutAsync()
         {
             return Task.FromResult(0);
         }

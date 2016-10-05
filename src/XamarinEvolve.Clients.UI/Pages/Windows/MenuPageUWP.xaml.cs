@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Xamarin.Forms;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class MenuPageUWP : ContentPage
-    {
-        public MenuPageUWP()
-        {
-            InitializeComponent();
-        }
+	public partial class MenuPageUWP : ContentPage
+	{
+		public MenuPageUWP()
+		{
+			InitializeComponent();
 
-        public ListView MenuList => ListViewMenu;
-    }
+			Title = EventInfo.EventName;
+		}
+
+		public ListView MenuList => ListViewMenu;
+	}
 }

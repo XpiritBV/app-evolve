@@ -1,20 +1,12 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading.Tasks;
-
+﻿using System.Reflection;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Gms.AppIndexing;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
-using Android.Gms.Gcm;
 using Android.OS;
-using Android.Runtime;
 using Android.Widget;
-using FormsToolkit;
 using FormsToolkit.Droid;
 using Gcm;
 using Plugin.Permissions;
@@ -23,24 +15,57 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.Clients.UI;
-using XamarinEvolve.DataObjects;
 using Xamarin.Forms.Platform.Android.AppLinks;
 using Xamarin;
 
 namespace XamarinEvolve.Droid
 {
-    
-
-    [Activity(Label = "Evolve16", Icon = "@drawable/newicon", LaunchMode = LaunchMode.SingleTask, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    [IntentFilter(new []{ Intent.ActionView },
+	[Activity(Label = XamarinEvolve.Utils.EventInfo.EventShortName, Icon = "@drawable/newicon", LaunchMode = LaunchMode.SingleTask, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [IntentFilter(new[] { Intent.ActionView },
+		Categories = new[]
+		{
+			Android.Content.Intent.CategoryDefault,
+			Android.Content.Intent.CategoryBrowsable
+		},
+		DataScheme = "http",
+		DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.SessionsSiteSubdirectory + "/",
+		DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
+	[IntentFilter(new[] { Intent.ActionView },
+		Categories = new[]
+		{
+			Android.Content.Intent.CategoryDefault,
+			Android.Content.Intent.CategoryBrowsable
+		},
+		DataScheme = "http",
+      	DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.SpeakersSiteSubdirectory + "/",
+		DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
+	[IntentFilter(new[] { Intent.ActionView },
+		Categories = new[]
+		{
+			Android.Content.Intent.CategoryDefault,
+			Android.Content.Intent.CategoryBrowsable
+		},
+		DataScheme = "https",
+		DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.SpeakersSiteSubdirectory + "/",
+		DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
+	[IntentFilter(new []{ Intent.ActionView },
         Categories = new []
         {
             Android.Content.Intent.CategoryDefault,
             Android.Content.Intent.CategoryBrowsable
         },
         DataScheme = "http",
-        DataPathPrefix = "/session/",
-        DataHost = "evolve.xamarin.com")]
+	    DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.MiniHacksSiteSubdirectory + "/",
+        DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
+	[IntentFilter(new[] { Intent.ActionView },
+		Categories = new[]
+		{
+			Android.Content.Intent.CategoryDefault,
+			Android.Content.Intent.CategoryBrowsable
+		},
+		DataScheme = "https",
+		DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.MiniHacksSiteSubdirectory + "/",
+		DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
     [IntentFilter(new []{ Intent.ActionView },
         Categories = new []
         {
@@ -48,8 +73,8 @@ namespace XamarinEvolve.Droid
             Android.Content.Intent.CategoryBrowsable
         },
         DataScheme = "https",
-        DataPathPrefix = "/session/",
-        DataHost = "evolve.xamarin.com")]
+        DataPathPrefix = "/" + XamarinEvolve.Utils.AboutThisApp.SessionsSiteSubdirectory + "/",
+        DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
 
     [IntentFilter(new []{ Intent.ActionView },
         Categories = new []
@@ -58,7 +83,7 @@ namespace XamarinEvolve.Droid
             Android.Content.Intent.CategoryBrowsable
         },
         DataScheme = "http",
-        DataHost = "evolve.xamarin.com")]
+        DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
     [IntentFilter(new []{ Intent.ActionView },
         Categories = new []
         {
@@ -66,7 +91,7 @@ namespace XamarinEvolve.Droid
             Android.Content.Intent.CategoryBrowsable
         },
         DataScheme = "https",
-        DataHost = "evolve.xamarin.com")]
+        DataHost = XamarinEvolve.Utils.AboutThisApp.AppLinksBaseDomain)]
     public class MainActivity : FormsAppCompatActivity
     {
         private static MainActivity current;
@@ -84,7 +109,6 @@ namespace XamarinEvolve.Droid
             AndroidAppLinks.Init(this);
             Toolkit.Init ();
 
-            //ZXing.Net.Mobile.Forms.Android.Platform.Init ();
             PullToRefreshLayoutRenderer.Init ();
             typeof (Color).GetProperty ("Accent", BindingFlags.Public | BindingFlags.Static).SetValue (null, Color.FromHex ("#757575"));
 
@@ -132,13 +156,12 @@ namespace XamarinEvolve.Droid
 
         void InitializeHockeyApp()
         {
-            if (string.IsNullOrWhiteSpace(ApiKeys.HockeyAppAndroid) || ApiKeys.HockeyAppAndroid == nameof(ApiKeys.HockeyAppAndroid))
+            if (string.IsNullOrWhiteSpace(XamarinEvolve.Utils.ApiKeys.HockeyAppAndroid) || XamarinEvolve.Utils.ApiKeys.HockeyAppAndroid == nameof(XamarinEvolve.Utils.ApiKeys.HockeyAppAndroid))
                 return;
 
-            HockeyApp.CrashManager.Register(this, ApiKeys.HockeyAppAndroid);
-            //HockeyApp.UpdateManager.Register(this, ApiKeys.HockeyAppAndroid);
+			HockeyApp.Android.CrashManager.Register(this, XamarinEvolve.Utils.ApiKeys.HockeyAppAndroid);
 
-            HockeyApp.Metrics.MetricsManager.Register(this, Application, ApiKeys.HockeyAppAndroid);
+			HockeyApp.Android.Metrics.MetricsManager.Register(this, Application, XamarinEvolve.Utils.ApiKeys.HockeyAppAndroid);
            
         }
         

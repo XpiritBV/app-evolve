@@ -67,17 +67,29 @@ namespace XamarinEvolve.DataObjects
         public string TwitterUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Facebook profile: 
+        /// For http://facebook.com/James.Montemagno this is: James.Montemagno
+        /// </summary>
+        /// <value>The Facebook Profile.</value>
+        public string FacebookProfileName { get; set; }
+
+        /// <summary>
         /// Gets or sets the linked in profile name.
         /// https://www.linkedin.com/in/jamesmontemagno we just need: jamesmontemagno
         /// </summary>
         /// <value>The linked in URL.</value>
         public string LinkedInUrl { get; set; }
 
+        /// <summary>
+        /// Gets or sets if a speaker is featured for promotional use
+        /// </summary>
+        public bool? IsFeatured { get; set; }
+
         public virtual ICollection<Session> Sessions { get; set; }
 
         #if MOBILE
         [Newtonsoft.Json.JsonIgnore]
-        public string FullName { get { return $"{FirstName} {LastName}"; } }
+		public string FullName { get { return $"{FirstName.Trim()} {LastName.Trim()}"; } }
         [Newtonsoft.Json.JsonIgnore]
         public string Title 
         {
@@ -85,8 +97,11 @@ namespace XamarinEvolve.DataObjects
             {
                 if (string.IsNullOrWhiteSpace (CompanyName))
                     return PositionName;
-                
-                return $"{PositionName}, {CompanyName}"; 
+
+				if (string.IsNullOrWhiteSpace (PositionName))
+					return CompanyName;
+				
+				return $"{PositionName.Trim()}, {CompanyName.Trim()}"; 
             } 
         }
 

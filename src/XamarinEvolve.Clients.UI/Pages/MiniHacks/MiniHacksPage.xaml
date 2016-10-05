@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="XamarinEvolve.Clients.UI.MiniHacksPage"
@@ -52,11 +52,11 @@
                                    AbsoluteLayout.LayoutBounds="0,0,1,1"
                     BackgroundColor="{DynamicResource WindowBackground}"
                     Padding="16,0">
-            <Label Text="Mini-Hacks will be revealed at Evolve. Check back soon." HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2">
+            <Label Text="{Binding NoHacksText}" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ForceRefreshCommand}"/> 
                 </Label.GestureRecognizers>
             </Label>
        </StackLayout>
     </AbsoluteLayout>
-</ContentPage>
+</local:BasePage>

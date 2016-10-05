@@ -11,6 +11,8 @@ using XamarinEvolve.DataObjects;
 using XamarinEvolve.DataStore.Abstractions;
 using System.Collections.Generic;
 using XamarinEvolve.Clients.Portable;
+using System.Diagnostics;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.DataStore.Azure
 {
@@ -38,11 +40,11 @@ namespace XamarinEvolve.DataStore.Azure
             taskList.Add(SponsorStore.SyncAsync());
             taskList.Add(EventStore.SyncAsync());
 
-
             if (syncUserSpecific)
             {
                 taskList.Add(FeedbackStore.SyncAsync());
                 taskList.Add(FavoriteStore.SyncAsync());
+				taskList.Add(ConferenceFeedbackStore.SyncAsync());
             }
 
             var successes = await Task.WhenAll(taskList).ConfigureAwait(false);
@@ -65,12 +67,10 @@ namespace XamarinEvolve.DataStore.Azure
             SponsorStore.DropTable();
             FeedbackStore.DropTable();
             FavoriteStore.DropTable();
+			ConferenceFeedbackStore.DropTable();
             IsInitialized = false;
             return Task.FromResult(true);
         }
-
-
-
 
         public bool IsInitialized { get; private set; }
         #region IStoreManager implementation
@@ -87,7 +87,7 @@ namespace XamarinEvolve.DataStore.Azure
                 IsInitialized = true;
                 var dbId = Settings.DatabaseId;
                 var path = $"syncstore{dbId}.db";
-                MobileService = new MobileServiceClient ("https://xamarinevolveappdemo.azurewebsites.net");
+                MobileService = new MobileServiceClient(ApiKeys.ApiUrl);
                 store = new MobileServiceSQLiteStore (path);
                 store.DefineTable<Category> ();
                 store.DefineTable<Favorite> ();
@@ -101,10 +101,16 @@ namespace XamarinEvolve.DataStore.Azure
                 store.DefineTable<SponsorLevel> ();
                 store.DefineTable<StoreSettings> ();
                 store.DefineTable<MiniHack> ();
+				store.DefineTable<ConferenceFeedback>();
             }
-
-            await MobileService.SyncContext.InitializeAsync (store, new MobileServiceSyncHandler ()).ConfigureAwait (false);
-
+            try
+            {
+                await MobileService.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler()).ConfigureAwait(false);
+            }
+            catch(Exception e)
+            {
+                Debugger.Break();
+            }
             await LoadCachedTokenAsync ().ConfigureAwait (false);
 
         }
@@ -125,6 +131,9 @@ namespace XamarinEvolve.DataStore.Azure
         IFeedbackStore feedbackStore;
         public IFeedbackStore FeedbackStore => feedbackStore ?? (feedbackStore  = DependencyService.Get<IFeedbackStore>());
 
+		IConferenceFeedbackStore conferenceFeedbackStore;
+		public IConferenceFeedbackStore ConferenceFeedbackStore => conferenceFeedbackStore ?? (conferenceFeedbackStore = DependencyService.Get<IConferenceFeedbackStore>());
+
         ISessionStore sessionStore;
         public ISessionStore SessionStore => sessionStore ?? (sessionStore  = DependencyService.Get<ISessionStore>());
      
@@ -139,7 +148,32 @@ namespace XamarinEvolve.DataStore.Azure
         public ISponsorStore SponsorStore => sponsorStore ?? (sponsorStore  = DependencyService.Get<ISponsorStore>());
 
 
-        #endregion
+		#endregion
+
+		public async Task<MobileServiceUser> LoginAnonymouslyAsync(string impersonateUserId = null)
+		{
+			if (!IsInitialized)
+			{
+				await InitializeAsync();
+			}
+
+			if (string.IsNullOrEmpty(impersonateUserId))
+			{
+				var settings = await ReadSettingsAsync();
+				impersonateUserId = settings?.UserId; // see if we have a saved user id from a previous token
+			}
+
+			var credentials = new JObject();
+			if (!string.IsNullOrEmpty(impersonateUserId))
+			{
+				credentials["anonymousUserId"] = impersonateUserId;
+			}
+			MobileServiceUser user = await MobileService.LoginAsync("AnonymousUser", credentials);
+
+			await CacheToken(user);
+
+			return user;
+		}
 
         public async Task<MobileServiceUser> LoginAsync(string username, string password)
         {
@@ -206,23 +240,26 @@ namespace XamarinEvolve.DataStore.Azure
             {
                 try
                 {
-                    if (!string.IsNullOrEmpty(settings.AuthToken) && JwtUtility.GetTokenExpiration(settings.AuthToken) > DateTime.UtcNow)
-                    {
-                        MobileService.CurrentUser = new MobileServiceUser(settings.UserId);
-                        MobileService.CurrentUser.MobileServiceAuthenticationToken = settings.AuthToken;
-                    }
+					if (!string.IsNullOrEmpty(settings.AuthToken)
+						&& JwtUtility.GetTokenExpiration(settings.AuthToken) > DateTime.UtcNow
+						&& JwtUtility.IsIntendedForAudience(settings.AuthToken, ApiKeys.ApiUrl))
+					{
+						MobileService.CurrentUser = new MobileServiceUser(settings.UserId);
+						MobileService.CurrentUser.MobileServiceAuthenticationToken = settings.AuthToken;
+					}
+					else
+					{
+						await ClearOldCredentials(settings);
+					}
                 }
                 catch (InvalidTokenException)
-                {
-                    settings.AuthToken = string.Empty;
-                    settings.UserId = string.Empty;
+				{
+					await ClearOldCredentials(settings);
+				}
+			}
+		}
 
-                    await SaveSettingsAsync(settings);
-                }
-            }
-        }
-
-        public class StoreSettings
+		public class StoreSettings
         {
             public const string StoreSettingsId = "store_settings";
 
@@ -237,6 +274,20 @@ namespace XamarinEvolve.DataStore.Azure
 
             public string AuthToken { get; set; }
         }
+
+		async Task ClearOldCredentials(StoreSettings settings)
+		{
+			if (FeatureFlags.LoginEnabled)
+			{
+				// if anonymous login is used, we must keep original user ID around to be used later
+				// when using non-anonymous login, the user will provide their user ID via login
+				settings.UserId = string.Empty;
+			}
+			settings.AuthToken = string.Empty;
+			Settings.Current.UserIdentifier = string.Empty; // triggers a new login once we hit an authenticated API
+
+			await SaveSettingsAsync(settings);
+		}
     }
 }
 

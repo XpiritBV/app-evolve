@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms.Platform.Android;
+﻿using Xamarin.Forms.Platform.Android;
 using Android.Support.Design.Widget;
 using Android.Runtime;
 using Xamarin.Forms;
@@ -8,16 +7,31 @@ using XamarinEvolve.Clients.Portable;
 using Android.Widget;
 using FormsToolkit;
 using Android.Views;
+using XamarinEvolve.Utils;
 
 
-[assembly: ExportRenderer (typeof(XamarinEvolve.Clients.UI.NavigationView), typeof(NavigationViewRenderer))]
+[assembly: ExportRenderer(typeof(XamarinEvolve.Clients.UI.NavigationView), typeof(NavigationViewRenderer))]
 namespace XamarinEvolve.Droid
 {
-    public class NavigationViewRenderer : ViewRenderer<XamarinEvolve.Clients.UI.NavigationView, NavigationView>
+	public class NavigationViewRenderer : ViewRenderer<XamarinEvolve.Clients.UI.NavigationView, NavigationView>
     {
         NavigationView navView;
         ImageView profileImage;
         TextView profileName;
+
+		public override void OnViewAdded(Android.Views.View child)
+		{
+			base.OnViewAdded(child);
+
+			navView.Menu.FindItem(Resource.Id.nav_feed).SetTitle($"{EventInfo.EventName}");
+			navView.Menu.FindItem(Resource.Id.nav_speakers).SetVisible(FeatureFlags.SpeakersEnabled);
+			navView.Menu.FindItem(Resource.Id.nav_events).SetVisible(FeatureFlags.EventsEnabled);
+			navView.Menu.FindItem(Resource.Id.nav_mini_hacks).SetVisible(FeatureFlags.MiniHacksEnabled);
+			navView.Menu.FindItem(Resource.Id.nav_evals).SetVisible(FeatureFlags.EvalEnabled);
+			navView.Menu.FindItem(Resource.Id.nav_floor_map).SetVisible(FeatureFlags.FloormapEnabled);
+			navView.Menu.FindItem(Resource.Id.nav_conference_info).SetVisible(FeatureFlags.ConferenceInformationEnabled || FeatureFlags.CodeOfConductEnabled);
+		}
+
         protected override void OnElementChanged(ElementChangedEventArgs<XamarinEvolve.Clients.UI.NavigationView> e)
         {
             
@@ -39,11 +53,19 @@ namespace XamarinEvolve.Droid
             profileImage = header.FindViewById<ImageView>(Resource.Id.profile_image);
             profileName = header.FindViewById<TextView>(Resource.Id.profile_name);
 
-            profileImage.Click += (sender, e2) => NavigateToLogin();
-            profileName.Click += (sender, e2) => NavigateToLogin();
+			if (FeatureFlags.LoginEnabled)
+			{
+				profileImage.Click += (sender, e2) => NavigateToLogin();
+				profileName.Click += (sender, e2) => NavigateToLogin();
 
-            UpdateName();
-            UpdateImage();
+				UpdateName();
+				UpdateImage();
+			}
+			else
+			{
+				profileImage.Visibility = ViewStates.Gone;
+				profileName.Visibility = ViewStates.Gone;
+			}
 
             navView.SetCheckedItem(Resource.Id.nav_feed);
         }
@@ -105,7 +127,10 @@ namespace XamarinEvolve.Droid
                 case Resource.Id.nav_sessions:
                     id = (int)AppPage.Sessions;
                     break;
-                case Resource.Id.nav_events:
+				case Resource.Id.nav_speakers:
+					id = (int)AppPage.Speakers;
+					break;
+				case Resource.Id.nav_events:
                     id = (int)AppPage.Events;
                     break;
                 case Resource.Id.nav_sponsors:

@@ -14,7 +14,10 @@ namespace XamarinEvolve.iOS
         {
             Device.BeginInvokeOnMainThread(() =>
                 {
-                    Toast.MakeText(message, Toast.LENGTH_LONG).SetCornerRadius(0).Show();
+					Toast.MakeText(message, Toast.LENGTH_LONG)
+				         .SetCornerRadius(5)
+				         .SetGravity(ToastGravity.Top)
+				         .Show(ToastType.Warning);
                 });
         }
     }

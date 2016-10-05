@@ -136,6 +136,7 @@
     },
     {
       "role": "companionSettings",
+      "filename": "Icon-58.png",
       "size": "29x29",
       "scale": "2x",
       "idiom": "watch"

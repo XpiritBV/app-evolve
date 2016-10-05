@@ -6,8 +6,10 @@ using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class SponsorsPage : ContentPage
-    {
+	public partial class SponsorsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Sponsors;
+
         SponsorsViewModel vm;
         SponsorsViewModel ViewModel => vm ?? (vm = BindingContext as SponsorsViewModel); 
 
@@ -17,7 +19,7 @@ namespace XamarinEvolve.Clients.UI
             BindingContext = new SponsorsViewModel(Navigation);
 
             if (Device.OS == TargetPlatform.Android)
-                ListViewSponsors.Effects.Add (Effect.Resolve ("Xamarin.ListViewSelectionOnTopEffect"));
+                ListViewSponsors.Effects.Add (Effect.Resolve ("Xpirit.ListViewSelectionOnTopEffect"));
 
             if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
             {
@@ -36,7 +38,6 @@ namespace XamarinEvolve.Clients.UI
                     var sponsorDetails = new SponsorDetailsPage();
 
                     sponsorDetails.Sponsor = sponsor;
-                    App.Logger.TrackPage(AppPage.Sponsor.ToString(), sponsor.Name);
                     await NavigationService.PushAsync(Navigation, sponsorDetails);
                     ListViewSponsors.SelectedItem = null;
             };
@@ -55,7 +56,7 @@ namespace XamarinEvolve.Clients.UI
             base.OnAppearing();
 
             ListViewSponsors.ItemTapped += ListViewTapped;
-            if (ViewModel.Sponsors.Count == 0)
+            if (ViewModel.SponsorsGrouped.Count == 0)
                 ViewModel.LoadSponsorsCommand.Execute(false);
 
         }
@@ -67,4 +68,3 @@ namespace XamarinEvolve.Clients.UI
         }
     }
 }
-

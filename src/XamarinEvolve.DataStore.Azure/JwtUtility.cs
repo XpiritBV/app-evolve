@@ -26,6 +26,23 @@ namespace XamarinEvolve.DataStore.Azure
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(mobileAppToken);
         }
 
+        public static bool IsIntendedForAudience(string rawToken, string expectedAudience)
+        {
+            string[] tokenParts = rawToken.Split('.');
+
+            if (tokenParts.Length != 3)
+            {
+                throw new InvalidTokenException("Invalid user token");
+            }
+
+            string mobileAppToken = GetDecodedPayload(tokenParts[1]);
+            var obj = JObject.Parse(mobileAppToken);
+
+            var audience = obj["aud"].Value<string>();
+
+			return audience.Contains(expectedAudience);
+        }
+
         public static DateTime? GetTokenExpiration(string token)
         {
             IDictionary<string, string> claims = GetClaims(token);

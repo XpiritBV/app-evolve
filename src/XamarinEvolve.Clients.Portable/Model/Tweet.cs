@@ -1,9 +1,10 @@
 ﻿using System;
-using Humanizer;
 using System.Windows.Input;
 using Xamarin.Forms;
 using FormsToolkit;
 using Newtonsoft.Json;
+using Humanizer;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {

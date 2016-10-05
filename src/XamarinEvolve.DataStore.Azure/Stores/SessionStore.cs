@@ -7,6 +7,7 @@ using System.Linq;
 
 using XamarinEvolve.DataStore.Azure;
 using Xamarin.Forms;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.DataStore.Azure
 {
@@ -29,6 +30,12 @@ namespace XamarinEvolve.DataStore.Azure
                 session.IsFavorite = isFav;
             }
 
+			var dataShare = DependencyService.Get<IPlatformSpecificDataHandler<Session>>();
+			if (dataShare != null)
+			{
+				await dataShare.UpdateMultipleEntities(sessions).ConfigureAwait(false);
+			}
+
             return sessions;
         }
 
@@ -43,13 +50,13 @@ namespace XamarinEvolve.DataStore.Azure
                 .OrderBy(s => s.StartTimeOrderBy);
         }
 
-        public async Task<IEnumerable<Session>> GetNextSessions()
+        public async Task<IEnumerable<Session>> GetNextSessions(int maxNumber = 2)
         {
             var date = DateTime.UtcNow.AddMinutes(-30);//about to start in next 30
 
             var sessions = await GetItemsAsync().ConfigureAwait(false);
 
-            var result = sessions.Where(s => s.StartTimeOrderBy > date && s.IsFavorite).Take(2);
+			var result = sessions.Where(s => s.StartTimeOrderBy.ToUniversalTime() > date && s.IsFavorite).Take(maxNumber);
            
             var enumerable = result as Session[] ?? result.ToArray();
             return enumerable.Any() ? enumerable : null;

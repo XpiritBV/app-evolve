@@ -3,11 +3,14 @@ using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.DataObjects;
 using System;
 using FormsToolkit;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class FilterSessionsPage : ContentPage
-    {
+    public partial class FilterSessionsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Filter;
+
         FilterSessionsViewModel vm;
         Category showFavorites, showPast;
         public FilterSessionsPage()
@@ -60,7 +63,9 @@ namespace XamarinEvolve.Clients.UI
                                     });
                             }
 
-                            var color = Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone ? "#7635EB" : string.Empty;
+                            var color = Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone
+					                          ? ((Color)App.Current.Resources["Primary"]).ToHex()
+					                          : string.Empty;
                              
                             showPast = new Category
                             {
@@ -68,7 +73,6 @@ namespace XamarinEvolve.Clients.UI
                                 IsEnabled = true,
                                 ShortName = "Show Past Sessions",
                                 Color = color
-
                             };
 
                             showFavorites = new Category
@@ -77,7 +81,6 @@ namespace XamarinEvolve.Clients.UI
                                 IsEnabled = true,
                                 ShortName = "Show Favorites Only",
                                 Color = color
-
                             };
 
                             TableSectionFilters.Add(new CategoryCell
@@ -91,7 +94,7 @@ namespace XamarinEvolve.Clients.UI
                             });
                             
                             //if end of evolve
-                            if (DateTime.UtcNow > Settings.EndOfEvolve)
+							if (DateTime.UtcNow > EventInfo.EndOfConference)
                                 showPast.IsEnabled = false;
 
                             showPast.IsFiltered = Settings.Current.ShowPastSessions;

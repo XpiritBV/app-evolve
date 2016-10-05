@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using XamarinEvolve.DataObjects;
-using System.Collections.Generic;
 
 namespace XamarinEvolve.DataStore.Abstractions
 {
-    public interface ISpeakerStore : IBaseStore<Speaker>
-    {
-    }
+	public interface ISpeakerStore : IBaseStore<Speaker>
+	{
+		Task<Speaker> GetAppIndexSpeaker(string id);
+	}
 }
 

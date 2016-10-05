@@ -8,6 +8,9 @@ using XamarinEvolve.Backend.Models;
 using Owin;
 using Microsoft.Azure.Mobile.Server;
 using WebApiThrottle;
+using XamarinEvolve.Backend.Helpers;
+using XamarinEvolve.Backend.App_Start;
+using System.Web.Http.ExceptionHandling;
 
 namespace XamarinEvolve.Backend
 {
@@ -16,13 +19,22 @@ namespace XamarinEvolve.Backend
         public static void ConfigureMobileApp(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
-
-            config.Routes.MapHttpRoute("XamarinAuthProvider", ".auth/login/xamarin", new { controller = "XamarinAuth" });
-
+     
+            app.UseMobileAppRequestHandler();
+            if (FeatureFlags.LoginEnabled)
+            {
+                config.Routes.MapHttpRoute("XamarinAuthProvider", ".auth/login/xamarin", new { controller = "XamarinAuth" });
+            }
+            else
+            {
+                config.Routes.MapHttpRoute("AnonymousUserAuthProvider", ".auth/login/anonymoususer", new { controller = "AnonymousUserAuth" });
+            }
             //For more information on Web API tracing, see http://go.microsoft.com/fwlink/?LinkId=620686 
             config.EnableSystemDiagnosticsTracing();
 
-                new MobileAppConfiguration()
+            config.Services.Add(typeof(IExceptionLogger), new ApplicationInsightsExceptionLogger());
+
+            new MobileAppConfiguration()
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
 
@@ -43,12 +55,11 @@ namespace XamarinEvolve.Backend
                 {
 
                 });
-            }
-
-           
+            }          
 
             app.UseWebApi(config);
-      
+            ConfigureSwagger(config);
+ 
         }
     }
 }

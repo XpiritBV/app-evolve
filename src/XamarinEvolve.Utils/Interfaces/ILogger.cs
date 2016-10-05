@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Threading.Tasks;
 
 namespace XamarinEvolve.Clients.Portable
 {
-    public static class EvolveLoggerKeys
+	public static class EvolveLoggerKeys
     {
         public const string WiFiConfig = "WiFiConfigured";
-        public const string CopyPassword = "CopyPassword";
+		public const string BuyTicket = "BuyTicket";
+		public const string CopyPassword = "CopyPassword";
         public const string LoginSuccess = "LoginSuccess";
         public const string LoginFailure = "LoginFailure";
         public const string LoginCancel = "LoginCancel";
@@ -20,12 +19,15 @@ namespace XamarinEvolve.Clients.Portable
         public const string ReminderRemoved = "ReminderRemoved";
         public const string Share = "Share";
         public const string LeaveFeedback = "LeaveFeedback";
+		public const string ConferenceFeedback = "ConferenceFeedback";
         public const string ManualSync = "ManualSync";
         public const string LaunchedBrowser = "LaunchedBrowser";
         public const string NavigateToEvolve = "NavigateToEvolve";
-        public const string CallHotel = "CallHotel";
-
+        public const string CallVenue = "CallVenue";
         public const string Logout = "Logout";
+		public const string GetSyncCode = "GetSyncCode";
+		public const string SyncWebToMobile = "SyncWebToMobile";
+        public const string FinishMiniHack = "FinishMiniHack";
     }
 
     public enum Severity
@@ -50,8 +52,9 @@ namespace XamarinEvolve.Clients.Portable
         void Track(string trackIdentifier);
         void Track(string trackIdentifier, string key, string value);
         void Report(Exception exception = null, Severity warningLevel = Severity.Warning);
-        void Report(Exception exception, IDictionary extraData, Severity warningLevel = Severity.Warning);
+        void Report(Exception exception, IDictionary<string, string> extraData, Severity warningLevel = Severity.Warning);
         void Report(Exception exception, string key, string value, Severity warningLevel = Severity.Warning);
+		void TrackTimeSpent(string page, string id, TimeSpan time);
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ContentPage 
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="XamarinEvolve.Clients.UI.ConferenceInformationPage"
@@ -14,7 +14,7 @@
                 BackgroundColor="{DynamicResource WindowBackgroundTable}"
                 Spacing="{DynamicResource CardSpacing}"
                 Padding="{DynamicResource CardPadding}">
-                <local:CardView>
+                <local:CardView IsVisible="{Binding WiFiEnabled}">
                      <StackLayout Spacing="0" StyleId="2.4GHzCard">
                         <local:LabelSection Text="Wi-Fi Configuration"/>
                         <local:HeaderDivider/>  
@@ -68,7 +68,7 @@
 
                 <local:CardView>
                  <StackLayout Spacing="0" StyleId="CodeOfConductCard">
-                  <local:LabelSection Text="Code of Conduct"/>
+                  <local:LabelSection Text="{Binding CodeOfConductPageTitle}"/>
                     <local:HeaderDivider/>  
                     <StackLayout HorizontalOptions="FillAndExpand" 
                                  VerticalOptions="FillAndExpand" 
@@ -86,4 +86,4 @@
         </StackLayout>
     </local:AlwaysScrollView>
 
-</ContentPage>
+</local:BasePage>

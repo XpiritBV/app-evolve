@@ -7,15 +7,17 @@ using XamarinEvolve.DataObjects;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class MiniHacksPage : ContentPage
-    {
+	public partial class MiniHacksPage : BasePage
+	{
+		public override AppPage PageType => AppPage.MiniHacks;
+
         MiniHacksViewModel vm;
         public MiniHacksPage()
         {
             InitializeComponent();
             BindingContext = vm = new MiniHacksViewModel();
             if (Device.OS == TargetPlatform.Android)
-                ListViewMiniHacks.Effects.Add (Effect.Resolve ("Xamarin.ListViewSelectionOnTopEffect"));
+                ListViewMiniHacks.Effects.Add (Effect.Resolve ("Xpirit.ListViewSelectionOnTopEffect"));
 
             if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
             {

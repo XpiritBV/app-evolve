@@ -31,10 +31,20 @@ namespace XamarinEvolve.Clients.UI
 
             App.Logger.TrackPage(AppPage.Speaker.ToString(), speaker.FullName);
 
-            await navigation.PushAsync(new SpeakerDetailsPage(sessionId)
+            if (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone)
+            {
+                await navigation.PushAsync(new SpeakerDetailsPageUWP(sessionId)
                 {
                     Speaker = speaker
                 });
+            }
+            else
+            {
+                await navigation.PushAsync(new SpeakerDetailsPage(sessionId)
+                {
+                    Speaker = speaker
+                });
+            }
         }
     }
     public partial class SpeakerCellView : ContentView

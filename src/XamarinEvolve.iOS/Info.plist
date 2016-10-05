@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.sample.evolve</string>
+	<string>com.yourcompany.conference</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -48,39 +48,29 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Tweet</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.sample.evolve.tweet</string>
+			<string>com.xpirit.techdays.tweet</string>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>quickaction_tweet</string>
 			<key>UIApplicationShortcutItemSubtitle</key>
-			<string>#XamarinEvolve</string>
+			<string>#TechDaysNL</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Announcements</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.sample.evolve.announcements</string>
+			<string>com.xpirit.techdays.announcements</string>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>quickaction_announcements</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Events</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.sample.evolve.events</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quickaction_events</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemTitle</key>
 			<string>Mini-Hacks</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.sample.evolve.minihacks</string>
+			<string>com.xpirit.techdays.minihacks</string>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>quickaction_mini-hacks</string>
 		</dict>
 	</array>
-	<key>CFBundleName</key>
-	<string>Evolve16</string>
 	<key>UILaunchImages</key>
 	<array>
 		<dict>
@@ -124,13 +114,53 @@
 			<string>{320, 480}</string>
 		</dict>
 	</array>
-	<key>CFBundleDisplayName</key>
-	<string>Evolve16</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Default.png</string>
 		<string>Default@2x.png</string>
 		<string>Default-568h@2x.png</string>
 	</array>
+	<key>CFBundleName</key>
+	<string>TechDays 16</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>techdays</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.xpirit.techdays</string>
+			<key>CFBundleURLTypes</key>
+			<string>Viewer</string>
+			<key>CFBundleURLIconFile</key>
+			<string>Icon-58</string>
+		</dict>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app uses bar code scanning to unlock Mini-Hacks or sync data with the website, so it needs access to your device&apos;s photo capabilities.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app allows you to add/remove conference sessions in your calendar.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.xpirit.techdays.session</string>
+		<string>com.xpirit.techdays.sponsor</string>
+		<string>com.xpirit.techdays.speaker</string>
+		<string>com.xpirit.techdays.sessions</string>
+		<string>com.xpirit.techdays.speakers</string>
+		<string>com.xpirit.techdays.minihacks</string>
+		<string>com.xpirit.techdays.minihack</string>
+	</array>
+	<key>CFBundleDisplayName</key>
+	<string>TechDays 16</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses bar code scanning to unlock Mini-Hacks or sync data with the website, so it needs access to your device&apos;s photo capabilities.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

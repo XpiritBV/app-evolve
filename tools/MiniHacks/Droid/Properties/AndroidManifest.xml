@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" package="com.yourcompany.minihacks" android:versionCode="1">
+	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="23" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="MiniHacks" android:icon="@drawable/icon"></application>
+</manifest>

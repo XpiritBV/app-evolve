@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
-using FormsToolkit;
 using XamarinEvolve.DataObjects;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class EventsPage : ContentPage
-    {
-        EventsViewModel vm;
-        EventsViewModel ViewModel => vm ?? (vm = BindingContext as EventsViewModel); 
+	public partial class EventsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Events;
 
-        public EventsPage()
+        EventsViewModel vm;
+        EventsViewModel ViewModel => vm ?? (vm = BindingContext as EventsViewModel);
+
+		public EventsPage()
         {
             InitializeComponent();
             BindingContext = new EventsViewModel(Navigation);
@@ -38,7 +36,6 @@ namespace XamarinEvolve.Clients.UI
                     var eventDetails = new EventDetailsPage();
 
                     eventDetails.Event = ev;
-                    App.Logger.TrackPage(AppPage.Event.ToString(), ev.Title);
                     await NavigationService.PushAsync(Navigation, eventDetails);
 
                     ListViewEvents.SelectedItem = null;

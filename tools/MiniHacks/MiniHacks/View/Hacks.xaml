@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+		xmlns="http://xamarin.com/schemas/2014/forms" 
+		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+		x:Class="MiniHacks.View.Hacks"
+		Title="Mini Hacks">
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+     <ListView 
+            x:Name="ListViewMiniHacks"
+            ItemsSource="{Binding MiniHacks}"
+            HasUnevenRows ="false"
+            RowHeight="150"
+            IsPullToRefreshEnabled="{Binding IsNotBusy}"
+            RefreshCommand="{Binding ForceRefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+            CachingStrategy="RecycleElement"
+            IsVisible="{Binding IsNotBusy}"
+            AbsoluteLayout.LayoutFlags="All" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+            <ViewCell>
+                 <StackLayout Spacing="0" HeightRequest="150">
+                    <StackLayout.Padding>
+                        <OnPlatform x:TypeArguments="Thickness" iOS="0" Android="0,4" WinPhone="0"/>
+                    </StackLayout.Padding>
+                    <Frame HeightRequest="150">
+                        <Grid Padding="16" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".4*"/>
+                                <ColumnDefinition Width=".6*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                                Aspect="AspectFit">
+                                <Image.Source>
+                                    <UriImageSource Uri="{Binding BadgeUri}" 
+                                        CacheValidity="3" 
+                                        CachingEnabled="true"/>
+                                </Image.Source>
+                            </Image>
+
+                                <StackLayout VerticalOptions="Center" Grid.Column="1" Spacing="0">
+                                  <Label Text="{Binding Name}" Style="{DynamicResource ListItemTextStyle}"/>
+                                  <Label Text="{Binding Subtitle}" Style="{DynamicResource ListItemDetailTextStyle}"/>
+                                </StackLayout>
+                      
+                        </Grid>
+                    </Frame>
+                </StackLayout>
+            </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+        <StackLayout IsVisible="{Binding IsBusy}"
+                                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                                   AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                                    <StackLayout.Orientation>
+                                    <OnPlatform x:TypeArguments="StackOrientation" iOS="Horizontal"/>
+                                   </StackLayout.Orientation>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" >
+            </ActivityIndicator>
+            <Label Text="Loading Mini-Hacks..." HorizontalOptions="Center"/>
+       </StackLayout>
+       <StackLayout IsVisible="{Binding NoHacksFound}"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   AbsoluteLayout.LayoutFlags="All"
+                                   AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    BackgroundColor="White"
+                    Padding="16,0">
+            <Label Text="Mini-Hacks will be revealed at TechDays. Check back soon." HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ForceRefreshCommand}"/> 
+                </Label.GestureRecognizers>
+            </Label>
+       </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>

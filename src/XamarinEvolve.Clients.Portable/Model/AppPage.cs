@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace XamarinEvolve.Clients.Portable
 {
     public class DeepLinkPage
@@ -7,31 +9,38 @@ namespace XamarinEvolve.Clients.Portable
         public AppPage Page { get; set; }
         public string Id { get; set;}
     }
-    public enum AppPage
-    {
-        Feed,
-        Sessions,
-        Events,
-        MiniHacks,
-        Sponsors,
-        Venue,
-        FloorMap,
-        ConferenceInfo,
-        Settings,
-        Session,
-        Speaker,
-        Sponsor,
-        Login,
-        Event,
-        Notification,
-        TweetImage,
-        WiFi,
-        CodeOfConduct,
-        Filter,
-        Information,
-        Tweet,
-        Evals
-    }
+
+	public enum AppPage
+	{
+		Feed,
+		Sessions,
+		Speakers,
+		Events,
+		MiniHacks,
+		Sponsors,
+		Venue,
+		FloorMap,
+		ConferenceInfo,
+		Settings,
+		Session,
+		Speaker,
+		Sponsor,
+		Login,
+		Event,
+		Notification,
+		TweetImage,
+		WiFi,
+		CodeOfConduct,
+		Filter,
+		Information,
+		Tweet,
+		Evals,
+		SyncMobileToWeb,
+		SyncWebToMobile,
+		Feedback,
+		MiniHack,
+		ConferenceFeedback,
+	}
 }
 
 

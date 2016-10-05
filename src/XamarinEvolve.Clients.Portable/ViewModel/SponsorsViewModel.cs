@@ -7,6 +7,7 @@ using MvvmHelpers;
 using Xamarin.Forms;
 using XamarinEvolve.DataObjects;
 using System.Collections.Generic;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -17,11 +18,7 @@ namespace XamarinEvolve.Clients.Portable
 
         }
 
-
-        public ObservableRangeCollection<Sponsor> Sponsors { get; } = new ObservableRangeCollection<Sponsor>();
-        public ObservableRangeCollection<Grouping<string, Sponsor>> SponsorsGrouped { get; } = new ObservableRangeCollection<Grouping<string, Sponsor>>();
-
-
+		public ObservableRangeCollection<Grouping<string, Sponsor>> SponsorsGrouped { get; } = new ObservableRangeCollection<Grouping<string, Sponsor>>();
 
         #region Properties
         Sponsor selectedSponsor;
@@ -40,8 +37,7 @@ namespace XamarinEvolve.Clients.Portable
                 SelectedSponsor = null;
             }
         }
-
-     
+		     
         #endregion
 
         #region Sorting
@@ -49,22 +45,14 @@ namespace XamarinEvolve.Clients.Portable
 
         void SortSponsors(IEnumerable<Sponsor> sponsors)
         {
-            var sponsorsRanked = from sponsor in sponsors
-                                          orderby sponsor.Name, sponsor.Rank
-                                          orderby sponsor.SponsorLevel.Rank
-                                          select sponsor;
-
-            Sponsors.ReplaceRange(sponsorsRanked);
-
-            var groups = from sponsor in Sponsors
-                group sponsor by sponsor.SponsorLevel.Name
+            var groups = from sponsor in sponsors
+				orderby sponsor.SponsorLevel?.Rank ?? 9999
+				group sponsor by sponsor.SponsorLevel?.Name ?? "Sponsor"
                 into sponsorGroup
-                select new Grouping<string, Sponsor>(sponsorGroup.Key, sponsorGroup); 
+                select new Grouping<string, Sponsor>(sponsorGroup.Key, sponsorGroup.OrderBy(s => s.Rank)); 
             
             SponsorsGrouped.ReplaceRange(groups);
         }
-
-
 
         #endregion
 

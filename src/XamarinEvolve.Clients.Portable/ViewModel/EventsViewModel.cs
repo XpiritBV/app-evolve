@@ -6,6 +6,7 @@ using FormsToolkit;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Linq;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -85,7 +86,7 @@ namespace XamarinEvolve.Clients.Portable
 
                 Events.ReplaceRange(await StoreManager.EventStore.GetItemsAsync(force));
 
-                Title = "Events (" + Events.Count(e => e.StartTime.HasValue && e.StartTime.Value > DateTime.UtcNow) + ")";
+				Title = "Events (" + Events.Count(e => e.StartTime.HasValue && e.StartTime.Value.ToUniversalTime() > DateTime.UtcNow) + ")";
 
                 SortEvents();
 

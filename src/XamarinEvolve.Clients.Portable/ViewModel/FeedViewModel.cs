@@ -13,6 +13,8 @@ using XamarinEvolve.DataObjects;
 using System.Net.Http;
 using System.Collections.Generic;
 using XamarinEvolve.DataStore.Abstractions;
+using XamarinEvolve.Utils;
+using Plugin.Share;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -24,11 +26,16 @@ namespace XamarinEvolve.Clients.Portable
         public DateTime NextForceRefresh { get; set; }
         public FeedViewModel()
         {
+			Title = $"{Utils.EventInfo.EventName}";
             NextForceRefresh = DateTime.UtcNow.AddMinutes(45);
+
+			MessagingService.Current.Subscribe("conferencefeedback_finished", (m) => { Device.BeginInvokeOnMainThread(EvaluateVisualState); });
         }
 
+		// only start showing upcoming favorites 1 day before the conference
+		public bool ShowUpcomingFavorites => Utils.EventInfo.StartOfConference.AddDays(-1) < DateTime.UtcNow;
 
-        ICommand  refreshCommand;
+        ICommand refreshCommand;
         public ICommand RefreshCommand =>
             refreshCommand ?? (refreshCommand = new Command(async () => await ExecuteRefreshCommandAsync())); 
 
@@ -96,7 +103,7 @@ namespace XamarinEvolve.Clients.Portable
                 Notification = new Notification
                     {
                         Date = DateTime.UtcNow,
-                        Text = "Welcome to Xamarin Evolve!"
+						Text = $"Welcome to {Utils.EventInfo.EventName}!"
                     };   
             }
             finally
@@ -112,44 +119,52 @@ namespace XamarinEvolve.Clients.Portable
             set { SetProperty(ref loadingSessions, value); }
         }
 
-
         ICommand  loadSessionsCommand;
         public ICommand LoadSessionsCommand =>
             loadSessionsCommand ?? (loadSessionsCommand = new Command(async () => await ExecuteLoadSessionsCommandAsync())); 
 
         async Task ExecuteLoadSessionsCommandAsync()
         {
+			if (!ShowUpcomingFavorites)
+				return;
+			
             if (LoadingSessions)
                 return;
             
             LoadingSessions = true;
 
-            try
-            {
-                NoSessions = false;
-                Sessions.Clear();
-                OnPropertyChanged("Sessions");
-                #if DEBUG
-                await Task.Delay(1000);
-                #endif
-                var sessions = await StoreManager.SessionStore.GetNextSessions();
-                if(sessions != null)
-                    Sessions.AddRange(sessions);
+			try
+			{
+				NoSessions = false;
+				Sessions.Clear();
+				OnPropertyChanged("Sessions");
+#if DEBUG
+				await Task.Delay(1000);
+#endif
+				var sessions = await StoreManager.SessionStore.GetNextSessions(2);
+				if (sessions != null)
+					Sessions.AddRange(sessions);
 
-                NoSessions = Sessions.Count == 0;
-            }
-            catch(Exception ex)
-            {
-                ex.Data["method"] = "ExecuteLoadSessionsCommandAsync";
-                Logger.Report(ex);
-                NoSessions = true;
-            }
-            finally
-            {
-                LoadingSessions = false;
-            }
-            
+				NoSessions = Sessions.Count == 0;
+			}
+			catch (Exception ex)
+			{
+				ex.Data["method"] = "ExecuteLoadSessionsCommandAsync";
+				Logger.Report(ex);
+				NoSessions = true;
+			}
+			finally
+			{
+				LoadingSessions = false;
+			}
         }
+
+		public void EvaluateVisualState()
+		{
+			OnPropertyChanged(nameof(ShowBuyTicketButton));
+			OnPropertyChanged(nameof(ShowUpcomingFavorites));
+			OnPropertyChanged(nameof(ShowConferenceFeedbackButton));
+		}
 
         bool noSessions;
         public bool NoSessions
@@ -182,8 +197,48 @@ namespace XamarinEvolve.Clients.Portable
             set { SetProperty(ref loadingSocial, value); }
         }
 
+		public bool ShowBuyTicketButton => FeatureFlags.ShowBuyTicketButton && Utils.EventInfo.StartOfConference.AddDays(-1) >= DateTime.Now;
 
-        ICommand  loadSocialCommand;
+#if DEBUG
+		public bool ShowConferenceFeedbackButton => true;
+#else
+		public bool ShowConferenceFeedbackButton => FeatureFlags.ShowConferenceFeedbackButton && Utils.EventInfo.EndOfConference.AddHours(-4) <= DateTime.Now && !Settings.Current.IsConferenceFeedbackFinished();
+#endif
+
+		public string SocialHeader
+		{
+			get { return $"Social - {Utils.EventInfo.HashTag}"; }
+		}
+
+		ICommand shareCommand;
+		public ICommand ShareCommand =>
+		shareCommand ?? (shareCommand = new Command(async () => await ExecuteShareCommand()));
+
+		async Task ExecuteShareCommand()
+		{
+			var tweet = DependencyService.Get<ITweetService>();
+			await tweet.InitiateConferenceTweet();
+		}
+
+		ICommand  buyTicketNowCommand;
+        public ICommand BuyTicketNowCommand =>
+			buyTicketNowCommand ?? (buyTicketNowCommand = new Command(() => ExecuteBuyTicketNowCommand()));
+
+		void ExecuteBuyTicketNowCommand()
+		{
+			LaunchBrowserCommand.Execute(Utils.EventInfo.TicketUrl);
+		}
+
+		ICommand showConferenceFeedbackCommand;
+		public ICommand ShowConferenceFeedbackCommand =>
+			showConferenceFeedbackCommand ?? (showConferenceFeedbackCommand = new Command(() => ExecuteShowConferenceFeedbackCommand()));
+
+		void ExecuteShowConferenceFeedbackCommand()
+		{
+			MessagingService.Current.SendMessage(MessageKeys.NavigateToConferenceFeedback);
+		}
+
+		ICommand  loadSocialCommand;
         public ICommand LoadSocialCommand =>
             loadSocialCommand ?? (loadSocialCommand = new Command(async () => await ExecuteLoadSocialCommandAsync())); 
 
@@ -201,8 +256,8 @@ namespace XamarinEvolve.Clients.Portable
                 using(var client = new HttpClient())
                 {
                     #if ENABLE_TEST_CLOUD
-                                        var json = ResourceLoader.GetEmbeddedResourceString(Assembly.Load(new AssemblyName("XamarinEvolve.Clients.Portable")), "sampletweets.txt");
-                                        Tweets.ReplaceRange(JsonConvert.DeserializeObject<List<Tweet>>(json));
+                        var json = ResourceLoader.GetEmbeddedResourceString(Assembly.Load(new AssemblyName("XamarinEvolve.Clients.Portable")), "sampletweets.txt");
+                        Tweets.ReplaceRange(JsonConvert.DeserializeObject<List<Tweet>>(json));
                     #else
 
 
@@ -269,28 +324,37 @@ namespace XamarinEvolve.Clients.Portable
 
         ICommand  favoriteCommand;
         public ICommand FavoriteCommand =>
-        favoriteCommand ?? (favoriteCommand = new Command<Session>((s) => ExecuteFavoriteCommand(s))); 
+        favoriteCommand ?? (favoriteCommand = new Command<Session>(async (s) => await ExecuteFavoriteCommandAsync(s))); 
 
-        void ExecuteFavoriteCommand(Session session)
+		async Task ExecuteFavoriteCommandAsync(Session session)
         {
-            MessagingService.Current.SendMessage<MessagingServiceQuestion>(MessageKeys.Question, new MessagingServiceQuestion
-                {
-                    Negative = "Cancel",
-                    Positive = "Unfavorite",
-                    Question = "Are you sure you want to remove this session from your favorites?",
-                    Title = "Unfavorite Session",
-                    OnCompleted = (async (result) =>
-                        {
-                            if(!result)
-                                return;
+			if (session.IsFavorite)
+			{
+				MessagingService.Current.SendMessage(MessageKeys.Question, new MessagingServiceQuestion
+				{
+					Negative = "Cancel",
+					Positive = "Unfavorite",
+					Question = "Are you sure you want to remove this session from your favorites?",
+					Title = "Unfavorite Session",
+					OnCompleted = (async (result) =>
+						{
+							if (!result)
+								return;
 
-                            var toggled = await FavoriteService.ToggleFavorite(session);
-                            if(toggled)
-                                await ExecuteLoadSessionsCommandAsync();
-                        })
-                });
-            
+							await ToggleFavorite(session);
+						})
+				});
+			}
         }
-    }
+
+		async Task ToggleFavorite(Session session)
+		{
+			var toggled = await FavoriteService.ToggleFavorite(session);
+			if (toggled)
+			{
+				await ExecuteLoadSessionsCommandAsync();
+			}
+		}
+	}
 }
 

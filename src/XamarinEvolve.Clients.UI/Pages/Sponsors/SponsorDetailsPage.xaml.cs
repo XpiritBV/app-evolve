@@ -8,22 +8,27 @@ using XamarinEvolve.DataObjects;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class SponsorDetailsPage : ContentPage
-    {
+    public partial class SponsorDetailsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Sponsor;
+
         SponsorDetailsViewModel ViewModel => vm ?? (vm = BindingContext as SponsorDetailsViewModel);
         SponsorDetailsViewModel vm;
 
         public SponsorDetailsPage()
         {
-            InitializeComponent();
-           
+            InitializeComponent();           
         }
 
 
         public Sponsor Sponsor
         {
             get { return ViewModel.Sponsor; }
-            set { BindingContext = new SponsorDetailsViewModel(Navigation, value); }
+            set 
+			{ 
+				BindingContext = new SponsorDetailsViewModel(Navigation, value);
+				ItemId = value?.Name;
+			}
         }
 
         protected override void OnBindingContextChanged()

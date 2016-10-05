@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using XamarinEvolve.DataObjects;
 using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class FeedbackPage : ContentPage
-    {
+    public partial class FeedbackPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Feedback;
         FeedbackViewModel vm;
+
         public FeedbackPage(Session session)
         {
             InitializeComponent();
 
+			ItemId = session.Title;
+
             BindingContext = vm = new FeedbackViewModel(Navigation, session);
             if (Device.OS != TargetPlatform.iOS)
                 ToolbarDone.Icon = "toolbar_close.png";
-
 
             ToolbarDone.Command = new Command(async () => 
                 {
@@ -31,9 +31,7 @@ namespace XamarinEvolve.Clients.UI
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            var items = StarGrid.Behaviors.Count;
-            for(int i = 0; i < items; i++)
-                StarGrid.Behaviors.RemoveAt(i);
+            RatingControl.RemoveBehaviors();
         }
     }
 }

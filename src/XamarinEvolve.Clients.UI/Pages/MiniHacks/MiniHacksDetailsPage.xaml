@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="XamarinEvolve.Clients.UI.MiniHacksDetailsPage"
@@ -72,7 +72,13 @@
                    
                     <local:SectionDivider/>
                     <StackLayout Padding="{StaticResource StandardPadding}" Spacing="{StaticResource StandardSpacing}" BackgroundColor="White">
-                       <Label Text="When you are finished with the Mini-Hack please see a Xamarin employee to scan the unlock code." Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
+						  <Label Text="{Binding FinishedInstruction}" Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
+
+							<StackLayout Spacing="{StaticResource StandardSpacing}" Orientation="Horizontal" IsVisible="{Binding AnonymousUser}">
+							  <Label Text="Your unique user code:" Style="{DynamicResource EvolveListItemDetailTextStyle}" VerticalTextAlignment="Center"/>
+							  <Label Text="{Binding UserIdShortCode}" Style="{DynamicResource MonoSpacedDetailTextStyle}" VerticalTextAlignment="Center"/>
+							</StackLayout>
+
                           <Button
                              Text="Finish Mini-Hack"                                     
                             x:Name="ButtonFinish"
@@ -101,4 +107,4 @@
         </StackLayout>
         </StackLayout>
     </local:AlwaysScrollView>
-</ContentPage>
+</local:BasePage>

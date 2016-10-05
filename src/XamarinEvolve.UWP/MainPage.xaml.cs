@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,12 +25,21 @@ namespace XamarinEvolve.UWP
     /// </summary>
     public sealed partial class MainPage
     {
+      
         public MainPage()
         {
             InitializeComponent();
 
             XamarinEvolve.Clients.UI.RootPageWindows.IsDesktop = AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop";
-            LoadApplication(new XamarinEvolve.Clients.UI.App());
+            try
+            {
+                ZXing.Net.Mobile.Forms.WindowsUniversal.ZXingScannerViewRenderer.Init();
+                LoadApplication(new XamarinEvolve.Clients.UI.App());
+            }
+            catch (Exception e)
+            {
+                Debugger.Break();
+            }
             ApplicationView.PreferredLaunchViewSize = new Size(1024, 768);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(1024, 768));

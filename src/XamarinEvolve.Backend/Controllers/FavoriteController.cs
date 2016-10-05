@@ -21,13 +21,14 @@ namespace XamarinEvolve.Backend.Controllers
             DomainManager = new EntityDomainManager<Favorite>(context, Request, true);
             
         }
-
+        [Authorize]
+        [EnableQuery(MaxTop = 500, PageSize = 200)]
         public IQueryable<Favorite> GetAllFavorite()
         {
             var items = Query();
-            var email = EmailHelper.GetAuthenticatedUserEmail(RequestContext);
+            var userId = AuthenticationHelper.GetAuthenticatedUserId(RequestContext);
 
-            var final = items.Where(favorite => favorite.UserId == email);
+            var final = items.Where(favorite => favorite.UserId == userId);
 
             return final;
         }
@@ -47,8 +48,7 @@ namespace XamarinEvolve.Backend.Controllers
         [Authorize]
         public async Task<IHttpActionResult> PostFavorite(Favorite item)
         {
-            item.UserId = EmailHelper.GetAuthenticatedUserEmail(RequestContext);
-
+            item.UserId = AuthenticationHelper.GetAuthenticatedUserId(RequestContext);
             var current = await InsertAsync(item);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }

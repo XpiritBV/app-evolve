@@ -6,20 +6,22 @@ using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class ConferenceInformationPage : ContentPage
+	public partial class ConferenceInformationPage : BasePage
     {
-        ConferenceInfoViewModel vm; 
+		public override AppPage PageType => AppPage.ConferenceInfo;
+
+		ConferenceInfoViewModel vm; 
         public ConferenceInformationPage()
         {
             InitializeComponent();
             BindingContext = vm = new ConferenceInfoViewModel();
         }
 
-        protected override async void OnAppearing()
+		protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            CodeOfConductText.Text = CodeOfConductPage.Conduct;
+			CodeOfConductText.Text = CodeOfConductViewModel.CodeOfConductContent;
             await vm.UpdateConfigs();
         }
     }

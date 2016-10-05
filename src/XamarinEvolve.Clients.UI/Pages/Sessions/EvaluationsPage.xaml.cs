@@ -4,11 +4,14 @@ using FormsToolkit;
 using Xamarin.Forms;
 using XamarinEvolve.Clients.Portable;
 using XamarinEvolve.DataObjects;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class EvaluationsPage : ContentPage
-    {
+    public partial class EvaluationsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Evals;
+
         EvaluationsViewModel viewModel;
         public EvaluationsPage ()
         {
@@ -22,9 +25,8 @@ namespace XamarinEvolve.Clients.UI
                     return;
 
 
-                if (!Settings.Current.IsLoggedIn) 
+				if (!Settings.Current.IsLoggedIn) 
                 {
-                    DependencyService.Get<ILogger> ().TrackPage (AppPage.Login.ToString (), "Feedback");
                     MessagingService.Current.SendMessage (MessageKeys.NavigateLogin);
                     return;
                 }

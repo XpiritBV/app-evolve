@@ -1,13 +1,13 @@
-# Xamarin Evolve 2016 Mobile App
+# TechDays 2016 Mobile App
 
 ![](art/apps.png)
 
 ## Download from App Store
-* [iOS: App Store](https://itunes.apple.com/us/app/xamarin-evolve/id618319027) 
-* [Android: Google Play](https://play.google.com/store/apps/details?id=com.xamarin.xamarinevolve)
-* [Windows 10: Marketplace](https://www.microsoft.com/en-us/store/apps/xamarin-evolve/9nblggh0ff9k) (Mobile & Desktop)
+* [iOS: App Store](https://itunes.apple.com/us/app/techdays-16/id1137372151) 
+* [Android: Google Play](https://play.google.com/store/apps/details?id=com.xpirit.techdays)
+* [Windows 10: Marketplace](https://www.microsoft.com/store/apps/9NBLGGH4TBWD) (Mobile & Desktop)
 
-The Xamarin Evolve 2016 app is full of awesome and includes everything that you would expect from a spectacular conference application, but features tons of deep integration with:
+The TechDays 2016 app is full of awesome and includes everything that you would expect from a spectacular conference application, but features tons of deep integration with:
 
 * Azure + Online/Offline Sync
 * Barcode Scanning
@@ -17,61 +17,51 @@ The Xamarin Evolve 2016 app is full of awesome and includes everything that you 
 * Phone Dialer
 * Wi-Fi configuration
 * URL Navigation (Universal Links + Google App Indexing)
+* iOS Today Widget and 3D-Touch integration
 * A bunch of other great things
 
 ## Shared code details
-This app is around 15,000 lines of code. The iOS version contains 93% shared code, the Android version contains 90% shared code, the UWP has 99% shared code, and our Azure backend contains 23% shared code with the clients!:
-        
-<table>
-  <tr>
-    <td>
-      <img src="http://chart.googleapis.com/chart?chtt=iOS%20app&cht=p&chs=500x220&chl=iOS-specific%20(7%)|Shared%20(93%)&chd=t:7,93&chco=9378CD|44B8A8"/>
-    </td>
-    <td>
-      <img src="http://chart.googleapis.com/chart?chtt=Android%20app&cht=p&chs=500x220&chl=Android-specific%20(10%)|Shared%20(90%)&chd=t:10,90&chco=91CA47|44B8A8"/>
-    </td>
-    </tr>
-    <tr>
-    <td>
-      <img src="http://chart.googleapis.com/chart?chtt=UWP%20app&cht=p&chs=500x220&chl=UWP-specific%20(1%)|Shared%20(99%)&chd=t:1,99&chco=3A6EBB|44B8A8"/>
-    </td>
-    <td>
-      <img src="http://chart.googleapis.com/chart?chtt=Server&cht=p&chs=500x220&chl=Server-specific%20(77%)|Shared%20(23%)&chd=t:77,23&chco=FFE23B|44B8A8"/>
-    </td>
-  </tr>
-</table>
+This app is around 15,000 lines of code. The iOS version contains 85% shared code, the Android version contains 92% shared code, the UWP has 92% shared code, and our Azure backend contains 23% shared code with the clients!
 
-## Test Cloud Integration
-With each push of code the Xamarin Evolve app was built with [Visual Studio Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx) and [Bitrise](http://bitrise.io) and deployed to be test on a plethora of apps in Xamarin Test Cloud. You can view results for both [iOS](https://testcloud.xamarin.com/test/evolve16_2857b3a8-e28a-4363-a174-60b076a047f9/) and [Android](https://testcloud.xamarin.com/test/evolve16_b6eac105-15e3-412d-b9a7-539f71c41c99/).
-
-![](art/testcloud1.png)
-
-![](art/testcloud2.png)
+![](art/code_share.png)
 
 ## HockeyApp crash reporting
-Not only was the Evolve 2016 app continuously deployed for testing with [HockeyApp](http://hockeyapp.net), but also provided events and crash reporting.
+Not only was the TechDays 2016 app continuously deployed for testing with [HockeyApp](http://hockeyapp.net), but also provided events and crash reporting.
 
 ![](art/hockeyapp.png)
 
+## Google Analytics monitoring
+For a live overview of the usage of the app, TechDays 2016 reported page views and events to Google Analytics.
+
+![](art/google_analytics.png)
 
 # Getting Started
 
 ## Mobile App
-Open up src/XamarinEvolve.sln, which contains the iOS, Android, and Windows project. Simply restore your NuGet packages and build the application. It will run out of the box and will work off of a sample backend that we have published. 
+Open up src/XamarinEvolve.sln, which contains the iOS, Android, and Windows project. Simply restore your NuGet packages and build the application. It will probably not run out of the box. You need to provide some information in the following file:
+
+*XamarinEvolve.Client.Utils/Helpers/Constants.cs*
+
+There are also separate solution files for the different targets. We used these for CI builds for each of the platforms. src/XamarinEvolve.sln contains all targets.
+
+## Feature Flags
+We have added feature flags to the app that enable you to toggle on/off specific features in the app. For example, for TechDays we had to facilitate anonymous users due to privacy policies. We could not leverage the original login system, so we added a feature flag named `LoginEnabled` and set it to `false`.
+
+Look for *XamarinEvolve.Client.Utils/Helpers/FeatureFlags.cs* to get an overview of all possible feature toggles.
 
 ## Data Source
-Out of the box the Evolve Mobile app uses sample data provided by the XamarinEvolve.DataStore.Mock. This is great for development, but you can also test against the test/development read-only Azure App Server Mobile Apps backend. Simply head to *XamarinEvolve.Client.Portable/ViewModel/ViewModelBase.cs*.
+Out of the box the TechDays Mobile app uses sample data provided by the XamarinEvolve.DataStore.Mock. This is great for development, but you can also test against the test/development read-only Azure App Server Mobile Apps backend. Simply head to *XamarinEvolve.Client.Utils/Helpers/FeatureFlags.cs*.
 
 Simply change:
 
 ```
-public static void Init (bool mock = true)
+public static bool UseMocks => true;
 ```
 
 to
 
 ```
-public static void Init (bool mock = false)
+public static bool UseMocks => false;
 ```
 
 # Additional setup
@@ -91,7 +81,7 @@ Insert it in the Android project: `~/Properties/AndroidManifest.xml`:
 
     <application ...>
       ...
-      <meta-data android:name="com.google.android.geo.API_KEY" android:value="GOOGLE_MAPS_API_KEY" />
+      <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="GOOGLE_MAPS_API_KEY" />
       ...
     </application>
 
@@ -103,25 +93,54 @@ In App.xaml.cs in the XamarinEvolve.UWP update Xamarin.FormsMaps.Init(string.Emp
 ## HockeyApp Crash Reporting
 Simply head over to http://hockeyapp.net and register a new iOS/Android/UWP application and fill in the HockeyApp API Keys in **XamarinEvolve.Utils/Helpers/Constants.cs** to enable crash reporting.
 
-## Build your own Backend
+## HockeyApp Crash Reporting
+Simply head over to http://analytics.google.com and register a new mobile application and fill in the Google Analytics Tracking ID Keys in **XamarinEvolve.Utils/Helpers/Constants.cs** to enable monitoring.
 
+## Build your own Backend
 This repo contains a full backend that you can deploy to your own Azure App Service Mobile App Backend.
 
+The backend runs on top of a SQL Azure database, which you can deploy with Entity Framework Code First Migrations.
+
+Make sure to provide authentication details for:
+
+- SQL Connection String
+- Azure Service Bus Push Notification Hub
+- Twitter API
+
+## Tools
+Of course a conference database needs data to work properly. We added some tools to the repo to facilitate this:
+
+*DataManager*
+The DataManager is an ASP.NET MVC web application that provides CRUD screens for entering data, sending push notifications, etc. You can deploy the application to an Azure website and point it to the same SQL Azure database as the mobile backend API.
+
+You'll find the source in *src/DataManager/DataManager.sln*
+
+Make sure to provide authentication details for:
+
+- SQL Connection String
+- Azure Service Bus Push Notification Hub Connection and Endpoint
+
+We used Auth0 for authenticating data manager user. You can quickly setup an account there and provide the `auth0:ClientId`, `auth0:ClientSecret` and `auth0:Domain` app settings. Or you can plug in your own identity provider if you like.
+
+*MiniHacks*
+If you want to run a Mini-Hack contest at your conference, this mobile app can be used by your staff to provide QR unlock codes. Just change the API url in the source code and deploy the app with HockeyApp to your staff using Ad-Hoc deployment.
+
+You'll find the source in *tools/MiniHacks/MiniHacks.sln*
+
+*PhotoSizeChecker*
+We learned the hard way that size matters when it comes to speaker photos. In order for the app to work smoothly, the size of the avatars and full photos must be small. The PhotoSizeChecker is a console application that queries the speaker list and reports the size of both photos. We used it to regularly check the data that was entered into the database and correct pictures that were too big.
+
+You'll find the source in *tools/PhotoSizeChecker/PhotoSizeChecker.sln*
+
 # About
-The Xamarin Evolve mobile apps were handcrafted by Xamarins spread out all over the world.
+The TechDays Evolve mobile apps were handcrafted by Xpirit and based on the original Xamarin Evolve 2016 app.
 
 **Development:**
+* [Roy Cornelissen](http://github.com/roycornelissen)
+* [Geert van der Cruijsen](https://github.com/geertvdc)
+* [Marcel de Vries](https://github.com/vriesmarcel)
+
+**Special thanks:**
 * [James Montemagno](http://github.com/jamesmontemagno)
-* [Pierce Boggan](http://github.com/pierceboggan)
 
-**Design:**
-* [Antonio García Aprea](http://github.com/deskfolio)
-
-**Testing:**
-* [Ethan Dennis](https://github.com/erdennis13)
-
-**Many thanks to:**
-* [Fabio Cavalcante](https://github.com/fabiocav)
-* [Matisse Hack](https://github.com/MatisseHack)
-* [Sweetkriti Satpathy](https://github.com/Sweekriti91)
-* [Andrew Branch](https://github.com/andrewbranch)
+James and his team of Xamarins originally built the Xamarin Evolve application and has kindly provided us with his help and wisdom. Thanks James!

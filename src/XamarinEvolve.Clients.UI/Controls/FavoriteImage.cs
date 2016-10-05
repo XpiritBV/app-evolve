@@ -7,6 +7,7 @@ namespace XamarinEvolve.Clients.UI
     public class FavoriteImage : Image
     {
         bool addedAnimation;
+		bool isAnimating;
 
         protected override void OnBindingContextChanged()
         {
@@ -30,32 +31,34 @@ namespace XamarinEvolve.Clients.UI
         /// <summary>
         /// Play animation to grow and shrink
         /// </summary>
-        public async Task Grow()
+        public void Grow()
         {
+			if (isAnimating)
+				return;
 
-            await this.ScaleTo(1.4, 75);
-            await this.ScaleTo(1.0, 75);
+			isAnimating = true;
 
-            Device.BeginInvokeOnMainThread (() => 
-            {
-                try
-                {
-                    this.ScaleTo (1.4, 75).ContinueWith ((t) =>
-                    {
-                        try
-                        {
-                            this.ScaleTo (1.0, 75);
-                        }
-                        catch
-                        {
-                        }
-                    },
-                    scheduler: TaskScheduler.FromCurrentSynchronizationContext ());
-                }
-                catch
-                {
-                }
-            });
+			try
+			{
+				this.ScaleTo(1.4, 75).ContinueWith((t) =>
+			  {
+				  try
+				  {
+					  this.ScaleTo(1.0, 75);
+				  }
+				  catch
+				  {
+				  }
+			  },
+				scheduler: TaskScheduler.FromCurrentSynchronizationContext());
+			}
+			catch
+			{
+			}
+			finally
+			{
+				isAnimating = false;
+			}
         }
     }
 }

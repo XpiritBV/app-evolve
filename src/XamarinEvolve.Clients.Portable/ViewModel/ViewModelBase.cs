@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Plugin.Share.Abstractions;
 using System;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -19,7 +20,7 @@ namespace XamarinEvolve.Clients.Portable
             Navigation = navigation;
         }
 
-        public static void Init (bool mock = true)
+		public static void Init ()
         {
 
 #if ENABLE_TEST_CLOUD && !DEBUG
@@ -35,12 +36,13 @@ namespace XamarinEvolve.Clients.Portable
                 DependencyService.Register<ISSOClient, XamarinEvolve.Clients.Portable.Auth.XamarinSSOClient>();
                 DependencyService.Register<IStoreManager, XamarinEvolve.DataStore.Mock.StoreManager>();
 #else
-            if (mock) 
+            if (FeatureFlags.UseMocks) 
             {
                 DependencyService.Register<ISessionStore, XamarinEvolve.DataStore.Mock.SessionStore> ();
                 DependencyService.Register<IFavoriteStore, XamarinEvolve.DataStore.Mock.FavoriteStore> ();
                 DependencyService.Register<IFeedbackStore, XamarinEvolve.DataStore.Mock.FeedbackStore> ();
-                DependencyService.Register<ISpeakerStore, XamarinEvolve.DataStore.Mock.SpeakerStore> ();
+				DependencyService.Register<IConferenceFeedbackStore, XamarinEvolve.DataStore.Mock.ConferenceFeedbackStore>();
+				DependencyService.Register<ISpeakerStore, XamarinEvolve.DataStore.Mock.SpeakerStore> ();
                 DependencyService.Register<ISponsorStore, XamarinEvolve.DataStore.Mock.SponsorStore> ();
                 DependencyService.Register<ICategoryStore, XamarinEvolve.DataStore.Mock.CategoryStore> ();
                 DependencyService.Register<IEventStore, XamarinEvolve.DataStore.Mock.EventStore> ();
@@ -54,6 +56,7 @@ namespace XamarinEvolve.Clients.Portable
                 DependencyService.Register<ISessionStore, XamarinEvolve.DataStore.Azure.SessionStore> ();
                 DependencyService.Register<IFavoriteStore, XamarinEvolve.DataStore.Azure.FavoriteStore> ();
                 DependencyService.Register<IFeedbackStore, XamarinEvolve.DataStore.Azure.FeedbackStore> ();
+				DependencyService.Register<IConferenceFeedbackStore, XamarinEvolve.DataStore.Azure.ConferenceFeedbackStore>();
                 DependencyService.Register<ISpeakerStore, XamarinEvolve.DataStore.Azure.SpeakerStore> ();
                 DependencyService.Register<ISponsorStore, XamarinEvolve.DataStore.Azure.SponsorStore> ();
                 DependencyService.Register<ICategoryStore, XamarinEvolve.DataStore.Azure.CategoryStore> ();
@@ -93,45 +96,66 @@ namespace XamarinEvolve.Clients.Portable
             if(IsBusy)
                 return;
 
-            if (!arg.StartsWith ("http://", StringComparison.OrdinalIgnoreCase) && !arg.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                arg = "http://" + arg;
-            
-            Logger.Track(EvolveLoggerKeys.LaunchedBrowser, "Url", arg);
+			if (!arg.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !arg.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+				arg = "http://" + arg;
 
-            var lower = arg.ToLowerInvariant();
-            if(Device.OS == TargetPlatform.iOS && lower.Contains("twitter.com"))
-            {
-                try
-                {
-                    var id = arg.Substring(lower.LastIndexOf("/", StringComparison.Ordinal) + 1);
-                    var launchTwitter = DependencyService.Get<ILaunchTwitter>();
-                    if(lower.Contains("/status/"))
-                    {
-                        //status
-                        if(launchTwitter.OpenStatus(id))
-                            return;
-                    }
-                    else
-                    {
-                        //user
-                        if(launchTwitter.OpenUserName(id))
-                            return;
-                    }
-                }
-                catch
-                {
-                }
-            }
+			arg = arg.Trim();
+
+			var lower = arg.ToLowerInvariant();
+
+			Logger.Track(EvolveLoggerKeys.LaunchedBrowser, "Url", lower);
+
+			if (Device.OS == TargetPlatform.iOS)
+			{
+				if (lower.Contains("twitter.com"))
+				{
+					try
+					{
+						var id = arg.Substring(lower.LastIndexOf("/", StringComparison.Ordinal) + 1);
+						var launchTwitter = DependencyService.Get<ILaunchTwitter>();
+						if (lower.Contains("/status/"))
+						{
+							//status
+							if (launchTwitter.OpenStatus(id))
+								return;
+						}
+						else
+						{
+							//user
+							if (launchTwitter.OpenUserName(id))
+								return;
+						}
+					}
+					catch
+					{
+					}
+				}
+				if (lower.Contains("facebook.com"))
+				{
+					try
+					{
+						var id = arg.Substring(lower.LastIndexOf("/", StringComparison.Ordinal) + 1);
+						var launchFacebook = DependencyService.Get<ILaunchFacebook>();
+						if (launchFacebook.OpenUserName(id))
+							return;
+					}
+					catch
+					{
+					}
+				}
+			}
 
             try 
             {
-                await CrossShare.Current.OpenBrowser (arg, new BrowserOptions {
+				var primaryColor = ((Color)Application.Current.Resources["Primary"]);
+
+				await CrossShare.Current.OpenBrowser (arg, new BrowserOptions {
                     ChromeShowTitle = true,
                     ChromeToolbarColor = new ShareColor {
                         A = 255,
-                        R = 118,
-                        G = 53,
-                        B = 235
+						R = Convert.ToInt32(primaryColor.R),
+						G = Convert.ToInt32(primaryColor.G),
+						B = Convert.ToInt32(primaryColor.B)
                     },
                     UseSafairReaderMode = true,
                     UseSafariWebViewController = true
@@ -141,9 +165,6 @@ namespace XamarinEvolve.Clients.Portable
             {
             }
         }
-
-       
-
     }
 }
 

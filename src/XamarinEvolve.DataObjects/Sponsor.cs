@@ -41,6 +41,19 @@ namespace XamarinEvolve.DataObjects
         public string TwitterUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Facebook profile: 
+        /// For http://facebook.com/James.Montemagno this is: James.Montemagno
+        /// </summary>
+        /// <value>The Facebook Profile.</value>
+        public string FacebookProfileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LinkedIn url
+        /// </summary>
+        /// <value>The LinkedIn Url.</value>
+        public string LinkedInUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the booth location.
         /// </summary>
         /// <value>The booth location.</value>

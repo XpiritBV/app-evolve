@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using Xamarin.Forms;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using MvvmHelpers;
 using FormsToolkit;
 using XamarinEvolve.DataObjects;
+using XamarinEvolve.Utils;
 
 namespace XamarinEvolve.Clients.Portable
 {
@@ -13,10 +15,19 @@ namespace XamarinEvolve.Clients.Portable
         public SessionsViewModel(INavigation navigation) : base(navigation)
         {
             NextForceRefresh = DateTime.UtcNow.AddMinutes(45);
+			MessagingService.Current.Subscribe<Session>(MessageKeys.SessionFavoriteToggled, UpdateFavoritedSession);
         }
 
+		void UpdateFavoritedSession(IMessagingService service, Session updatedSession)
+		{
+			var sessionInList = SessionsGrouped.SelectMany(g => g).FirstOrDefault(s => s.Id == updatedSession.Id);
+			if (sessionInList != null && sessionInList.IsFavorite != updatedSession.IsFavorite)
+			{
+				sessionInList.IsFavorite = updatedSession.IsFavorite;
+			}
+		}
 
-        public ObservableRangeCollection<Session> Sessions { get; } = new ObservableRangeCollection<Session>();
+		public ObservableRangeCollection<Session> Sessions { get; } = new ObservableRangeCollection<Session>();
         public ObservableRangeCollection<Session> SessionsFiltered { get; } = new ObservableRangeCollection<Session>();
         public ObservableRangeCollection<Grouping<string, Session>> SessionsGrouped { get; } = new ObservableRangeCollection<Grouping<string, Session>>();
         public DateTime NextForceRefresh { get; set; }
@@ -59,10 +70,7 @@ namespace XamarinEvolve.Clients.Portable
         void SortSessions()
         {
             SessionsGrouped.ReplaceRange(SessionsFiltered.FilterAndGroupByDate());
-
-
         }
-
 
         bool noSessionsFound;
         public bool NoSessionsFound
@@ -101,10 +109,10 @@ namespace XamarinEvolve.Clients.Portable
             IsBusy = true;
             NoSessionsFound = false;
 
-            // Abort the current command if the query has changed and is not empty
+            // Abort the current command if the user is typing fast
             if (!string.IsNullOrEmpty(Filter))
             {
-                var query = Filter;
+				var query = Filter;
                 await Task.Delay(250);
                 if (query != Filter) 
                     return;
@@ -182,10 +190,25 @@ namespace XamarinEvolve.Clients.Portable
                 {
                     NoSessionsFound = false;
                 }
-                
-                foreach (var session in Sessions)
-                    Application.Current.AppLinks.RegisterLink(session.GetAppLink());
 
+				if (Device.OS != TargetPlatform.WinPhone && Device.OS != TargetPlatform.Windows && FeatureFlags.AppLinksEnabled)
+                {
+					foreach (var session in Sessions)
+					{
+						try
+						{
+							// data migration: older applinks are removed so the index is rebuilt again
+							Application.Current.AppLinks.DeregisterLink(new Uri($"http://{AboutThisApp.AppLinksBaseDomain}/{AboutThisApp.SessionsSiteSubdirectory}/{session.Id}"));
+
+							Application.Current.AppLinks.RegisterLink(session.GetAppLink());
+						}
+						catch (Exception applinkException)
+						{
+							// don't crash the app
+							Logger.Report(applinkException, "AppLinks.RegisterLink", session.Id);
+						}
+					}
+                }
             } 
             catch (Exception ex) 
             {

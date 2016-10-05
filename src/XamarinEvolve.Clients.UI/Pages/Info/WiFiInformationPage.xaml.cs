@@ -6,8 +6,10 @@ using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class WiFiInformationPage : ContentPage
-    {
+	public partial class WiFiInformationPage : BasePage
+	{
+		public override AppPage PageType => AppPage.WiFi;
+
         ConferenceInfoViewModel vm;
         public WiFiInformationPage()
         {

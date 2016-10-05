@@ -10,6 +10,8 @@ namespace XamarinEvolve.Clients.UI
         static List<StarBehavior> defaultBehaviors = new List<StarBehavior>();
         static Dictionary<string, List<StarBehavior>> starGroups = new Dictionary<string, List<StarBehavior>>();
 
+		public event EventHandler RatingChanged;
+
         public static readonly BindableProperty GroupNameProperty =
             BindableProperty.Create("GroupName",
                 typeof(string),
@@ -23,15 +25,19 @@ namespace XamarinEvolve.Clients.UI
             get { return (string)GetValue(GroupNameProperty); }
         }
 
-        public static readonly BindableProperty RatingProperty =
-            BindableProperty.Create("Rating",
+        public static readonly BindableProperty StarRatingProperty =
+            BindableProperty.Create("StarRating",
                 typeof(int),
                 typeof(StarBehavior), default(int));
 
-        public int Rating
+        public int StarRating
         {
-            set { SetValue(RatingProperty, value); }
-            get { return (int)GetValue(RatingProperty); }
+            set 
+			{ 
+				SetValue(StarRatingProperty, value);
+				RatingChanged?.Invoke(this, EventArgs.Empty);
+			}
+            get { return (int)GetValue(StarRatingProperty); }
         }
 
         static void OnGroupNameChanged(BindableObject bindable, object oldValue, object newValue)
@@ -130,13 +136,10 @@ namespace XamarinEvolve.Clients.UI
                     if (item != behavior && itemReached)
                         item.IsStarred = false;
 
-                    item.Rating = position;
+                    item.StarRating = position;
                     count++;
                 }
-
             }
-
-
         }
 
         public StarBehavior()
@@ -149,7 +152,7 @@ namespace XamarinEvolve.Clients.UI
             tapRecognizer = new TapGestureRecognizer();
             tapRecognizer.Tapped += OnTapRecognizerTapped;
             bindable.GestureRecognizers.Add(tapRecognizer);
-        }
+		}
 
         protected override void OnDetachingFrom(View bindable)
         {

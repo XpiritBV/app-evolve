@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="XamarinEvolve.Clients.UI.SponsorsPage"
@@ -11,10 +11,10 @@
    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
      <ListView 
             x:Name="ListViewSponsors"
-            ItemsSource="{Binding Sponsors}"
+            ItemsSource="{Binding SponsorsGrouped}"
             GroupDisplayBinding="{Binding Key}"
-            IsGroupingEnabled="false"
-            HasUnevenRows ="false"
+            IsGroupingEnabled="true"
+            HasUnevenRows ="true"
             RowHeight="120"
             IsPullToRefreshEnabled="{Binding IsNotBusy}"
             RefreshCommand="{Binding ForceRefreshCommand}"
@@ -26,6 +26,16 @@
         <ListView.SeparatorColor>
             <OnPlatform x:TypeArguments="Color" iOS="{StaticResource ListSeparator}" Android="Transparent"/>
         </ListView.SeparatorColor>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <ViewCell.Height>
+                        <OnPlatform x:TypeArguments="x:Double" iOS="28"/>
+                    </ViewCell.Height>  
+                    <local:EvolveGroupHeaderView/>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
       <ListView.ItemTemplate>
         <DataTemplate>
             <ViewCell StyleId="disclosure">
@@ -48,4 +58,4 @@
             <Label Text="Loading Sponsors..." HorizontalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}"/>
        </StackLayout>
     </AbsoluteLayout>
-</ContentPage>
+</local:BasePage>

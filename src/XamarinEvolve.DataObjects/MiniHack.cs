@@ -10,7 +10,8 @@ namespace XamarinEvolve.DataObjects
         public string GitHubUrl {get;set;}
         public string BadgeUrl { get; set; }
         public string UnlockCode { get; set; }
-
+        public int? Score { get; set; }
+        public string Category { get; set; }
 
         #if MOBILE
         [Newtonsoft.Json.JsonIgnore]
@@ -36,6 +37,14 @@ namespace XamarinEvolve.DataObjects
         {
             get { return isCompleted; }
             set { SetProperty(ref isCompleted, value); }
+        }
+
+        bool completedSynced;
+        [Newtonsoft.Json.JsonIgnore]
+        public bool CompletedSynced
+        {
+            get { return completedSynced; }
+            set { SetProperty(ref completedSynced, value); }
         }
         #endif
     }

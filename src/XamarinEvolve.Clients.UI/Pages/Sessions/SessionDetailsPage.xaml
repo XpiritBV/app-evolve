@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="XamarinEvolve.Clients.UI.SessionDetailsPage"
@@ -90,7 +90,48 @@
                         </StackLayout>
                     </local:CardView>
 
-				<local:CardView IsVisible="{Binding Session, Converter={StaticResource RatingVisibleConverter}}">
+					<local:CardView IsVisible="{Binding ShowSessionMaterials}">
+                            <StackLayout Spacing="0">
+                                <!--Session materials-->
+                                <local:LabelSection Text="Session materials"/>
+                                <local:HeaderDivider/>
+                                <local:NonScrollableListView
+                                    ItemsSource="{Binding SessionMaterialItems}"
+                                    VerticalOptions="Start"
+                                    x:Name="ListViewSessionMaterial"
+                                    SelectedItem="{Binding SelectedSessionMaterialItem, Mode=TwoWay}"
+                                    RowHeight="44">
+                                    <local:NonScrollableListView.SeparatorColor>
+                                        <OnPlatform x:TypeArguments="Color" iOS="{StaticResource ListSeparator}"/>
+                                    </local:NonScrollableListView.SeparatorColor>
+                                    <local:NonScrollableListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell StyleId="disclosure">
+                                                <Grid ColumnSpacing="{StaticResource StandardSpacing}">
+                                                    <Grid.Padding>
+                                                        <OnPlatform x:TypeArguments="Thickness" iOS="16,12" Android="16,8"/>
+                                                    </Grid.Padding>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Image VerticalOptions="Center" Source="{Binding Icon}">
+                                                        <Image.IsVisible>
+                                                            <OnPlatform x:TypeArguments="x:Boolean" iOS="true" Android="true"/>
+                                                        </Image.IsVisible>
+                                                    </Image>
+                                                    <Label Grid.Column="1" VerticalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}" Text="{Binding Name}">
+													</Label>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </local:NonScrollableListView.ItemTemplate>
+                                </local:NonScrollableListView>
+                                <local:FooterDivider/>
+                            </StackLayout>
+                        </local:CardView>
+
+					<local:CardView IsVisible="{Binding Session, Converter={StaticResource RatingVisibleConverter}}">
                         <StackLayout Spacing="0">
                             <!--Rate-->
                             <local:LabelSection Text="Leave Feedback" StyleId="FeedbackTitle"/>
@@ -209,8 +250,8 @@
                          </StackLayout>
                      </local:CardView>
 
-				 <local:CardView IsVisible="{Binding Session.Room, Converter={StaticResource GenericIsVisibleConverter}}">
-                      <StackLayout Spacing="0">
+				 	 <local:CardView IsVisible="{Binding Session.Room, Converter={StaticResource GenericIsVisibleConverter}}">
+                      	<StackLayout Spacing="0">
                             <local:LabelSection Text="Location"/> 
                             <local:HeaderDivider/>
                              <StackLayout Padding="{StaticResource StandardPadding}" BackgroundColor="White">
@@ -222,7 +263,7 @@
                              </StackLayout>
                             <local:FooterDivider/>
                          </StackLayout>
-                     </local:CardView>
+                    </local:CardView>
 
                     <!--Abstract-->
                     <local:CardView IsVisible="{Binding Session.Abstract, Converter={StaticResource GenericIsVisibleConverter}}">
@@ -236,10 +277,19 @@
                          </StackLayout>
                      </local:CardView>
 
-                    
-
-                    
+                    <!--Level-->
+                    <local:CardView IsVisible="{Binding Session.Level, Converter={StaticResource GenericIsVisibleConverter}}">
+                      <StackLayout Spacing="0">
+                            <local:LabelSection Text="Level"/> 
+                            <local:HeaderDivider/>
+                             <StackLayout Padding="{StaticResource StandardPadding}" BackgroundColor="White">
+                                <Label Text="{Binding Session.Level}" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="SessionLevel"/>
+                             </StackLayout>
+                            <local:FooterDivider/>
+                         </StackLayout>
+                     </local:CardView>                    
+                                         
                 </StackLayout>
             </StackLayout>
         </local:AlwaysScrollView>
-</ContentPage>
+</local:BasePage>

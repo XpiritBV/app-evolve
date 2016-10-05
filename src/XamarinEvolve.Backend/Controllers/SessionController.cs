@@ -20,14 +20,14 @@ namespace XamarinEvolve.Backend.Controllers
             DomainManager = new EntityDomainManager<Session>(context, Request, true);
         }
 
-        [QueryableExpand("Room,Speakers,MainCategory")]
-        [EnableQuery(MaxTop=500)]
+        [QueryableExpand("Room,Speakers,Categories")]
+        [EnableQuery(MaxTop=500, PageSize = 500)]
         public IQueryable<Session> GetAllSession()
         {
             return Query(); 
         }
 
-        [QueryableExpand("Speakers,Room,MainCategory")]
+        [QueryableExpand("Speakers,Room,Categories")]
         public SingleResult<Session> GetSession(string id)
         {
             return Lookup(id);

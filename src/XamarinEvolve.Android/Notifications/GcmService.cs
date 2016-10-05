@@ -5,6 +5,7 @@ using Android.App;
 using Android.Content;
 using Gcm;
 using WindowsAzure.Messaging;
+using XamarinEvolve.Utils;
 using XamarinEvolve.Clients.Portable;
 using Android.Support.V4.App;
 
@@ -13,7 +14,7 @@ namespace XamarinEvolve.Droid
 
 
 
-    [Service(Name="com.sample.evolve.GcmService")] //Must use the service tag
+	[Service(Name=AboutThisApp.PackageName + ".GcmService")] //Must use the service tag
     public class GcmService : GcmServiceBase
     {
         static NotificationHub hub;
@@ -145,7 +146,7 @@ namespace XamarinEvolve.Droid
 
                 var builder = new NotificationCompat.Builder(this)
                     .SetContentIntent(pendingIntent)
-                    .SetContentTitle("Xamarin Evolve")
+                    .SetContentTitle(EventInfo.EventName)
                     .SetAutoCancel(true)
                     .SetStyle(style)
                     .SetSmallIcon(Resource.Drawable.ic_notification)

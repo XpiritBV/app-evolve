@@ -6,8 +6,10 @@ using XamarinEvolve.Clients.Portable;
 
 namespace XamarinEvolve.Clients.UI
 {
-    public partial class NotificationsPage : ContentPage
-    {
+	public partial class NotificationsPage : BasePage
+	{
+		public override AppPage PageType => AppPage.Notification;
+
         NotificationsViewModel vm;
         public NotificationsPage()
         {
@@ -16,7 +18,7 @@ namespace XamarinEvolve.Clients.UI
             ListViewNotifications.ItemTapped += (sender, e) => ListViewNotifications.SelectedItem = null;
         }
 
-        protected override void OnAppearing()
+		protected override void OnAppearing()
         {
             base.OnAppearing();
             if (vm.Notifications.Count == 0)
