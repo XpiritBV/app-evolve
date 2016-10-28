@@ -1,6 +1,7 @@
 ﻿select     s.Id
 ,		   s.Title
-,          CONVERT(DECIMAL(2,1), AVG(f.SessionRating)) as [AverageRating]
+,          COUNT(1) as [NumberOfVotes]
+,          CONVERT(DECIMAL(3,2), AVG(CONVERT(DECIMAL(3,2), f.SessionRating))) as [AverageRating]
 ,          [OneStar] = dbo.fn_NumberOfRatings(s.Id, 1)
 ,          [TwoStar] = dbo.fn_NumberOfRatings(s.Id, 2)
 ,          [ThreeStar] = dbo.fn_NumberOfRatings(s.Id, 3)
@@ -12,4 +13,4 @@ inner join dbo.Feedbacks f
 where      (f.Deleted != 1 or f.Deleted is null)
   and      (s.Deleted != 1 or s.Deleted is null)
 group by   s.Id, s.Title
-order by   3 desc
+order by   4 desc, 3 desc

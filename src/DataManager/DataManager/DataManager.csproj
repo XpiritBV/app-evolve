@@ -227,10 +227,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AiHandleErrorAttribute.cs" />
+    <Compile Include="Controllers\AppRatingsController.cs" />
     <Compile Include="Controllers\Auth0AccountController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ConferenceFeedbacksController.cs" />
     <Compile Include="Controllers\MiniHacksController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\MiniHackCompletionsController.cs" />
@@ -257,6 +259,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MiniHack.cs" />
+    <Compile Include="ViewModels\ConferenceFeedbackViewModel.cs" />
     <Compile Include="ViewModels\MiniHackCompletionViewModel.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Room.cs" />
@@ -269,6 +272,7 @@
     <Compile Include="Repository\Configuration.cs" />
     <Compile Include="Repository\Techdays2016Repository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AppRatingViewModel.cs" />
     <Compile Include="ViewModels\SessionWithRatingsViewModel.cs" />
     <Compile Include="ViewModels\SessionWithFavoritesViewModel.cs" />
     <Compile Include="ViewModels\SponsorViewModel.cs" />
@@ -286,10 +290,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Repository\Functions\fn_AppRatingPerPlatform.sql" />
+    <Content Include="Repository\Functions\fn_NumberOfConferenceFeedBacks.sql" />
     <Content Include="Repository\Functions\fn_NumberOfRatings.sql" />
     <EmbeddedResource Include="Repository\Queries\TopSessions.sql" />
     <EmbeddedResource Include="Repository\Queries\SessionWithRatings.sql" />
     <EmbeddedResource Include="Repository\Queries\MiniHackCompletions.sql" />
+    <EmbeddedResource Include="Repository\Queries\ConferenceFeedbackOverview.sql" />
+    <EmbeddedResource Include="Repository\Queries\AppRatings.sql" />
     <Content Include="Scripts\ai.1.0.0-build00159.js" />
     <Content Include="Scripts\ai.1.0.0-build00159.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -402,6 +410,8 @@
     <Content Include="Views\TopSessions\Index.cshtml" />
     <Content Include="Views\SessionRatings\Index.cshtml" />
     <Content Include="Views\MiniHackCompletions\Index.cshtml" />
+    <Content Include="Views\ConferenceFeedbacks\Index.cshtml" />
+    <Content Include="Views\AppRatings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,22 +1,22 @@
-﻿@model IEnumerable<DataManager.ViewModels.SessionWithRatingsViewModel>
+﻿@model IEnumerable<DataManager.ViewModels.AppRatingViewModel>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Session ratings</h2>
+<h2>App Ratings</h2>
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Platform
         </th>
         <td>
-            # votes
+            Average
         </td>
         <td>
-            Average Rating
+            # Votes
         </td>
         <td align="center">*</td>
         <td align="center">**</td>
@@ -28,13 +28,13 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Title)
+            @Html.DisplayFor(modelItem => item.DeviceOS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Score)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NumberOfVotes)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AverageRating)
         </td>
         <td align="center">
             @Html.DisplayFor(modelItem => item.OneStar)

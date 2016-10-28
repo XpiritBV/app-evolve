@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace DataManager.Controllers
 {
+    [Authorize]
     public class MiniHackCompletionsController : Controller
     {
         private Techdays2016Repository db = new Techdays2016Repository();
