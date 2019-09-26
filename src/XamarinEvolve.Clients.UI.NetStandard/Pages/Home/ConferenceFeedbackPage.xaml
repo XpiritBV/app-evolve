@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinEvolve.Clients.UI.ConferenceFeedbackPage"
+    BackgroundColor="{DynamicResource WindowBackground}"
+    NavigationPage.BackButtonTitle="Back"
+    Title="{Binding Title}">  
+  <ContentPage.Resources>
+     <ResourceDictionary>
+        <local:RatingConverter x:Key="RatingConverter" />
+     </ResourceDictionary>
+    </ContentPage.Resources>
+  
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" Command="{Binding DoneCommand}" x:Name="ToolbarDone"/>
+    </ContentPage.ToolbarItems>
+
+	<Grid Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+		<ScrollView VerticalOptions="FillAndExpand">
+
+			<StackLayout VerticalOptions="FillAndExpand" Spacing="{DynamicResource CardSpacing}"
+                    Padding="{DynamicResource CardPadding}">
+
+				<local:CardView
+					BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}"
+					>
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 1 out of 7" />
+						<local:HeaderDivider />
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How satisfied are you in general with this event?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question1" GroupName="Question1" Rating="{Binding Question1, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question1},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not good ,Fair ,Ok ,Good ,Awesome'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+						<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 2 out of 7" />
+						<local:HeaderDivider />				
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How do you rate the venue (Pathe Ede)?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question2" GroupName="Question2" Rating="{Binding Question2, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question2},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not good ,Fair ,Ok ,Good ,Awesome'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+					<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 3 out of 7" />
+						<local:HeaderDivider />				
+
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How do you rate the registration and payment process for the conference?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question3" GroupName="Question3" Rating="{Binding Question3, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question3},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not good ,Fair ,Ok ,Good ,Awesome'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+					<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 4 out of 7" />
+						<local:HeaderDivider />				
+
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How do you rate the website of Techorama?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question4" GroupName="Question4" Rating="{Binding Question4, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question4},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not good ,Fair ,Ok ,Good ,Awesome'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+						<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 5 out of 7" />
+						<local:HeaderDivider />				
+
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How do you rate our Techorama App?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question5" GroupName="Question5" Rating="{Binding Question5, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question5},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not good ,Fair ,Ok ,Good ,Awesome'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+						<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 6 out of 7" />
+						<local:HeaderDivider />				
+
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="How likely are you to recommend Techorama to others (0 not likely, 5 Highly likely)?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:RatingControl x:Name="Question6" GroupName="Question6" Rating="{Binding Question6, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question6},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, Not likely, Somewhat likely, Likely, Very Likely, Absolutely'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+						<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+
+				<local:CardView BackgroundColor="{DynamicResource WindowBackground}"
+												BorderColor="{DynamicResource Accent}">
+					<StackLayout Spacing="5" Margin="5,5,5,5">
+						<local:LabelSection Text="Question 7 out of 7" />
+						<local:HeaderDivider />				
+
+						<StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+							
+				            <Label Text="Can you apply what you have learned immediately in practice?" 
+				                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+				                StyleId="LabelSessionName"
+				                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+				            <Grid RowSpacing="18" HorizontalOptions="Center">
+				            <Grid.ColumnDefinitions>
+				                <ColumnDefinition Width="*"/>
+				                <ColumnDefinition Width="Auto"/>
+				                <ColumnDefinition Width="*"/>
+				            </Grid.ColumnDefinitions>
+				            <Grid.RowDefinitions>
+				                <RowDefinition Height="Auto"/>
+				            </Grid.RowDefinitions>
+
+				            <local:Rating3Control x:Name="Question7" GroupName="Question7" Rating="{Binding Question7, Mode=TwoWay}" Grid.Column="1" />
+				          </Grid>
+
+				            <Label Text="{Binding Source={x:Reference Question7},
+				                   Path=Rating, Converter={StaticResource RatingConverter}, ConverterParameter='Please select an Answer, No, Not now, Yes'}" 
+				                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+				                   StyleId="Status"
+				                   HorizontalOptions="Center"/>
+				        </StackLayout>
+						<local:FooterDivider />
+					</StackLayout>
+				</local:CardView>
+			</StackLayout>
+        </ScrollView>
+
+        <StackLayout Padding="{StaticResource StandardPadding}" Grid.Row="1">
+            <Button
+                Text="Submit"  
+                StyleId="ButtonSubmit"
+                Command="{Binding SubmitFeedbackCommand}"
+                BackgroundColor="{StaticResource PrimaryDark}"
+                TextColor="{DynamicResource Accent}"
+                IsEnabled="{Binding IsNotBusy}">
+                
+                <Button.FontAttributes>
+                    <OnPlatform x:TypeArguments="FontAttributes">
+                        <On Platform="iOS" Value="Bold"/>
+                    </OnPlatform>
+                </Button.FontAttributes>
+            </Button>
+        </StackLayout>
+    </Grid>
+</local:BasePage>

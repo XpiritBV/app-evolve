@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIdentifier</key>
+	<string>com.techorama.conferenceapp</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.3</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>MinimumOSVersion</key>
+	<string>9.0</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIPrerenderedIcon</key>
+	<true/>
+	<key>UILaunchStoryboardName~ipad</key>
+	<string>LaunchScreen~ipad</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location is needed to display your current location on maps.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We use your location to help you find your way during our conference. We don&apos;t store or keep this data anywhere in our services!</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Share</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.techorama.conferenceapp.share</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quickaction_share</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>#Techorama</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Announcements</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.techorama.conferenceapp.announcements</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quickaction_announcements</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Sessions</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.techorama.conferenceapp.sessions</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quickaction_sessions</string>
+		</dict>
+	</array>
+	<key>UILaunchImages</key>
+	<array>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>8.0</string>
+			<key>UILaunchImageName</key>
+			<string>Default-667h</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{375, 667}</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>8.0</string>
+			<key>UILaunchImageName</key>
+			<string>Default-736h</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{414, 736}</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>7.0</string>
+			<key>UILaunchImageName</key>
+			<string>Default-568h</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{320, 568}</string>
+		</dict>
+		<dict>
+			<key>UILaunchImageMinimumOSVersion</key>
+			<string>6.0</string>
+			<key>UILaunchImageName</key>
+			<string>Default</string>
+			<key>UILaunchImageOrientation</key>
+			<string>Portrait</string>
+			<key>UILaunchImageSize</key>
+			<string>{320, 480}</string>
+		</dict>
+	</array>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Default.png</string>
+		<string>Default@2x.png</string>
+		<string>Default-568h@2x.png</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>TechDays 17</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.techorama.conferenceapp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>techorama2019</string>
+			</array>
+			<key>CFBundleURLIconFile</key>
+			<string>Icon-58</string>
+		</dict>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSRemindersUsageDescription</key>
+	<string>Add reminders for events.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app uses bar code scanning and photography to play in Treasure Hunts or sync data with the website, so it needs access to your device&apos;s photo capabilities.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app allows you to add/remove conference sessions or events in your calendar.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.techorama.conferenceapp.session</string>
+		<string>com.techorama.conferenceapp.sponsor</string>
+		<string>com.techorama.conferenceapp.speaker</string>
+		<string>com.techorama.conferenceapp.sessions</string>
+		<string>com.techorama.conferenceapp.speakers</string>
+		<string>com.techorama.conferenceapp.minihacks</string>
+		<string>com.techorama.conferenceapp.minihack</string>
+	</array>
+	<key>CFBundleDisplayName</key>
+	<string>Techorama conference app</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses bar code scanning and photography to play in Treasure Hunts or sync data with the website, so it needs access to your device&apos;s photo capabilities.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.3</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>XSAppIconAssets</key>
+	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
+	<key>XSLaunchImageAssets</key>
+	<string>Images.xcassets/LaunchImages.launchimage</string>
+</dict>
+</plist>

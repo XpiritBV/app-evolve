@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"     
+    x:Class="XamarinEvolve.Clients.UI.FeedbackPage"
+    BackgroundColor="{DynamicResource WindowBackground}"
+		Title="Rate Session">
+    <ContentPage.Resources>
+     <ResourceDictionary>
+        <local:RatingConverter x:Key="RatingConverter" />
+     </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" Command="{Binding DoneCommand}" x:Name="ToolbarDone"/>
+    </ContentPage.ToolbarItems>
+    <Grid Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackLayout VerticalOptions="Center" Spacing="{StaticResource StandardSpacing}">
+            <Image Source="icon_sessions_big.png" HorizontalOptions="Center" />
+            <Label Text="{Binding Session.Title}" 
+                HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+                StyleId="LabelSessionName"
+                Style="{DynamicResource EvolveListItemTextStyle}"/>
+
+            <Grid RowSpacing="18" HorizontalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+
+            <local:RatingControl x:Name="RatingControl" Grid.Column="1" />
+          </Grid>
+
+            <Label Text="{Binding Source={x:Reference RatingControl},
+                   Path=Rating, Converter={StaticResource RatingConverter}}" 
+                   Style="{DynamicResource EvolveListItemDetailTextStyle}"
+                   StyleId="Status"
+                   HorizontalOptions="Center"/>
+			<local:HeaderDivider/>
+			<Entry MaxLength="1024" IsSpellCheckEnabled="True" Text="{Binding Feedback}" HeightRequest="100" x:Name="txtFeedback" PlaceholderColor="Accent" Placeholder="Provide additional comments here..."/>
+		</StackLayout>
+        <StackLayout Padding="{StaticResource StandardPadding}" Grid.Row="1">
+			<Button
+                Text="Submit"  
+                StyleId="ButtonSubmit"
+                Command="{Binding SubmitRatingCommand}"
+                CommandParameter="{Binding Source={x:Reference RatingControl},Path=Rating}"
+                IsEnabled="{Binding IsNotBusy}" BackgroundColor="{DynamicResource Accent}" TextColor="{DynamicResource Primary}">
+			</Button>
+        </StackLayout>
+    </Grid>
+</local:BasePage>

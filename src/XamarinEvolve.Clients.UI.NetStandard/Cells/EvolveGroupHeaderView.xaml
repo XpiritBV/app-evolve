@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="XamarinEvolve.Clients.UI.EvolveGroupHeaderView">
+    <StackLayout VerticalOptions="Center"
+				 BackgroundColor="{StaticResource SecondaryAccent}">
+        <StackLayout.Padding>
+			<OnPlatform x:TypeArguments="Thickness">
+				<On Platform="iOS" Value="16,8"/>
+				<On Platform="Android" Value="16,8"/>
+				<On Platform="Windows" Value="16,8"/>
+			</OnPlatform>
+		</StackLayout.Padding>
+		<Label Text="{Binding Key}" 
+            VerticalOptions="Center" 
+            VerticalTextAlignment="Center" TextColor="{StaticResource PrimaryDark}">
+             <Label.FontSize>
+                <OnPlatform x:TypeArguments="x:Double">
+                    <On Platform="iOS" Value="16"/>
+                    <On Platform="Android" Value="18"/>
+                    <On Platform="Windows" Value="16"/>
+                </OnPlatform>
+            </Label.FontSize>
+            <Label.FontFamily>
+                <OnPlatform x:TypeArguments="x:String">
+                    <On Platform="Android" Value="sans-serif-light"/>
+					<On Platform="iOS" Value="sans-serif-light"/>
+				</OnPlatform>
+            </Label.FontFamily>
+        </Label>
+    </StackLayout>
+</ContentView>

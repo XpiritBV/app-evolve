@@ -1,0 +1,427 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App.xaml" />
+    <None Remove="Cells\CategoryCellView.xaml" />
+    <None Remove="Cells\EvolveGroupHeaderView.xaml" />
+    <None Remove="Cells\FloorMapCell.xaml" />
+    <None Remove="Cells\MiniHackCell.xaml" />
+    <None Remove="Cells\NotificationCell.xaml" />
+    <None Remove="Cells\ObjectToFindCell.xaml" />
+    <None Remove="Cells\ScavengerHuntCell.xaml" />
+    <None Remove="Cells\SessionCell.xaml" />
+    <None Remove="Cells\SessionCellForSpeakerDetail.xaml" />
+    <None Remove="Cells\SpeakerCell.xaml" />
+    <None Remove="Cells\SpeakerCellForSessionDetail.xaml" />
+    <None Remove="Cells\SponsorCell.xaml" />
+    <None Remove="Cells\TweetCell.xaml" />
+    <None Remove="Controls\FooterDivider.xaml" />
+    <None Remove="Controls\HeaderDivider.xaml" />
+    <None Remove="Controls\LabelSection.xaml" />
+    <None Remove="Controls\Rating3Control.xaml" />
+    <None Remove="Controls\RatingControl.xaml" />
+    <None Remove="Controls\SectionDivider.xaml" />
+    <None Remove="Pages\Android\MenuPage.xaml" />
+    <None Remove="Pages\Events\EventDetailsPage.xaml" />
+    <None Remove="Pages\Events\EventsPage.xaml" />
+    <None Remove="Pages\Home\ConferenceFeedbackPage.xaml" />
+    <None Remove="Pages\Home\FeedPage.xaml" />
+    <None Remove="Pages\Home\NotificationsPage.xaml" />
+    <None Remove="Pages\Home\TweetImagePage.xaml" />
+    <None Remove="Pages\Info\CodeOfConductPage.xaml" />
+    <None Remove="Pages\Info\ConferenceInformationPage.xaml" />
+    <None Remove="Pages\Info\FloorMapPage.xaml" />
+    <None Remove="Pages\Info\LoginPage.xaml" />
+    <None Remove="Pages\Info\SettingsPage.xaml" />
+    <None Remove="Pages\Info\VenuePage.xaml" />
+    <None Remove="Pages\Info\WiFiInformationPage.xaml" />
+    <None Remove="Pages\iOS\AboutPage.xaml" />
+    <None Remove="Pages\Rooms\RoomDetailsPage.xaml" />
+    <None Remove="Pages\Sessions\EvaluationsPage.xaml" />
+    <None Remove="Pages\Sessions\FeedbackPage.xaml" />
+    <None Remove="Pages\Sessions\FilterSessionsPage.xaml" />
+    <None Remove="Pages\Sessions\SessionDetailsPage.xaml" />
+    <None Remove="Pages\Sessions\SessionsPage.xaml" />
+    <None Remove="Pages\Speakers\SpeakerDetailsPage.xaml" />
+    <None Remove="Pages\Speakers\SpeakersPage.xaml" />
+    <None Remove="Pages\Sponsors\SponsorDetailsPage.xaml" />
+    <None Remove="Pages\Sponsors\SponsorsPage.xaml" />
+    <None Remove="Controls\CategoryBadge.xaml" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <EmbeddedResource Include="App.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\CategoryCellView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\EvolveGroupHeaderView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\FloorMapCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\MiniHackCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\NotificationCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\ObjectToFindCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\ScavengerHuntCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\SessionCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\SessionCellForSpeakerDetail.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\SpeakerCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\SpeakerCellForSessionDetail.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\SponsorCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cells\TweetCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FooterDivider.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HeaderDivider.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LabelSection.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Rating3Control.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RatingControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SectionDivider.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Android\MenuPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Events\EventDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Events\EventsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Home\ConferenceFeedbackPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Home\FeedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Home\NotificationsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Home\TweetImagePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\CodeOfConductPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\ConferenceInformationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\FloorMapPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\SettingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\SyncMobileToWebPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\SyncWebToMobilePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\VenuePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Info\WiFiInformationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\iOS\AboutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\MiniHacks\MiniHacksDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\MiniHacks\MiniHacksPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Rooms\RoomDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\ScavengerHunts\ObjectsToFindPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\ScavengerHunts\RegisterForScavengerHuntPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\ScavengerHunts\ScavengerHuntsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\ScavengerHunts\UnlockScavengerHuntObject.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sessions\EvaluationsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sessions\FeedbackPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sessions\FilterSessionsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sessions\SessionDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sessions\SessionsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Speakers\SpeakerDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Speakers\SpeakersPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sponsors\SponsorDetailsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Sponsors\SponsorsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Compile Update="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\CategoryCellView.xaml.cs">
+      <DependentUpon>CategoryCellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\EvolveGroupHeaderView.xaml.cs">
+      <DependentUpon>EvolveGroupHeaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\FloorMapCell.xaml.cs">
+      <DependentUpon>FloorMapCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\MiniHackCell.xaml.cs">
+      <DependentUpon>MiniHackCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\NotificationCell.xaml.cs">
+      <DependentUpon>NotificationCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\ObjectToFindCell.xaml.cs">
+      <DependentUpon>ObjectToFindCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\ScavengerHuntCell.xaml.cs">
+      <DependentUpon>ScavengerHuntCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\NonSessionCell.xaml.cs">
+      <DependentUpon>NonSessionCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\SessionCell.xaml.cs">
+      <DependentUpon>SessionCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\SessionCellForSpeakerDetail.xaml.cs">
+      <DependentUpon>SessionCellForSpeakerDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\SpeakerCell.xaml.cs">
+      <DependentUpon>SpeakerCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\SpeakerCellForSessionDetail.xaml.cs">
+      <DependentUpon>SpeakerCellForSessionDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\SponsorCell.xaml.cs">
+      <DependentUpon>SponsorCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\TweetCell.xaml.cs">
+      <DependentUpon>TweetCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\FooterDivider.xaml.cs">
+      <DependentUpon>FooterDivider.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\HeaderDivider.xaml.cs">
+      <DependentUpon>HeaderDivider.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\LabelSection.xaml.cs">
+      <DependentUpon>LabelSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\Rating3Control.xaml.cs">
+      <DependentUpon>Rating3Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\RatingControl.xaml.cs">
+      <DependentUpon>RatingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\SectionDivider.xaml.cs">
+      <DependentUpon>SectionDivider.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Android\MenuPage.xaml.cs">
+      <DependentUpon>MenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Events\EventDetailsPage.xaml.cs">
+      <DependentUpon>EventDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Events\EventsPage.xaml.cs">
+      <DependentUpon>EventsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Home\ConferenceFeedbackPage.xaml.cs">
+      <DependentUpon>ConferenceFeedbackPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Home\FeedPage.xaml.cs">
+      <DependentUpon>FeedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Home\NotificationsPage.xaml.cs">
+      <DependentUpon>NotificationsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Home\TweetImagePage.xaml.cs">
+      <DependentUpon>TweetImagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\CodeOfConductPage.xaml.cs">
+      <DependentUpon>CodeOfConductPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\ConferenceInformationPage.xaml.cs">
+      <DependentUpon>ConferenceInformationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\FloorMapPage.xaml.cs">
+      <DependentUpon>FloorMapPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\VenuePage.xaml.cs">
+      <DependentUpon>VenuePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Info\WiFiInformationPage.xaml.cs">
+      <DependentUpon>WiFiInformationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\iOS\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Rooms\RoomDetailsPage.xaml.cs">
+      <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sessions\EvaluationsPage.xaml.cs">
+      <DependentUpon>EvaluationsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sessions\FeedbackPage.xaml.cs">
+      <DependentUpon>FeedbackPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sessions\FilterSessionsPage.xaml.cs">
+      <DependentUpon>FilterSessionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sessions\SessionDetailsPage.xaml.cs">
+      <DependentUpon>SessionDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sessions\SessionsPage.xaml.cs">
+      <DependentUpon>SessionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Speakers\SpeakerDetailsPage.xaml.cs">
+      <DependentUpon>SpeakerDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Speakers\SpeakersPage.xaml.cs">
+      <DependentUpon>SpeakersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sponsors\SponsorDetailsPage.xaml.cs">
+      <DependentUpon>SponsorDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Sponsors\SponsorsPage.xaml.cs">
+      <DependentUpon>SponsorsPage.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Controls\CategoryBadge.xaml.cs">
+      <DependentUpon>CategoryBadge.xaml</DependentUpon>
+    </EmbeddedResource>
+
+  </ItemGroup>
+  <ItemGroup>
+    
+    <PackageReference Include="FormsToolkit" version="2.0.1" Version="2.0.1" />
+    <PackageReference Include="Humanizer.Core" version="2.6.2" Version="2.6.2" />
+    <PackageReference Include="Microsoft.AppCenter" Version="2.2.1-preview" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="2.2.1-preview" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.2.2" />
+    <PackageReference Include="Microsoft.NETCore.Targets" version="2.1.0" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NodaTime" Version="2.4.6" />
+    <PackageReference Include="Plugin.Permissions" version="3.0.0.12" Version="3.0.0.12" />
+    <PackageReference Include="Plugin.Share" version="7.1.1" Version="7.1.1" />
+    <PackageReference Include="Refractored.MvvmHelpers" version="1.3.2.47-beta" Version="1.3.2.47-beta" />
+    <PackageReference Include="Refractored.XamForms.PullToRefresh" version="2.4.1" Version="2.4.1" />
+    <PackageReference Include="runtime.native.System" version="4.3.1" Version="4.3.1" />
+    <PackageReference Include="System.Collections" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Collections.Concurrent" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Debug" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Tools" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Tracing" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Globalization" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.IO" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.IO.Compression" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Linq" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Expressions" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" version="4.3.4" Version="4.3.4" />
+    <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
+    <PackageReference Include="System.ObjectModel" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Primitives" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Resources.ResourceManager" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" version="4.3.1" Version="4.3.1" />
+    <PackageReference Include="System.Runtime.Extensions" version="4.3.1" Version="4.3.1" />
+    <PackageReference Include="System.Runtime.InteropServices" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Numerics" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="System.Threading" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Tasks" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="System.Xml.ReaderWriter" version="4.3.1" Version="4.3.1" />
+    <PackageReference Include="System.Xml.XDocument" version="4.3.0" Version="4.3.0" />
+    <PackageReference Include="Xam.Plugin.Connectivity" version="3.2.0" Version="3.2.0" />
+     <PackageReference Include="Xam.Plugin.Media" version="4.0.1.5" Version="4.0.1.5" />
+    <PackageReference Include="Xam.Plugins.Forms.ImageCircle" version="3.0.0.5" Version="3.0.0.5" />
+    <PackageReference Include="Xam.Plugins.Settings" version="3.1.1" Version="3.1.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.1.0.618606" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.1.0.618606" />
+    <PackageReference Include="ZXing.Net.Mobile" version="2.4.1" Version="2.4.1" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" version="2.4.1" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XamarinEvolve.Clients.Portable.NetStandard\XamarinEvolve.Clients.Portable.NetStandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Abstractions.Netstandard\XamarinEvolve.DataStore.Abstractions.Netstandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Azure.NetStandard\XamarinEvolve.DataStore.Azure.NetStandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Mock.NetStandard\XamarinEvolve.DataStore.Mock.NetStandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.Utils.NetStandard\XamarinEvolve.Utils.NetStandard.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Cells\NonSessionCell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+</Project>

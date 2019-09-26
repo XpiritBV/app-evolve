@@ -1,146 +1,46 @@
-# TechDays 2016 Mobile App
+# Techorama App
 
-![](art/apps.png)
+## How does the app work?
+When you start the app, you will see the personal conference page. On this page, we provide you with updates on schedule changes or other things that we need your attention on. The middle part of the screen shows the next upcoming sessions that you have added as favorite in the sessions screen. In the bottom you can find a twitter feed, where all tweets that have #TechoramaNL in the post. So if you want your tweet to show up for all attendees to see, use the hashtag, and it will show up after a few minutes.
+
+
+![Main screen](https://techorama.nl/media/1286/main-page-explain.png?width=500&height=361.2424037812289)
+
+If you use the hamburger menu in the top on android, or use the app bar at the bottom on iOS, you can select other pages in the app. We have two primary pages for you if it comes to our sessions. You can either look for your favorite speaker and then see what sessions he or she will present and like the session there to add it to your personal feed on the home screen. (remember only the next upcoming are shown there based on the time of the day)
+
+The page flow via speakers is as follows:
+
+
+![App flow Android](https://techorama.nl/media/1283/android-speakerflow.png?width=500&height=310)
+
+![App flow iOS](https://techorama.nl/media/1285/ios-speakerflow.png?width=500&height=310)
+
+
+ 
+
+You can also go to the sessions page. Here you will see all sessions in sequence of delivery. You can favorite each session by tapping the heart icon. You can tap on the rest of the session card, and that will bring you to a details page. Here you can then find the details of the session, who is presenting the session and where the session is located in the venue.
+
+The flow for this is as follows:
+![App flow android](https://techorama.nl/media/1282/android-sessoinflow.png?width=500&height=491)
+
+![App flow iOS](https://techorama.nl/media/1284/ios-sessionflow.png?width=500&height=491)
+
+
+
+For your convenience, we also provided some additional pages, where you can find info on our partners, our code of conduct and the floorplan of the venue. We also have an about page. On this page we have the option to do a hard reset of the session and speaker data if your app, for some reason is not updating its schedule data. Schedule data is fetched every 30 minutes if there are changes. All the data is cached on the device, so it also works without internet connectivity.
+
+Finally, we have the option to rate the sessions you have visited. We encourage all of you to provide feedback for the speakers. They put a lot of effort in presenting to you the best content possible and to deliver this to you in a way you can absorb it with ease. The option to rate a session becomes available 30 minutes after the session started. Go to the session page and there you will find a button to rate the session.
+
+On the second day of the conference after the lunch break, you also get the option to rate the conference as a whole. We, of course, love to get your feedback on how you liked the experience and how we can improve.
+
+We hope you like the app and that it helps you get the best conference experience possible.
+
+## Current build status
+[![Build status backend](https://dev.azure.com/xpirit/ConferenceApp/_apis/build/status/Build%20Backend%20Techorama%202019)](https://dev.azure.com/xpirit/ConferenceApp/_build/latest?definitionId=75)
 
 ## Download from App Store
-* [iOS: App Store](https://itunes.apple.com/us/app/techdays-16/id1137372151) 
-* [Android: Google Play](https://play.google.com/store/apps/details?id=com.xpirit.techdays)
-* [Windows 10: Marketplace](https://www.microsoft.com/store/apps/9NBLGGH4TBWD) (Mobile & Desktop)
+* [iOS: App Store](https://apps.apple.com/us/app/techorama-conference-app/id1475710427) 
+* [Android: Google Play](https://play.google.com/store/apps/details?id=com.techorma.conferenceapp)
 
-The TechDays 2016 app is full of awesome and includes everything that you would expect from a spectacular conference application, but features tons of deep integration with:
+[![Download the app](https://techorama.nl/media/1273/conference_app.png?width=149&height=194&mode=max)](https://techorama.nl/media/1273/conference_app.png?width=149&height=194&mode=max)
 
-* Azure + Online/Offline Sync
-* Barcode Scanning
-* Calendar Integration
-* Maps & Navigation
-* Push Notifications
-* Phone Dialer
-* Wi-Fi configuration
-* URL Navigation (Universal Links + Google App Indexing)
-* iOS Today Widget and 3D-Touch integration
-* A bunch of other great things
-
-## Shared code details
-This app is around 15,000 lines of code. The iOS version contains 85% shared code, the Android version contains 92% shared code, the UWP has 92% shared code, and our Azure backend contains 23% shared code with the clients!
-
-![](art/code_share.png)
-
-## HockeyApp crash reporting
-Not only was the TechDays 2016 app continuously deployed for testing with [HockeyApp](http://hockeyapp.net), but also provided events and crash reporting.
-
-![](art/hockeyapp.png)
-
-## Google Analytics monitoring
-For a live overview of the usage of the app, TechDays 2016 reported page views and events to Google Analytics.
-
-![](art/google_analytics.png)
-
-# Getting Started
-
-## Mobile App
-Open up src/XamarinEvolve.sln, which contains the iOS, Android, and Windows project. Simply restore your NuGet packages and build the application. It will probably not run out of the box. You need to provide some information in the following file:
-
-*XamarinEvolve.Client.Utils/Helpers/Constants.cs*
-
-There are also separate solution files for the different targets. We used these for CI builds for each of the platforms. src/XamarinEvolve.sln contains all targets.
-
-## Feature Flags
-We have added feature flags to the app that enable you to toggle on/off specific features in the app. For example, for TechDays we had to facilitate anonymous users due to privacy policies. We could not leverage the original login system, so we added a feature flag named `LoginEnabled` and set it to `false`.
-
-Look for *XamarinEvolve.Client.Utils/Helpers/FeatureFlags.cs* to get an overview of all possible feature toggles.
-
-## Data Source
-Out of the box the TechDays Mobile app uses sample data provided by the XamarinEvolve.DataStore.Mock. This is great for development, but you can also test against the test/development read-only Azure App Server Mobile Apps backend. Simply head to *XamarinEvolve.Client.Utils/Helpers/FeatureFlags.cs*.
-
-Simply change:
-
-```
-public static bool UseMocks => true;
-```
-
-to
-
-```
-public static bool UseMocks => false;
-```
-
-# Additional setup
-
-## Push Notifications
-All of the code for Azure Notification Hubs has been integrated into the Xamarin Evolve application, you will just need to setup your Azure Notifcation Hub Keys and Google Keys. Please read through the [startup guide](https://azure.microsoft.com/en-us/documentation/articles/notification-hubs-overview/) and then fill in your keys in: **XamarinEvolve.Utils/Helpers/Constants.cs**
-
-## SQLite for UWP
-
-Inside of Visual Studio go to Tools -> Extensions and Updates and install SQLite for Universal Windows Platform: https://visualstudiogallery.msdn.microsoft.com/4913e7d5-96c9-4dde-a1a1-69820d615936
-
-## Google Maps API key (Android)
-There is a “Debug” key that you can use out of the box, or you can configure your own. For Android, you'll need to obtain a Google Maps API key:
-https://developer.xamarin.com/guides/android/platform_features/maps_and_location/maps/obtaining_a_google_maps_api_key/
-
-Insert it in the Android project: `~/Properties/AndroidManifest.xml`:
-
-    <application ...>
-      ...
-      <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="GOOGLE_MAPS_API_KEY" />
-      ...
-    </application>
-
-
-## Bing Maps API Key (UWP)
-
-In App.xaml.cs in the XamarinEvolve.UWP update Xamarin.FormsMaps.Init(string.Empty); with your API key from https://www.bingmapsportal.com/
-
-## HockeyApp Crash Reporting
-Simply head over to http://hockeyapp.net and register a new iOS/Android/UWP application and fill in the HockeyApp API Keys in **XamarinEvolve.Utils/Helpers/Constants.cs** to enable crash reporting.
-
-## HockeyApp Crash Reporting
-Simply head over to http://analytics.google.com and register a new mobile application and fill in the Google Analytics Tracking ID Keys in **XamarinEvolve.Utils/Helpers/Constants.cs** to enable monitoring.
-
-## Build your own Backend
-This repo contains a full backend that you can deploy to your own Azure App Service Mobile App Backend.
-
-The backend runs on top of a SQL Azure database, which you can deploy with Entity Framework Code First Migrations.
-
-Make sure to provide authentication details for:
-
-- SQL Connection String
-- Azure Service Bus Push Notification Hub
-- Twitter API
-
-## Tools
-Of course a conference database needs data to work properly. We added some tools to the repo to facilitate this:
-
-### DataManager
-The DataManager is an ASP.NET MVC web application that provides CRUD screens for entering data, sending push notifications, etc. You can deploy the application to an Azure website and point it to the same SQL Azure database as the mobile backend API.
-
-You'll find the source in *src/DataManager/DataManager.sln*
-
-Make sure to provide authentication details for:
-
-- SQL Connection String
-- Azure Service Bus Push Notification Hub Connection and Endpoint
-
-We used Auth0 for authenticating data manager user. You can quickly setup an account there and provide the `auth0:ClientId`, `auth0:ClientSecret` and `auth0:Domain` app settings. Or you can plug in your own identity provider if you like.
-
-### MiniHacks
-If you want to run a Mini-Hack contest at your conference, this mobile app can be used by your staff to provide QR unlock codes. Just change the API url in the source code and deploy the app with HockeyApp to your staff using Ad-Hoc deployment.
-
-You'll find the source in *tools/MiniHacks/MiniHacks.sln*
-
-### PhotoSizeChecker
-We learned the hard way that size matters when it comes to speaker photos. In order for the app to work smoothly, the size of the avatars and full photos must be small. The PhotoSizeChecker is a console application that queries the speaker list and reports the size of both photos. We used it to regularly check the data that was entered into the database and correct pictures that were too big.
-
-You'll find the source in *tools/PhotoSizeChecker/PhotoSizeChecker.sln*
-
-# About
-The TechDays Evolve mobile apps were handcrafted by Xpirit and based on the original Xamarin Evolve 2016 app.
-
-**Development:**
-* [Roy Cornelissen](http://github.com/roycornelissen)
-* [Geert van der Cruijsen](https://github.com/geertvdc)
-* [Marcel de Vries](https://github.com/vriesmarcel)
-
-**Special thanks:**
-* [James Montemagno](http://github.com/jamesmontemagno)
-
-James and his team of Xamarins originally built the Xamarin Evolve application and has kindly provided us with his help and wisdom. Thanks James!

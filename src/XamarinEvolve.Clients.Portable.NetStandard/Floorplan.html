@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Floorplan</title>
+        <script src="jquery-3.2.1.min.js"></script>            
+        <script src="snap.svg-min.js"></script>            
+        <script lang="JavaScript">
+            function pulseObject(theObject)
+            {
+                theObject.animate ( { 'transform': 's1.8' }, 600, mina.bounce, function() {
+                theObject.animate ( { 'transform': 's1' }, 100, function() {
+                        pulseObject(theObject);
+                    });
+                });
+            }
+        </script>
+        <style>
+    body { -webkit-backface-visibility: hidden; background-color:#0A1870; color:#82F9D1;}
+    #output,#floorImage { -webkit-transform-style: preserve-3d;}
+    </style>
+    </head>
+    <body>
+        <div id="output">
+        </div>
+        <script lang="JavaScript">
+            var container = Snap("#output");
+
+            Snap.load('floor_{{floor}}.svg', function(f) {
+                container.append(f);
+
+                var theImage = Snap("#floorImage");
+
+                var color = '{{markercolor}}';
+                var x = {{xpos}};
+                var y = {{ypos}};
+                var r = theImage.rect(x, y, 35, 16, 8);
+                r.attr({ 'fill-opacity': '0', 'stroke': color, 'strokeWidth': 4 });
+
+                window.scrollTo((x - (window.innerWidth / 2)), y - (window.innerHeight / 2));
+
+                pulseObject(r);
+            });
+        </script>
+    </body>
+</html>

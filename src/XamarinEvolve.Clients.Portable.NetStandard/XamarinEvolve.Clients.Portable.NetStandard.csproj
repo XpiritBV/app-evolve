@@ -1,0 +1,91 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="codeofconduct.txt" />
+    <None Remove="Floorplan.html" />
+    <None Remove="Floorplans.html" />
+    <None Remove="sampletweets.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="codeofconduct.txt" />
+    <EmbeddedResource Include="Floorplan.html" />
+    <EmbeddedResource Include="Floorplans.html" />
+    <EmbeddedResource Include="sampletweets.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CClarke.Plugin.Calendars" version="1.0.0" />
+ <PackageReference Include="FormsToolkit" version="2.0.1" />
+    <PackageReference Include="Humanizer.Core" version="2.6.2" />
+    <PackageReference Include="Microsoft.AppCenter" Version="2.2.1-preview" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="2.2.1-preview" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client" version="4.1.1" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" version="4.1.1" />
+    <PackageReference Include="Newtonsoft.Json" version="12.0.2" />
+    <PackageReference Include="NodaTime" version="2.4.6" />
+    <PackageReference Include="Plugin.Permissions" version="3.0.0.12" />
+    <PackageReference Include="Plugin.Share" version="7.1.1" />
+    <PackageReference Include="Refractored.MvvmHelpers" version="1.3.2.47-beta" />
+    <PackageReference Include="runtime.native.System" version="4.3.1" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" version="1.1.14" />
+    <PackageReference Include="SQLitePCLRaw.core" version="1.1.14" />
+    <PackageReference Include="System.Collections" version="4.3.0" />
+    <PackageReference Include="System.Collections.Concurrent" version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Debug" version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Tools" version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Tracing" version="4.3.0" />
+    <PackageReference Include="System.Globalization" version="4.3.0" />
+    <PackageReference Include="System.IO" version="4.3.0" />
+    <PackageReference Include="System.IO.Compression" version="4.3.0" />
+    <PackageReference Include="System.Linq" version="4.3.0" />
+    <PackageReference Include="System.Linq.Expressions" version="4.3.0" />
+    <PackageReference Include="System.Net.Http" version="4.3.4" />
+    <PackageReference Include="System.Net.Primitives" version="4.3.1" />
+    <PackageReference Include="System.ObjectModel" version="4.3.0" />
+    <PackageReference Include="System.Reflection" version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" version="4.3.0" />
+    <PackageReference Include="System.Reflection.Primitives" version="4.3.0" />
+    <PackageReference Include="System.Resources.ResourceManager" version="4.3.0" />
+    <PackageReference Include="System.Runtime" version="4.3.1" />
+    <PackageReference Include="System.Runtime.Extensions" version="4.3.1" />
+    <PackageReference Include="System.Runtime.InteropServices" version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" />
+    <PackageReference Include="System.Runtime.Numerics" version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding" version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" version="4.3.0" />
+    <PackageReference Include="System.Text.RegularExpressions" version="4.3.1" />
+    <PackageReference Include="System.Threading" version="4.3.0" />
+    <PackageReference Include="System.Threading.Tasks" version="4.3.0" />
+    <PackageReference Include="System.Xml.ReaderWriter" version="4.3.1" />
+    <PackageReference Include="System.Xml.XDocument" version="4.3.0" />
+    <PackageReference Include="Xam.Plugin.Connectivity" version="3.2.0" />
+    <PackageReference Include="Xam.Plugin.ExternalMaps" version="4.0.1" />
+    <PackageReference Include="Xam.Plugin.Media" version="4.0.1.5" />
+    <PackageReference Include="Xam.Plugins.Messaging" version="5.2.0" />
+    <PackageReference Include="Xam.Plugins.Settings" version="3.1.1" />
+    <PackageReference Include="Xamarin.Forms" version="4.1.0.618606" />
+    <PackageReference Include="Xamarin.Forms.Maps" version="4.1.0.618606" />
+    <PackageReference Include="ZXing.Net.Mobile" version="2.4.1" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Abstractions.Netstandard\XamarinEvolve.DataStore.Abstractions.Netstandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Azure.NetStandard\XamarinEvolve.DataStore.Azure.NetStandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.DataStore.Mock.NetStandard\XamarinEvolve.DataStore.Mock.NetStandard.csproj" />
+    <ProjectReference Include="..\XamarinEvolve.Utils.NetStandard\XamarinEvolve.Utils.NetStandard.csproj" />
+  </ItemGroup>
+
+</Project>

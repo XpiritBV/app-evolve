@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!--Get colors from: http://www.materialpalette.com/-->
+  <color name="primary">#0A1870</color>
+  <color name="primaryDark">#0A1870</color>
+  <color name="accent">#82F9D1</color>
+  <color name="lightPrimary">#85E6FE</color>
+  <color name="textIcon">#82F9D1</color>
+  <color name="primaryText">#82F9D1</color>
+  <color name="secondaryText">#85E6FE</color>
+  <color name="divider">#82F9D1</color>
+  <color name="activated_color">#85E6FE</color>
+  <color name="window_background">#0A1870</color>
+  <color name="notification">#85E6FE</color>
+  <color name="primaryDarkSplash">#01126A</color>
+</resources>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@color/primaryDarkSplash"/>
+
+    <item>
+        <bitmap
+            android:gravity="top"
+            android:src="@drawable/logo_launchscreen_top"/>
+      
+
+    </item>
+  <item>
+    <bitmap
+            android:gravity="center_vertical"
+            android:src="@drawable/logo_launchscreen_center"/>
+    
+  </item>
+  <item>
+    <bitmap
+          android:gravity="bottom"
+          android:src="@drawable/logo_launchscreen_bottom"/>
+  </item>
+
+</layer-list>

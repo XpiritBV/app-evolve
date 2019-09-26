@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="XamarinEvolve.Clients.UI.SponsorDetailsPage"
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    xmlns:toolkit="clr-namespace:FormsToolkit;assembly=FormsToolkit"
+    Title="{Binding Sponsor.Name}"
+    BackgroundColor="{DynamicResource WindowBackgroundTable}">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:HasDataConverter x:Key="GenericIsVisibleConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <local:AlwaysScrollView>
+        <StackLayout BackgroundColor="{DynamicResource WindowBackgroundTable}"
+                                 Spacing="{DynamicResource CardSpacing}"
+                                 Padding="{DynamicResource CardPadding}">
+            <local:CardView>
+                <StackLayout Padding="0" Spacing="0" BackgroundColor="{DynamicResource WindowBackground}">
+                    <local:HeaderDivider/>
+                        <StackLayout Padding="{StaticResource StandardPadding}" >
+                            <Image
+                                Margin="32,16,32,0"
+                                HorizontalOptions="FillAndExpand"
+								BackgroundColor="#5585E6FE"
+                                Aspect="AspectFit"
+                                StyleId="SponsorDetailImage"
+								>
+                                <Image.Source>
+                                    <UriImageSource Uri="{Binding Sponsor.ImageUri}" 
+                                        CacheValidity="4" 
+                                        CachingEnabled="true"/>
+                                </Image.Source>
+                            </Image>
+                            <StackLayout Spacing="0">
+                              <Label Text="{Binding Sponsor.Name}" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="SponsorDetailName"/>
+                              <Label Text="{Binding Sponsor.SponsorLevel.Name, StringFormat='{0} Sponsor'}" Style="{DynamicResource EvolveListItemDetailTextStyle}" StyleId="SponsorDetailLevel"/>
+                              <Label Text="{Binding Sponsor.BoothLocation, StringFormat='Booth {0}'}" IsVisible="{Binding Sponsor.BoothLocation, Converter={StaticResource GenericIsVisibleConverter}}" Style="{DynamicResource EvolveListItemDetailTextStyle}" StyleId="SponsorBoothLocation"/>
+                            </StackLayout>
+                            <StackLayout Padding="0,16">
+                                <Label Text="{Binding Sponsor.Description}"  Style="{DynamicResource EvolveListItemTextStyle}" StyleId="SponsorDetailDescription"/>
+                            </StackLayout>
+                        </StackLayout>
+                    <local:FooterDivider/>
+               </StackLayout>
+            </local:CardView>
+
+            <local:CardView BackgroundColor="{DynamicResource WindowBackground}" IsVisible="{Binding FollowItems, Converter={StaticResource GenericIsVisibleConverter}}">
+                <StackLayout Spacing="0">
+                <local:LabelSection Text="Links"/>
+                    <local:HeaderDivider/>
+                    <local:NonScrollableListView 
+                        ItemsSource="{Binding FollowItems}" 
+                        VerticalOptions="Start" 
+                        x:Name="ListViewFollow"
+                        SelectedItem="{Binding SelectedFollowItem, Mode=TwoWay}"
+                        StyleId="SponsorDetailLinks"
+                        RowHeight="44"> 
+                        <local:NonScrollableListView.SeparatorColor>
+                            <OnPlatform x:TypeArguments="Color">
+                                <On Platform="iOS" Value="{StaticResource ListSeparator}"/>
+                            </OnPlatform>
+                        </local:NonScrollableListView.SeparatorColor>
+                        <local:NonScrollableListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell StyleId="disclosure">
+                                <Grid ColumnSpacing="{StaticResource StandardSpacing}">
+                                    <Grid.Padding>
+                                        <OnPlatform x:TypeArguments="Thickness">
+                                            <On Platform="iOS" Value="16,12"/>
+                                            <On Platform="Android" Value="16,8"/>
+                                        </OnPlatform>
+                                    </Grid.Padding>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                        <Image VerticalOptions="Center" Source="{Binding Icon}">
+                                        </Image>
+                                        <Label Grid.Column="1" VerticalOptions="Center"  Style="{DynamicResource EvolveListItemTextStyle}" Text="{Binding Name}"/>
+                                </Grid>
+                                </ViewCell> 
+                            </DataTemplate>
+                        </local:NonScrollableListView.ItemTemplate>
+                    </local:NonScrollableListView>
+                    <local:FooterDivider/>
+                </StackLayout>
+            </local:CardView>
+        </StackLayout>
+    </local:AlwaysScrollView>
+</local:BasePage>

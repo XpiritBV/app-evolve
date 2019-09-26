@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="XamarinEvolve.Clients.UI.LabelSection">
+    <ContentView.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="Android" Value="16,16,16,4"/>
+            <On Platform="iOS" Value="16,24,16,4"/>
+			<On Platform="Windows" Value="16,16,16,4"/>
+		</OnPlatform>
+    </ContentView.Padding>
+    <ContentView.Content>
+         <Label 
+            Style="{DynamicResource SectionLabelTextStyle}" VerticalTextAlignment="Center"
+            x:Name="Section">
+        </Label>            
+    </ContentView.Content>
+</ContentView>

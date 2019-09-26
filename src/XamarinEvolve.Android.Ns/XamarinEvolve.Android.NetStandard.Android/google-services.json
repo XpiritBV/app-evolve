@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "432722548443",
+    "firebase_url": "https://techorama-conference-app.firebaseio.com",
+    "project_id": "techorama-conference-app",
+    "storage_bucket": "techorama-conference-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432722548443:android:83594f8ba4ebd0cc",
+        "android_client_info": {
+          "package_name": "com.techorma.conferenceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432722548443-p4l8t5lqfeqh58e612jvv0rtsdhkoen5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMN14s8A6gvumylTOiPm6Al5LShePHuMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432722548443-p4l8t5lqfeqh58e612jvv0rtsdhkoen5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Application 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="XamarinEvolve.Clients.UI.App">
+    <Application.Resources>
+        <ResourceDictionary>
+			<Color x:Key="Primary">#0A1870</Color>
+			<Color x:Key="PrimaryDark">#0A1870</Color>
+			<Color x:Key="PrimaryDarkTranslucent">#0A18703C</Color>
+			<Color x:Key="Accent">#82F9D1</Color>
+			<Color x:Key="SecondaryAccent">#85E6FE</Color>
+            <Color x:Key="NavigationText">#85E6FE</Color>
+            <Color x:Key="LabelSectionText">#82F9D1</Color>
+            <Color x:Key="DetailTextColor">White</Color>
+			<Color x:Key="BarBackgroundColor">#0A1870</Color>
+
+            <Thickness x:Key="SmallPadding">4</Thickness>
+            <Thickness x:Key="MediumPadding">8</Thickness>
+            <Thickness x:Key="StandardPadding">16</Thickness>
+
+            <x:Double x:Key="SmallSpacing">4</x:Double>
+            <x:Double x:Key="MediumSpacing">8</x:Double>
+			<x:Double x:Key="StandardSpacing">16</x:Double>
+
+			<OnPlatform x:TypeArguments="Color" x:Key="WindowBackgroundTable">
+                <On Platform="Android">#0A1870</On>
+                <On Platform="iOS">#0A1870</On>
+                <On Platform="Windows">#0A1870</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="Color" x:Key="WindowBackground">
+                <On Platform="Android">#0A1870</On>
+                <On Platform="iOS">#0A1870</On>
+                <On Platform="Windows">#0A1870</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="Color" x:Key="Divider">
+				<On Platform="Android">#82F9D1</On>
+                <On Platform="iOS">#82F9D1</On>
+				<On Platform="Windows">#82F9D1</On>
+			</OnPlatform>
+            <Color x:Key="ButtonBorder">#82F9D1</Color>
+            <Color x:Key="ListSeparator">#82F9D1</Color>
+            <OnPlatform x:TypeArguments="Thickness" x:Key="CardPadding">
+                <On Platform="Android">8,16</On>
+                <On Platform="iOS">0,0,0,16</On>
+                <On Platform="Windows">0,0,0,16</On>
+			</OnPlatform>
+			<OnPlatform x:TypeArguments="x:Double" x:Key="CardSpacing">
+				<On Platform="Android">16</On>
+				<On Platform="iOS">0</On>
+				<On Platform="Windows">0</On>
+			</OnPlatform>
+			<OnPlatform x:TypeArguments="x:Double" x:Key="EvolveListItemTextStyleSize">
+                <On Platform="Android">15</On>
+                <On Platform="iOS">15</On>
+				<On Platform="Windows">13</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:Double" x:Key="EvolveListItemDetailTextStyleSize">
+                <On Platform="Android">13</On>
+                <On Platform="iOS">13</On>
+				<On Platform="Windows">13</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:Double" x:Key="LabelSectionFontSize">
+                <On Platform="Android">18</On>
+                <On Platform="iOS">13</On>
+				<On Platform="Windows">13</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:Double" x:Key="TweetTextSize">
+                <On Platform="Android">14</On>
+                <On Platform="iOS">14</On>
+				<On Platform="Windows">14</On>
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:Double" x:Key="HugeTextSize">
+                <On Platform="Android">48</On>
+                <On Platform="iOS">48</On>
+				<On Platform="Windows">48</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:Double" x:Key="BigTextSize">
+                <On Platform="Android">40</On>
+                <On Platform="iOS">40</On>
+                <On Platform="Windows">40</On>
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="MonoSpacedTextFontFamily">
+                <On Platform="Android">monospace</On>
+                <On Platform="iOS">Courier</On>
+				<On Platform="Windows">verdana</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="TitleTextFontAttributes">
+                <On Platform="Android">Bold</On>
+                <On Platform="iOS">Bold</On>
+				<On Platform="Windows">Bold</On>
+			</OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="SectionLabelFontFamily">
+                <On Platform="Android">sans-serif-light</On>
+            </OnPlatform>
+
+			<Style x:Key="ListItemTitleTextStyle" TargetType="Label" BaseResourceKey="ListItemTextStyle">
+				<Setter Property="FontSize" Value="Medium" />
+				<Setter Property="TextColor" Value="WhiteSmoke"/>
+			</Style>
+			<Style x:Key="ListItemTitleTextStyleLight" TargetType="Label" BaseResourceKey="ListItemTextStyle">
+				<Setter Property="FontSize" Value="Medium" />
+				<Setter Property="TextColor" Value="WhiteSmoke"/>
+			</Style>
+			<Style x:Key="ListItemTitleTextStyleLightSpeakerDetail" TargetType="Label" BaseResourceKey="ListItemTextStyle">
+				<Setter Property="FontSize" Value="Subtitle"/>
+				<Setter Property="TextColor" Value="WhiteSmoke"/>
+				<Setter Property="FontAttributes" Value="Bold"/>
+			</Style>
+
+			<Style x:Key="TweetTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource TweetTextSize}" />
+				<Setter Property="TextColor" Value="{DynamicResource SecondaryAccent}"/>
+            </Style>
+
+            <Style x:Key="EvolveListItemTextStyle" TargetType="Label" BaseResourceKey="BodyStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemTextStyleSize}" />
+				<Setter Property="TextColor" Value="{DynamicResource SecondaryAccent}"/>
+							
+            </Style>
+
+            <Style x:Key="EvolveDetailTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+            </Style>
+
+			<Style x:Key="HugeTextStyle" TargetType="Label" BaseResourceKey="ListItemTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource HugeTextSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource LabelSectionText}"/>
+                <Setter Property="FontFamily" Value="{DynamicResource MonoSpacedTextFontFamily}"/>
+				<Setter Property="HorizontalTextAlignment" Value="Center" />
+            </Style>
+
+			<Style x:Key="MonoSpacedDetailTextStyle" TargetType="Label" BaseResourceKey="EvolveListItemDetailTextStyle">
+                <Setter Property="TextColor" Value="{DynamicResource LabelSectionText}"/>
+                <Setter Property="FontFamily" Value="{DynamicResource MonoSpacedTextFontFamily}"/>
+            </Style>
+
+            <Style x:Key="SectionLabelTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource LabelSectionFontSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource LabelSectionText}"/>
+                <Setter Property="FontFamily" Value="{DynamicResource SectionLabelFontFamily}"/>
+            </Style>
+
+            <Style x:Key="EvolveListItemDetailTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource DetailTextColor}"/>
+            </Style>
+
+            <Style x:Key="EvolveListItemDetailPrimaryTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource Accent}"/>
+            </Style>
+
+            <Style x:Key="EvolveListItemDetailSecondaryTextStyle" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryAccent}"/>
+            </Style>
+
+             <Style x:Key="EventTitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemTextStyleSize}" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontFamily" Value="{DynamicResource SectionLabelFontFamily}"/>
+                <Setter Property="Font" Value="Semibold"/>
+				<Setter Property="TextColor" Value="{DynamicResource SecondaryAccent}"/>
+			</Style>
+
+              <Style x:Key="EvolveListItemTextStyleBold" TargetType="Label" BaseResourceKey="ListItemTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemTextStyleSize}" />
+                <Setter Property="Font" Value="Semibold"/>
+            </Style>
+
+            <Style x:Key="EvolveDetailTextStyleBold" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            <Style x:Key="EvolveListItemDetailTextStyleBold" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource DetailTextColor}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+             <Style x:Key="EvolveListItemDetailPrimaryTextStyleBold" TargetType="Label" BaseResourceKey="ListItemDetailTextStyle">
+                <Setter Property="FontSize" Value="{DynamicResource EvolveListItemDetailTextStyleSize}" />
+                <Setter Property="TextColor" Value="{DynamicResource Primary}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

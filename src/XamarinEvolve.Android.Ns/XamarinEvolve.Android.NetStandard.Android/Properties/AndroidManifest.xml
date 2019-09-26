@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.techorma.conferenceapp" 
+android:installLocation="auto" android:versionName="1.0.0011" android:versionCode="00011">
+	<uses-sdk android:minSdkVersion="25" android:targetSdkVersion="28" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.READ_CALENDAR" />
+	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<application android:icon="@drawable/ic_launcher" android:theme="@style/MyTheme" android:label="Techorama" android:usesCleartextTraffic="true">
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCBSp9xKEYgz87ciAQ1cXruUHT3X-tAeLI" />
+    <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
+    <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" 
+    android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <category android:name="${applicationId}" />
+      </intent-filter>
+    </receiver>
+ <uses-library android:name="org.apache.http.legacy" android:required="false" />
+ 
+ </application>
+</manifest>

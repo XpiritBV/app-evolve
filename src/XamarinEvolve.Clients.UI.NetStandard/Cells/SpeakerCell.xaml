@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+			 xmlns:imagecircle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+
+			 xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard" 
+			 x:Class="XamarinEvolve.Clients.UI.SpeakerCellView"
+			 BackgroundColor="{DynamicResource WindowBackgroundTable}">
+	<ContentView.Resources>
+		<ResourceDictionary>
+			<local:SpeakerImageConverter x:Key="SpeakerImageConverter" />
+		</ResourceDictionary>
+	</ContentView.Resources>
+	<ContentView.Content>
+		<Grid Padding="10,10" ColumnSpacing="{StaticResource StandardSpacing}" BackgroundColor="{DynamicResource WindowBackground}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<imagecircle:CircleImage Source="{Binding AvatarUrl, Converter={StaticResource SpeakerImageConverter}, ConverterParameter={Binding IsCompleted}" VerticalOptions="Center" Aspect="AspectFill">
+				<imagecircle:CircleImage.WidthRequest>
+					<OnPlatform x:TypeArguments="x:Double">
+						<On Platform="iOS" Value="70" />
+						<On Platform="Android" Value="70" />
+					</OnPlatform>
+				</imagecircle:CircleImage.WidthRequest>
+				<imagecircle:CircleImage.HeightRequest>
+					<OnPlatform x:TypeArguments="x:Double">
+						<On Platform="iOS" Value="70" />
+						<On Platform="Android" Value="70" />
+					</OnPlatform>
+				</imagecircle:CircleImage.HeightRequest>
+			</imagecircle:CircleImage>
+			<StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand" 
+						 Spacing="{StaticResource SmallSpacing}" BackgroundColor="{DynamicResource WindowBackground}">
+				<Label Style="{DynamicResource ListItemTitleTextStyle}" Text="{Binding FullName}" />
+				<Label Style="{DynamicResource EvolveListItemDetailTextStyle}" Text="{Binding Title}" />
+				<Label Style="{DynamicResource EvolveListItemDetailPrimaryTextStyle}" Text="{Binding TwitterHandle}" />
+			</StackLayout>
+		</Grid>
+	</ContentView.Content>
+</ContentView>

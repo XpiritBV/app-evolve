@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinEvolve.Clients.UI.SponsorsPage"
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    Title="Sponsors"
+    Icon="tab_sponsors.png"
+    BackgroundColor="{DynamicResource WindowBackground}">
+   <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+     <ListView 
+            x:Name="ListViewSponsors"
+            ItemsSource="{Binding SponsorsGrouped}"
+            GroupDisplayBinding="{Binding Key}"
+            IsGroupingEnabled="true"
+            HasUnevenRows ="true"
+            RowHeight="120"
+            IsPullToRefreshEnabled="{Binding IsNotBusy}"
+            RefreshCommand="{Binding ForceRefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+            CachingStrategy="RetainElement"
+            IsVisible="{Binding IsNotBusy}"
+            AbsoluteLayout.LayoutFlags="All" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+						BackgroundColor="{DynamicResource WindowBackground}">
+        <ListView.SeparatorColor>
+            <OnPlatform x:TypeArguments="Color">
+                <On Platform="iOS" Value="{StaticResource ListSeparator}"/>
+                <On Platform="Android" Value="Transparent"/>
+            </OnPlatform>
+        </ListView.SeparatorColor>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <ViewCell.Height>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS" Value="28"/>
+                        </OnPlatform>
+                    </ViewCell.Height>  
+                    <local:EvolveGroupHeaderView/>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+            <ViewCell StyleId="disclosure">
+                <local:SponsorCell HeightRequest="120"/>
+            </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+        <StackLayout IsVisible="{Binding IsBusy}" BackgroundColor="{DynamicResource WindowBackground}"
+                                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                                   AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                                   <StackLayout.Orientation>
+                                        <OnPlatform x:TypeArguments="StackOrientation">
+                                            <On Platform="iOS" Value="Horizontal"/>
+                                        </OnPlatform>
+                                   </StackLayout.Orientation>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" >
+                <ActivityIndicator.Color>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="{StaticResource Accent}"/>
+                    </OnPlatform>
+                </ActivityIndicator.Color>
+            </ActivityIndicator>
+            <Label Text="Loading Sponsors..." HorizontalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}"/>
+       </StackLayout>
+    </AbsoluteLayout>
+</local:BasePage>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="XamarinEvolve.Clients.UI.CategoryBadge"
+			 xmlns:toolkit="clr-namespace:FormsToolkit;assembly=FormsToolkit">
+    <ContentView.Resources>
+     <ResourceDictionary>
+        <toolkit:HexToColorConverter x:Key="StringToColorConverter" />
+        <toolkit:HasDataConverter x:Key="HasDataConverter" />
+        <toolkit:UpperTextConverter x:Key="UpperTextConverter"/>
+     </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+		<Grid Padding="0,4" 
+			  HeightRequest="28" 
+			  MinimumWidthRequest="200"
+			  VerticalOptions="Center"
+			  HorizontalOptions="Start"
+			  IsVisible="{Binding BadgeName, Converter={StaticResource HasDataConverter}}">
+			<BoxView BackgroundColor="{Binding Color, Converter={StaticResource StringToColorConverter}}"
+					 VerticalOptions="Center"
+					 HorizontalOptions="FillAndExpand"
+					 CornerRadius="5"
+					 HeightRequest="24"/>
+			<Label FontSize="Micro"
+				   VerticalTextAlignment="Center"
+				   HorizontalOptions="Center"
+				   HorizontalTextAlignment="Center"
+				   TextColor="White"
+				   Text="{Binding BadgeName, Converter={StaticResource UpperTextConverter}}"
+				   MinimumWidthRequest="60"
+				   Margin="10,0" />
+		</Grid>
+    </ContentView.Content>
+</ContentView>
+

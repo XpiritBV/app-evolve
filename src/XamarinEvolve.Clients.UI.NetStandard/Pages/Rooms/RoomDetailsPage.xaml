@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard" 
+    xmlns:toolkit="clr-namespace:FormsToolkit;assembly=FormsToolkit" 
+    x:Class="XamarinEvolve.Clients.UI.RoomDetailsPage" 
+    Title="{Binding Room.Name}" 
+    NavigationPage.BackButtonTitle="Back" 
+	x:Name="RoomDetails"
+    BackgroundColor="{DynamicResource WindowBackgroundTable}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ZoomIn" Clicked="Handle_Zoom_FloorPlan" Text="Full screen" Icon="toolbar_locate.png" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:HasDataConverter x:Key="GenericIsVisibleConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <local:ZoomableWebView x:Name="FloorMapsView" Grid.Row="0" VerticalOptions="Fill">
+        </local:ZoomableWebView>
+        <StackLayout Spacing="0" HorizontalOptions="FillAndExpand" Grid.Row="1">
+			<local:CardView BackgroundColor="{DynamicResource WindowBackground}">
+                <!--Sessions-->
+                <StackLayout Spacing="0">
+                    <Label Margin="16,0,16,0" Text="{Binding FloorLevelText}" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="FloorLevelLabel" />
+                    <local:LabelSection Text="{Binding SessionsInThisRoomText}" StyleId="SessionsInThisRoomSection" />
+                    <local:HeaderDivider />
+                    <StackLayout IsVisible="{Binding IsBusy}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" BackgroundColor="White" Padding="{StaticResource StandardPadding}">
+                        <ActivityIndicator IsRunning="{Binding IsBusy}">
+                            <ActivityIndicator.Color>
+                                <OnPlatform x:TypeArguments="Color">
+                                    <On Platform="Android" Value="{StaticResource Accent}" />
+                                </OnPlatform>
+                            </ActivityIndicator.Color>
+                        </ActivityIndicator>
+                        <Label Text="Loading Sessions..." HorizontalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}" />
+                    </StackLayout>
+                    <local:FooterDivider />
+                </StackLayout>
+            </local:CardView>
+
+            <ListView 
+                x:Name="ListViewSessions"
+                ItemsSource="{Binding Sessions}"
+                HasUnevenRows ="true"
+                CachingStrategy="RecycleElement"
+                IsVisible="{Binding IsNotBusy}"
+                BackgroundColor="{DynamicResource WindowBackground}">
+                <ListView.SeparatorColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="iOS" Value="{StaticResource ListSeparator}" />
+                    </OnPlatform>
+                </ListView.SeparatorColor>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+							<local:SessionCellView FavoriteCommand="{Binding Path=BindingContext.FavoriteCommand, Source={x:Reference RoomDetails}}" />
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </Grid>
+</local:BasePage>

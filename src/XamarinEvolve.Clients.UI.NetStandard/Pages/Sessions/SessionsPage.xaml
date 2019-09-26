@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    x:Class="XamarinEvolve.Clients.UI.SessionsPage"
+    Title="Sessions"
+	x:Name="Sessions"
+    Icon="tab_sessions.png"
+    BackgroundColor="{DynamicResource WindowBackground}"
+	>
+    <ContentPage.Resources>
+     <ResourceDictionary>
+        <local:IsFavoriteTextConverter x:Key="IsFavoriteTextConverter" />
+		<DataTemplate x:Key="SessionTemplate">
+			<ViewCell>
+				<!--Inflate main Session Cell here-->
+				<local:SessionCellView FavoriteCommand="{Binding Path=BindingContext.FavoriteCommand, Source={x:Reference Sessions}}" />
+			</ViewCell>
+		</DataTemplate>
+		<DataTemplate x:Key="NonSessionTemplate">
+			<ViewCell>
+					<!--Inflate main Session Cell here-->
+					<local:NonSessionCellView />
+			</ViewCell>
+		</DataTemplate>
+		<local:SessionDataTemplateSelector x:Key="SessionDataTemplateSelector"
+            SessionTemplate="{StaticResource SessionTemplate}"
+            NonSessionTemplate="{StaticResource NonSessionTemplate}" />
+		</ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackLayout>
+            <StackLayout.Padding>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="Android" Value="0,8,8,8"/>
+                    <On Platform="iOS" Value="0"/>
+                    <On Platform="Windows" Value="0"/>
+                </OnPlatform>
+            </StackLayout.Padding>
+            <StackLayout.BackgroundColor>
+                <OnPlatform x:TypeArguments="Color">
+                    <On Platform="Android" Value="{StaticResource Primary}"/>
+                </OnPlatform>
+            </StackLayout.BackgroundColor>
+             <SearchBar Text="{Binding Filter, Mode=TwoWay}" 
+                        Placeholder="Search"
+                        SearchCommand="{Binding FilterSessionsCommand}"
+                        FontSize="Small" >
+                <SearchBar.PlaceholderColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="White"/>
+						<On Platform="iOS" Value="White"/>
+					</OnPlatform> 
+                </SearchBar.PlaceholderColor>
+                <SearchBar.BackgroundColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="{StaticResource Primary}"/>
+						<On Platform="iOS" Value="{StaticResource Primary}"/>
+					</OnPlatform>
+                </SearchBar.BackgroundColor>
+                <SearchBar.TextColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="White"/>
+						<On Platform="iOS" Value="Black"/>
+					</OnPlatform>
+                </SearchBar.TextColor>
+                <SearchBar.CancelButtonColor>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="White"/>
+                        <On Platform="iOS" Value="{StaticResource Primary}"/>
+                    </OnPlatform>
+                </SearchBar.CancelButtonColor>
+            </SearchBar>
+        </StackLayout>
+     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="1">
+     <ListView 
+            x:Name="ListViewSessions"
+            ItemsSource="{Binding SessionsGrouped}"
+            GroupDisplayBinding="{Binding Key}"
+            IsGroupingEnabled="true"
+            IsPullToRefreshEnabled="{Binding IsNotBusy}"
+            RefreshCommand="{Binding ForceRefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            HasUnevenRows ="true"
+            CachingStrategy="RecycleElement"
+            IsVisible="{Binding IsNotBusy}"
+            BackgroundColor="{DynamicResource WindowBackground}"
+            AbsoluteLayout.LayoutFlags="All" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+			ItemTemplate="{StaticResource SessionDataTemplateSelector}"
+		 >
+            <ListView.SeparatorColor>
+                <OnPlatform x:TypeArguments="Color">
+					<On Platform="iOS" Value="{StaticResource ListSeparator}"/>
+					<On Platform="Android" Value="{StaticResource ListSeparator}"/>
+				</OnPlatform>
+            </ListView.SeparatorColor>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <ViewCell.Height>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS" Value="28"/>
+                        </OnPlatform>
+                    </ViewCell.Height>
+                    <local:EvolveGroupHeaderView/>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+       
+    </ListView>
+     <StackLayout IsVisible="{Binding IsBusy}"
+                                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                                   AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                                    <StackLayout.Orientation>
+                                        <OnPlatform x:TypeArguments="StackOrientation">
+                                            <On Platform="iOS" Value="Horizontal"/>
+                                        </OnPlatform>
+                                   </StackLayout.Orientation>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" >
+                <ActivityIndicator.Color>
+                    <OnPlatform x:TypeArguments="Color">
+                        <On Platform="Android" Value="{StaticResource Accent}"/>
+                    </OnPlatform>
+                </ActivityIndicator.Color>
+            </ActivityIndicator>
+            <Label Text="Loading Sessions..." HorizontalOptions="Center" Style="{DynamicResource EvolveListItemTextStyle}"/>
+       </StackLayout>
+        <StackLayout IsVisible="{Binding NoSessionsFound}"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   AbsoluteLayout.LayoutFlags="All"
+                                   AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    BackgroundColor="{DynamicResource WindowBackground}"
+                    Padding="16,0">
+            <Label Text="{Binding NoSessionsFoundMessage}" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2"/>
+       </StackLayout>
+    </AbsoluteLayout>
+    </Grid>
+    </ContentPage.Content>
+</local:BasePage>

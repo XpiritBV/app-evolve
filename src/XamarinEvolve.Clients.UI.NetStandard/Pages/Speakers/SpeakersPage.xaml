@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinEvolve.Clients.UI.SpeakersPage"
+	xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    Title="Speakers"
+    Icon="tab_speakers.png"
+    BackgroundColor="{DynamicResource WindowBackground}">
+	<ContentPage.Content>
+	   <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+	     <ListView 
+	            x:Name="ListViewSpeakers"
+	            ItemsSource="{Binding Speakers}"
+                HasUnevenRows="true"
+	            IsPullToRefreshEnabled="{Binding IsNotBusy}"
+	            RefreshCommand="{Binding ForceRefreshCommand}"
+	            IsRefreshing="{Binding IsBusy, Mode=OneWay}" 
+	            CachingStrategy="RecycleElement"
+	            IsVisible="{Binding IsNotBusy}"
+	            AbsoluteLayout.LayoutFlags="All" 
+	            AbsoluteLayout.LayoutBounds="0,0,1,1"
+			 BackgroundColor="{DynamicResource WindowBackground}"
+			 SeparatorColor="{StaticResource ListSeparator}">
+	      <ListView.ItemTemplate>
+	        <DataTemplate>
+	            <ViewCell StyleId="disclosure">
+	                <local:SpeakerCellView />
+	            </ViewCell>
+	        </DataTemplate>
+	      </ListView.ItemTemplate>
+	    </ListView>
+	        <StackLayout IsVisible="{Binding IsBusy}"
+						 BackgroundColor="{DynamicResource WindowBackground}"
+	                                   AbsoluteLayout.LayoutFlags="PositionProportional"
+	                                   AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+	                                   <StackLayout.Orientation>
+	                                    <OnPlatform x:TypeArguments="StackOrientation">
+                                            <On Platform="iOS" Value="Horizontal"/>
+                                        </OnPlatform>
+	                                   </StackLayout.Orientation>
+				<ActivityIndicator IsRunning="{Binding IsBusy}" Color="{DynamicResource Accent}">
+				</ActivityIndicator>
+	            <Label Text="Loading Speakers..." HorizontalOptions="Center" 
+					   Style="{DynamicResource EvolveListItemTextStyle}" TextColor="{DynamicResource Accent}"/>
+	       </StackLayout>
+			<StackLayout IsVisible="{Binding NoSpeakers}"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   AbsoluteLayout.LayoutFlags="All"
+                                   AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    BackgroundColor="{DynamicResource WindowBackground}"
+                    Padding="16,0">
+				<Label Text="No Speakers found" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="22" TextColor="#D3D2D2"/>
+			</StackLayout>
+
+			
+		</AbsoluteLayout>
+	</ContentPage.Content>
+</local:BasePage>

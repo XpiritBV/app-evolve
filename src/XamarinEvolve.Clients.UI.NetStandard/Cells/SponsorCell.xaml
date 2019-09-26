@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:local="clr-namespace:XamarinEvolve.Clients.UI;assembly=XamarinEvolve.Clients.UI.NetStandard"
+    xmlns:toolkit="clr-namespace:FormsToolkit;assembly=FormsToolkit"
+    x:Class="XamarinEvolve.Clients.UI.SponsorCell" >
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:HasDataConverter x:Key="HasDataConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+	<Grid Padding="16" ColumnSpacing="16" BackgroundColor="{DynamicResource WindowBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Image
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            StyleId="SponsorImage"
+			BackgroundColor="#5585E6FE"
+            Aspect="AspectFit">
+            <Image.Source>
+                <UriImageSource Uri="{Binding ImageUri}" 
+                    CacheValidity="3" 
+                    CachingEnabled="true"/>
+            </Image.Source>
+        </Image>
+        <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Column="1" Spacing="0" StyleId="SponsorCell">
+          <Label Text="{Binding Name}" Style="{DynamicResource EvolveListItemTextStyle}" StyleId="SponsorName"/>
+          <Label Text="{Binding SponsorLevel.Name, StringFormat='{0} Sponsor'}" Style="{DynamicResource EvolveListItemDetailTextStyle}" StyleId="SponsorLevel"/>
+          <Label Text="{Binding BoothLocation, StringFormat='Booth {0}'}" IsVisible="{Binding BoothLocation, Converter={StaticResource HasDataConverter}}" Style="{DynamicResource EvolveListItemDetailTextStyle}" StyleId="SponsorBoothLocation"/>
+        </StackLayout>
+ 
+    </Grid>
+</ContentView>

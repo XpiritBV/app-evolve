@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="XamarinEvolve.Clients.UI.ScavengerHuntCell"
+    BackgroundColor="White">
+    <StackLayout Orientation="Horizontal">
+        <StackLayout VerticalOptions="Center" Padding="{StaticResource StandardPadding}" Spacing="{StaticResource StandardSpacing}">
+          <Label Text="{Binding Name}" Style="{DynamicResource ListItemTitleTextStyle}"/>
+          <Label Text="{Binding Description}" Style="{DynamicResource EvolveListItemDetailTextStyle}"/>
+          <Label Text="{Binding OpenString}" IsVisible="{Binding IsOpen}" Style="{DynamicResource EvolveListItemDetailTextStyle}" TextColor="{StaticResource Primary}"/>
+          <Label Text="completed" IsVisible="{Binding IsCompleted}" TextColor="{StaticResource Accent}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentView>
