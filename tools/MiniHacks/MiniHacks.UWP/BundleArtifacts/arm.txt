@@ -1,2 +1,0 @@
-MainPackage=C:\Projects\Xpirit\ConferenceApp\tools\MiniHacks\MiniHacks.UWP\bin\ARM\Release\MiniHacks.UWP_1.0.1.0_ARM.appx
-SymbolPackage=C:\Projects\Xpirit\ConferenceApp\tools\MiniHacks\MiniHacks.UWP\AppPackages\MiniHacks.UWP_1.0.1.0_Test\MiniHacks.UWP_1.0.1.0_ARM.appxsym
